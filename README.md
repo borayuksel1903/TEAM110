@@ -1,5 +1,7 @@
 # TEAM110
 
+## No one should be working on master.
+
 ## Getting Started:
 1) Clone the project;
 ```
@@ -9,19 +11,28 @@ git clone https://github.com/borayuksel1903/TEAM110.git
 ```
 cd TEAM110
 ```
-3) Create your own branch: follow *Pointers with Git*
+3) Create your own branch called __<branch_name>__: 
+```
+git checkout -b <branch_name>
+```
 
 ## Pointers with Git:
-1) When making changes, create and switch to new branch with name relating to the change 
+1) Swicthing between branches:
 ```
-git checkout -b <branch_name> 
+git checkout <branch_name>
 ```
-2) Finish your changes, and add and commit the file.
-3) Then git push the new branch to github 
+2) When finsihed making changes, go to root (TEAM110) and then add and commit files:
 ```
-git push -u origin <branch_name>
+git add .
+git commit -m "<message>"
 ```
-4) Then review the new branch, submit a pull request and compare new branch with master, and approve it if no conflicts.
-5) Then other members can git pull the changes.
+3) Push your changes for your branch:
+```
+git push origin <branch_name>
+```
+
+## Merging a Branche to master: (Bora)
+1) On GitHub, click on the brnach, <branch_name>, and it should prompt for a pull request. 
+2) Review the new branch and compare <branch_name> with master, and approve it if there are no conflicts.
  
-This way a working model will be preserved in master.
+This way a working model will always be preserved in master.
