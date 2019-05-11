@@ -31,7 +31,7 @@ git commit -m "<message>"
 git push origin <branch_name>
 ```
 
-## Merging a Branch to master: (Bora)
+## Merging <branch_name> to master: (Bora)
 1) On GitHub, click on the brnach, <branch_name>, and it should prompt for a pull request. 
 2) Review the new branch and compare <branch_name> with master, and approve it if there are no conflicts.
  
