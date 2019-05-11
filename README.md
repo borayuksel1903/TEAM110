@@ -1,7 +1,17 @@
 # TEAM110
 
-## Pointers with Git:
+## Getting Started:
+1) Clone the project;
+```
+git clone https://github.com/borayuksel1903/TEAM110.git
+```
+2) cd into the project directory:
+```
+cd TEAM110
+```
+3) Create your own branch: follow *Pointers with Git*
 
+## Pointers with Git:
 1) When making changes, create and switch to new branch with name relating to the change 
 ```
 git checkout -b <branch_name> 
