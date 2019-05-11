@@ -3,7 +3,7 @@
 ## No one should be working on master.
 
 ## Getting Started:
-1) Clone the project;
+1) Clone the project:
 ```
 git clone https://github.com/borayuksel1903/TEAM110.git
 ```
