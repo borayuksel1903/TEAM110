@@ -3,8 +3,8 @@ import googlemaps
 import gmaps
 import json
 
-gmaps.configure(api_key = 'AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ')
-pyMaps = googlemaps.Client(key='AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ')
+gmaps.configure(api_key = #API_KEY)
+pyMaps = googlemaps.Client(key= #API_KEY)
 
 app = Flask(__name__)
 
