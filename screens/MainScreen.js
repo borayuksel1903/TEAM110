@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import {
 } from "native-base";
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -18,7 +19,6 @@ export default class MainScreen extends React.Component {
   render() {
     return (
       <Container style={styles.container}>
-	<KeyboardAvoidingView behavior="position">
         <Header style={styles.container}>
           <Left>
             <Button
@@ -35,7 +35,11 @@ export default class MainScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-	<Gauge percent={parseInt(this.state.gasTankPercent)}/>
+	<KeyboardAvoidingView behavior="position">
+	<GooglePlacesInput />
+	<TouchableOpacity onPress={() => {Alert.alert("Gas Up Button")}}>
+	  <Gauge percent={parseInt(this.state.gasTankPercent)}/>
+	</TouchableOpacity>
         <Item floatingLabel style={styles.label}>
           <Label style={styles.label}>Gasonline (0-100)</Label>
           <Input 
@@ -84,12 +88,50 @@ class Gauge extends React.Component {
   }
 }
 
+class GooglePlacesInput extends React.Component {
+  render() {
+    return(
+    <GooglePlacesAutocomplete
+    query={{
+        // available options: https://developers.google.com/places/web-service/autocomplete
+        key: 'AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ',
+        language: 'en', // language of the results
+        types: '(cities)' // default: 'geocode'
+      }}
+  placeholder='Enter Location'
+  minLength={2}
+  autoFocus={false}
+  returnKeyType={'default'}
+  fetchDetails={true}
+  styles={{
+    textInputContainer: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      borderTopWidth: 0,
+      borderBottomWidth:0
+    },
+    textInput: {
+      marginLeft: 0,
+      marginRight: 0,
+      height: 38,
+      color: '#5d5d5d',
+      fontSize: 16
+    },
+    predefinedPlacesDescription: {
+      color: '#1faadb'
+    },
+  }}
+  currentLocation={false}
+/>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff'
   },
   textStyle: {
-    color: '#000'
+    color: '#000',
   },
   logo: {
     width: 170.8,
@@ -100,6 +142,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+  textInput: {
+    height: 40,
+    width: 300,
+    borderWidth: 1,
+  },
   gauge: {
     alignSelf: 'center',
     marginTop: '60%'
@@ -107,7 +154,7 @@ const styles = StyleSheet.create({
   label: {
     alignSelf: 'center',
     width: 300,
-    top: 5
+    top: 5,
   }
 
 });
