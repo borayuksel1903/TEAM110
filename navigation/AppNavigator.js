@@ -5,7 +5,7 @@ import MainTabNavigator from './MainTabNavigator';
 import Signinscreen from '../screens/Signinscreen';
 import Signupscreen from '../screens/Signupscreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import MainScreen from '../screens/MainScreen'
+import MainScreen from '../screens/MainScreen';
 
 export default createAppContainer(createSwitchNavigator(
   {
@@ -18,3 +18,4 @@ export default createAppContainer(createSwitchNavigator(
     initialRouteName: 'SignIn',
   }
 ));
+
