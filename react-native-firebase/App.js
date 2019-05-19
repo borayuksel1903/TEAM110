@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as firebase from "firebase";
 import { Container, Item, Form, Input, Button, Label } from "native-base";
 
+// firebase notes
 var config = {
   apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
   authDomain: "ricoauth.firebaseapp.com",
