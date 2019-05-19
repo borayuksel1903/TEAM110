@@ -1,3 +1,9 @@
 {
-  "devToolsPort": 19002
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 55151,
+  "expoServerNgrokUrl": "https://kd-rzf.anonymous.team110.exp.direct",
+  "packagerNgrokUrl": "https://packager.kd-rzf.anonymous.team110.exp.direct",
+  "ngrokPid": 55168
 }
