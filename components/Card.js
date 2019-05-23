@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
-import{StyleSheet} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Button, Footer } from 'native-base';
+import { View, StyleSheet, Text, Alert } from 'react-native';
+import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, Right } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import Shell from './Shell';
 import SeventySix from './76';
 import SevenEleven from './711';
@@ -13,15 +14,27 @@ import United from './United';
 import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
+
 export default class CardComp extends Component {
   render() {
     return (
       <Container>
-        <Header>
-          <Text style={{fontWeight: "bold",fontSize:20}}>
-            Settings
-          </Text>
-          </Header>
+        <Header style={styles.header}>
+          <Left>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.openDrawer();
+              }}
+            >
+              <Ionicons name="ios-menu" color="#DE601B" size={32}/>
+            </Button>
+          </Left>
+          <Body>
+            <Title style={styles.textStyle}>Settings</Title>
+          </Body>
+          <Right />
+        </Header>
         <Content>
           <Card>
             <CardItem header>
@@ -79,4 +92,10 @@ const styles = StyleSheet.create({
     backgroundColor:'#DE601B',
     alignSelf: 'center'
   },
+  textStyle: {
+    color: '#000',
+  },
+  header: {
+    backgroundColor: '#fff'
+  }
 });
