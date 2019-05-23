@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,15 +12,20 @@ import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class MainScreen extends React.Component {
+
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 75, animation: true } 
+    this.state = { gasTankPercent: 10, animation: true } 
     this.props.navigation.navigate('Drawer');
+    this.cycle = 0;
+    this.increment = 5;
+    this.intervalID = 0; 
+    this.maxCycles = 0
   }
 
   addGas = () => {
-    console.log( this.state.gasTankPercent + 5);
     this.setState({ gasTankPercent: Math.min(this.state.gasTankPercent + 5, 100), animation: false });
+    console.log( this.state.gasTankPercent );
   }
   
   removeGas = () => {
@@ -28,7 +33,36 @@ export default class MainScreen extends React.Component {
     console.log( this.state.gasTankPercent );
   }
 
+  componentDidMount() {
+    this.intervalID = setInterval(() => {
+      this.initAnimation();
+    }, 25);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID); 
+  }
+
+  initAnimation = () => {
+    if( this.state.animation === false ) {
+      clearInterval(this.intervalID);
+    }
+
+    if( this.state.gasTankPercent % 100 === 0 ) {
+       this.increment = this.increment * -1;
+       this.cycle = this.cycle + 1;
+    }
+    else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
+      this.setState({ animation: false }); 
+      return 
+    }
+
+    this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
+
+  }
+
   render() {
+  let { init } = this.state;
     return (
       <Container style={styles.container}>
         <Header style={styles.container}>
@@ -47,36 +81,21 @@ export default class MainScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-	<KeyboardAvoidingView behavior="position">
+        <Animated.View>
 	  <View style={styles.gauge}>
 	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
-	      <Gauge percent={parseInt(this.state.gasTankPercent)} animation={this.state.animation}/>
+	      <Gauge percent={this.state.gasTankPercent} />
 	    </Button>
 	  </View>
-	<View style={styles.gasFillButtons}>
-        <Button transparent style={styles.removeButton} onPress={this.removeGas}>
-          <Ionicons name="ios-remove-circle" color="#DE601B" size={32}/>
-	</Button>
-        <Button transparent style={styles.addButton} onPress={this.addGas}>
-          <Ionicons name="ios-add-circle" color="#DE601B" size={32} />
-	</Button>
+	  <View style={styles.gasFillButtons}>
+          <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
+            <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
+	  </TouchableOpacity>
+          <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
+            <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
+	  </TouchableOpacity>
 	</View>
-          <Item floatingLabel style={styles.label}>
-            <Label>Gasonline (0-100)</Label>
-            <Input 
-	      style={styles.textStyle} 
-	      keyboardType={'number-pad'}
-	      returnKeyType={"done"}
-              autoCapitalize="none"
-              autoCorrect={false}
-              onChangeText={gasTankPercent => {
-	        if( gasTankPercent !== "" )
-	        this.setState({ gasTankPercent: parseInt(gasTankPercent) })
-	        }}
-	      onFocus={() => {this.setState({animation: true})}}
-              />
-          </Item>
-        </KeyboardAvoidingView >
+      </Animated.View>
       </Container>
     );
   }
@@ -90,32 +109,8 @@ class Gauge extends React.Component {
   render() {
     var tintColor = "#DE601B";
 
-    if( this.props.percent <= 15 ) {
+    if( this.props.percent <= 20 ) {
       tintColor = "#773b00";
-    }
-    else if( this.props.percent <= 30 ) {
-      tintColor = "#8e4600"
-    }
-
-    if( this.props.animation === true ) {
-      return(
-        <AnimatedGaugeProgress
-          style = {this.props.style}
-          size={200}
-          width={15}
-          fill={this.props.percent}
-          rotation={90}
-          cropDegree={90}
-          tintColor={tintColor}
-          delay={100}
-          backgroundColor="#ddd"
-          stroke={[2, 2]} //For a equaly dashed line
-          strokeCap="circle">
-          <Image style = {styles.logo}
-          source={require('../assets/images/logo.png')}
-          />
-          </AnimatedGaugeProgress>
-      );
     }
 
     return(
@@ -174,10 +169,11 @@ const styles = StyleSheet.create({
     top: 80
   },
   addButton: {
-    marginHorizontal: 30 
+    marginHorizontal: 50 
   },
   removeButton: {
-    marginHorizontal: 30
+    marginHorizontal: 50
+
   },
   label: {
     alignSelf: 'center',
