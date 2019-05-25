@@ -33,7 +33,7 @@ export default class Shell extends Component {
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) } 
+            onPress={ () => this.setState({ showImg: !this.state.showImg }) }
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>
@@ -46,7 +46,7 @@ export default class Shell extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
   footer: {
     flex: 1,
   },
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     height: 50,
     width: 50,
-    
+
   },
   textStyle:{
     marginTop: 5,

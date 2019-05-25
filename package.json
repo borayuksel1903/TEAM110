@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "cross-spawn": "^6.0.5",
     "expo": "^32.0.0",
     "firebase": "^6.0.2",
     "graceful-fs": "^4.1.15",

@@ -63,10 +63,18 @@ export default class CardComp extends Component {
       }
     }
   }
+
   handleSubmit = () => {
     addItem(this.state);
     AlertIOS.alert("Settings saved successfully!");
   }
+
+  handleChange = e => {
+    this.setState({
+      shell: !this.state
+    });
+  }
+
   render() {
     return (
       <Container>
@@ -81,7 +89,7 @@ export default class CardComp extends Component {
             <Text>Gas station preference</Text>
             </CardItem>
             <CardItem>
-              <Shell/>
+              <Shell onChange={this.handleChange}/>
               <SevenEleven/>
               <SeventySix/>
             </CardItem>
