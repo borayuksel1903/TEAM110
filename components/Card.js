@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import{StyleSheet} from 'react-native';
+import{StyleSheet, AlertIOS} from 'react-native';
 import { Container, Header, Content, Card, CardItem, Text, Button, Footer } from 'native-base';
 import Shell from './Shell';
 import SeventySix from './76';
@@ -13,7 +13,60 @@ import United from './United';
 import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
+import * as firebase from "firebase";
+var config = {
+  apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
+  authDomain: "ricoauth.firebaseapp.com",
+  databaseURL: "https://ricoauth.firebaseio.com",
+  projectId:"ricoauth",
+  storageBucket: "ricoauth.appspot.com",
+   messagingSenderId: "748133694175"
+};
+let app = firebase.initializeApp(config);
+const db = app.database();
+let itemsRef = db.ref('/settings');
+let addItem = item => {
+  itemsRef.push({
+    shell: item.shell,
+    seveneleven: item.seveneleven,
+    seventysix: item.seventysix,
+    arco: item.arco,
+    chevron: item.chevron,
+    costco: item.costco,
+    mobil: item.mobil,
+    speedway: item.speedway,
+    united: item.united,
+    usa: item.usa,
+    payment: item.payment,
+    carSetting: item.carSetting
+  });
+};
 export default class CardComp extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      shell: true,
+      seveneleven: true,
+      seventysix: true,
+      arco: true,
+      chevron: true,
+      costco: true,
+      mobil: true,
+      speedway: true,
+      united: true,
+      usa: true,
+      payment: "Credit Card",
+      carSetting:{
+        make: '',
+        model: '',
+        year: ''
+      }
+    }
+  }
+  handleSubmit = () => {
+    addItem(this.state);
+    AlertIOS.alert("Settings saved successfully!");
+  }
   render() {
     return (
       <Container>
@@ -60,8 +113,8 @@ export default class CardComp extends Component {
           </Card>
         </Content>
         <Footer>
-        <Button onPress={this._saveAsync} style={styles.backButton}>
-          <Text>Save my settings</Text> 
+        <Button onPress={this.handleSubmit} style={styles.backButton}>
+          <Text>Save my settings</Text>
         </Button>
         </Footer>
       </Container>
