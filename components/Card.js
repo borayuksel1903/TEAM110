@@ -69,10 +69,11 @@ export default class CardComp extends Component {
     AlertIOS.alert("Settings saved successfully!");
   }
 
-  handleChange = e => {
+  handleChange = () => {
     this.setState({
-      shell: !this.state
+      shell: !(this.state.shell)
     });
+    AlertIOS.alert(this.state.shell);
   }
 
   render() {
@@ -89,7 +90,7 @@ export default class CardComp extends Component {
             <Text>Gas station preference</Text>
             </CardItem>
             <CardItem>
-              <Shell onChange={this.handleChange}/>
+              <Shell onClick={this.handleChange}/>
               <SevenEleven/>
               <SeventySix/>
             </CardItem>
