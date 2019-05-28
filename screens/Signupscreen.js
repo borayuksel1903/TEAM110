@@ -2,8 +2,42 @@ import React from 'react';
 import { ScrollView, StyleSheet,Text,Image} from 'react-native';
 import { Container, Item, Form, Input, Button, Label, } from "native-base"
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import * as firebase from "firebase";
+
+var config = {
+  apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
+  authDomain: "ricoauth.firebaseapp.com",
+  databaseURL: "https://ricoauth.firebaseio.com",
+  projectId:"ricoauth",
+  storageBucket: "ricoauth.appspot.com",
+   messagingSenderId: "748133694175"
+};
+//firebase.initializeApp(config)
 
 export default class LinksScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+                email :'',
+                password:'',
+                re_password:'',
+                validated: true ,
+                 }
+  };
+
+  validate = (text) => {
+    console.log(text);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(reg.test(text) === false){
+      console.log("Email is Not Correct");
+      this.setState({email:text})
+      return false;
+    }
+    else {
+      this.setState({email:text})
+      console.log("Email is Correct");
+    }
+  }
   render() {
     return (
       <Container style={styles.container}>
@@ -18,6 +52,8 @@ export default class LinksScreen extends React.Component {
               autoCapitalize="none"
               autoCorrect={false}
               onChangeText={email => this.setState({ email })}
+              //onChangeText={(text) => this.validate(text)}
+              //value={this.state.email}
             />
           </Item>
           <Item floatingLabel style={styles.label}>
@@ -35,13 +71,13 @@ export default class LinksScreen extends React.Component {
               secureTextEntry={true}
               autoCapitalize="none"
               autoCorrect={false}
-              onChangeText={password => this.setState({ password })}
+              onChangeText={re_password => this.setState({ re_password })}
             />
           </Item>
-          <Button success style = {styles.sigupButton} onPress={this._signUpAsync}> 
+          <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}> 
             <Text>Create Account!</Text>
           </Button>
-          <Button transparent style = {styles.forgot}>
+          <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
             <Text style={{color: '#fff'}}>
               Continue as guest
             </Text>
@@ -50,9 +86,29 @@ export default class LinksScreen extends React.Component {
       </Container>
     );
   }
-  _signUpAsync = async () => {
-    this.props.navigation.navigate('Settings');
+  _RegisterAsync = async () => {
+      this.props.navigation.navigate('Settings');
   };
+  _AsGuestAsync = async () => {
+    this.props.navigation.navigate('Main');
+};
+
+  signup = (email, password) =>{
+    if(this.state.password == this.state.re_password){
+      try{
+        firebase.auth().createUserWithEmailAndPassword(email,password)
+      .then(() => this.props.navigation.navigate('Settings'))
+      .catch(error => {   
+        alert(error.toString());
+     })
+      }
+        catch (error) {
+      }
+    }
+    else{
+      alert('Please re-enter the same password');
+    }  
+  }
 }
 
 const styles = StyleSheet.create({

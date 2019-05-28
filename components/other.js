@@ -7,10 +7,10 @@ import {
   View,
   Image,
 } from 'react-native';
-import select from '../assets/gaslogo/711color.png';
-import unselect from '../assets/gaslogo/711bw.png';
+import select from '../assets/gaslogo/othercolor.png';
+import unselect from '../assets/gaslogo/otherbw.png';
 
-export default class SevenEleven extends Component {
+export default class Mobile extends Component {
   constructor() {
     super();
     this.state = { showImg: true };
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   img: {
     alignItems: 'center',
     height: 55,
-    width: 57,
+    width: 55,
     
   },
   textStyle:{

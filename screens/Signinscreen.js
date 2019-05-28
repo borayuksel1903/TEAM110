@@ -2,9 +2,27 @@ import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Container, Item, Form, Input, Button, Label, } from "native-base"
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
+import * as firebase from "firebase";
 
+var config = {
+  apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
+  authDomain: "ricoauth.firebaseapp.com",
+  databaseURL: "https://ricoauth.firebaseio.com",
+  projectId:"ricoauth",
+  storageBucket: "ricoauth.appspot.com",
+   messagingSenderId: "748133694175"
+};
+firebase.initializeApp(config)
 
 export default class SigninScreens extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+                email :'',
+                password:'',
+                validated: false ,
+                 }
+  };
   render() {
     return (
       
@@ -31,7 +49,7 @@ export default class SigninScreens extends React.Component {
               onChangeText={password => this.setState({ password })}
             />
           </Item>
-          <Button primary style = {styles.siginButton} onPress={this._signInAsync}> 
+          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}> 
             <Text>Sign In</Text>
           </Button>
           <Button success style = {styles.sigupButton} onPress={this._signUpAsync}> 
@@ -42,7 +60,7 @@ export default class SigninScreens extends React.Component {
               Forgot Password
             </Text>
           </Button>
-          <Button transparent style = {styles.forgot}>
+          <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
             <Text style={{color: '#fff'}}>
               Continue as guest
             </Text>
@@ -57,6 +75,18 @@ export default class SigninScreens extends React.Component {
 
   _signInAsync = async () => {
     this.props.navigation.navigate('Main');
+  };
+  _AsGuestAsync = async () => {
+    this.props.navigation.navigate('Main');
+};
+  signin = (email, password) =>{
+  try{
+    firebase.auth().signInWithEmailAndPassword(email,password)
+    .then(firebase.auth().onAuthStateChanged(async () => this.props.navigation.navigate('Main')))
+    .catch(error => {alert(error.toString())});
+  }
+    catch (error) {
+  }
   };
 }
 

@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import{StyleSheet} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Button, Footer } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Text, Button, Footer, CheckBox,ListItem,Body} from 'native-base';
 import Shell from './Shell';
 import SeventySix from './76';
 import SevenEleven from './711';
@@ -11,9 +11,16 @@ import Mobile from './Mobile';
 import Speedway from './Speedway';
 import United from './United';
 import Usa from './Usa';
+import Other from './other'
 import Payment from './Payment';
 import CarSetting from './CarSetting';
 export default class CardComp extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+                otherStatations :false,
+                 }
+  };
   render() {
     return (
       <Container>
@@ -31,17 +38,28 @@ export default class CardComp extends Component {
               <Shell/>
               <SevenEleven/>
               <SeventySix/>
+              <Speedway/>
             </CardItem>
             <CardItem>
-              <Arco/>
+            <United/>
               <Chevron/>
               <Costco/>
               <Mobile/>
             </CardItem>
             <CardItem>
-              <Speedway/>
-              <United/>
+              <Arco/>
               <Usa/>
+            </CardItem>
+            <CardItem style={{ paddingTop: 0}}>
+              <ListItem onPress={() => this.setState({ otherStatations: !this.state.otherStatations })}
+                        style={{alignSelf:'center'}}
+              >
+                <CheckBox checked={this.state.otherStatations} 
+                          onPress={() => this.setState({ otherStatations: !this.state.otherStatations })} 
+                          color="#DE601B"
+                /> 
+                  <Text style={{fontWeight: "bold",fontSize:14}}> Other Stations</Text>
+              </ListItem>
             </CardItem>
          </Card>
          <Card>
@@ -68,6 +86,7 @@ export default class CardComp extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
