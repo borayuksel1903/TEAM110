@@ -14,7 +14,8 @@ import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
 import * as firebase from "firebase";
-var config = {
+import { app } from '../screens/Signinscreen'
+/*var config = {
   apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
   authDomain: "ricoauth.firebaseapp.com",
   databaseURL: "https://ricoauth.firebaseio.com",
@@ -22,11 +23,13 @@ var config = {
   storageBucket: "ricoauth.appspot.com",
    messagingSenderId: "748133694175"
 };
-let app = firebase.initializeApp(config);
+let app = firebase.initializeApp(config);*/
 const db = app.database();
-let itemsRef = db.ref('/settings');
+let itemsRef = db.ref('/users');
+let uid = firebase.auth().currentUser;
+
 let addItem = item => {
-  itemsRef.push({
+  itemsRef.child(uid).update({
     shell: item.shell,
     seveneleven: item.seveneleven,
     seventysix: item.seventysix,
@@ -64,6 +67,7 @@ export default class CardComp extends Component {
     }
   }
 
+
   handleSubmit = () => {
     addItem(this.state);
     AlertIOS.alert("Settings saved successfully!");
@@ -73,7 +77,8 @@ export default class CardComp extends Component {
     this.setState({
       shell: !(this.state.shell)
     });
-    AlertIOS.alert(this.state.shell);
+    this.handleSubmit();
+    AlertIOS.alert("Hi");
   }
 
   render() {
@@ -90,7 +95,7 @@ export default class CardComp extends Component {
             <Text>Gas station preference</Text>
             </CardItem>
             <CardItem>
-              <Shell onClick={this.handleChange}/>
+              <Shell/>
               <SevenEleven/>
               <SeventySix/>
             </CardItem>
@@ -122,13 +127,16 @@ export default class CardComp extends Component {
           </Card>
         </Content>
         <Footer>
-        <Button onPress={this.handleSubmit} style={styles.backButton}>
+        <Button onPress={this.handleChange} style={styles.backButton}>
           <Text>Save my settings</Text>
         </Button>
         </Footer>
       </Container>
     );
   }
+  _saveAsync = async () => {
+    this.props.navigation.navigate('Main');
+  };
 }
 const styles = StyleSheet.create({
   container: {
