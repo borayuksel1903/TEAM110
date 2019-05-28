@@ -10,6 +10,7 @@ import {
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import MapView from 'react-native-maps';
 
 export default class MainScreen extends React.Component {
 
@@ -20,7 +21,7 @@ export default class MainScreen extends React.Component {
     this.cycle = 0;
     this.increment = 5;
     this.intervalID = 0; 
-    this.maxCycles = 0
+    this.maxCycles = 1;
   }
 
   addGas = () => {
@@ -81,6 +82,8 @@ export default class MainScreen extends React.Component {
           </Body>
           <Right />
         </Header>
+  
+        <MapView style={{flex: 1}} showsUserLocation={true} /> 
         <Animated.View>
 	  <View style={styles.gauge}>
 	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
@@ -88,14 +91,14 @@ export default class MainScreen extends React.Component {
 	    </Button>
 	  </View>
 	  <View style={styles.gasFillButtons}>
-          <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
-            <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	  </TouchableOpacity>
-          <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
-            <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	  </TouchableOpacity>
-	</View>
-      </Animated.View>
+            <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
+              <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
+	    </TouchableOpacity>
+            <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
+              <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
+	    </TouchableOpacity>
+	  </View>
+        </Animated.View>
       </Container>
     );
   }
@@ -159,21 +162,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: '60%'
   },
   gasFillButtons: {
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    top: 80
+    top: 60,
+    marginBottom: '30%'
   },
   addButton: {
     marginHorizontal: 50 
   },
   removeButton: {
     marginHorizontal: 50
-
   },
   label: {
     alignSelf: 'center',
