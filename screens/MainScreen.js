@@ -12,6 +12,8 @@ import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView from 'react-native-maps';
 
+// TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
+
 export default class MainScreen extends React.Component {
 
   constructor(props) {
