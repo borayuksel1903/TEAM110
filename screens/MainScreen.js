@@ -56,7 +56,8 @@ export default class MainScreen extends React.Component {
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      }
+      },
+      text: ''
     } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -184,26 +185,13 @@ export default class MainScreen extends React.Component {
 	    </View>
           </Animated.View>
         </View>
-        {/*<TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1 , marginBottom: '40%'}}
-        onChangeText={(text) => this.setState({text})}
-        value={this.state.text}
-        />
-        <Animated.View>
-	  <View style={styles.gauge}>
-	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
-	      <Gauge percent={this.state.gasTankPercent} />
-	    </Button>
-	  </View>
-	  <View style={styles.gasFillButtons}>
-            <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
-              <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	    </TouchableOpacity>
-            <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
-              <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	    </TouchableOpacity>
-	  </View>
-        </Animated.View>*/}
+	{/*
+          <Input
+            style={styles.searchBar}
+            onChangeText={(text) => this.setState({text})}
+            value={this.state.text}
+          />
+        */}
       </Container>
     );
   }
@@ -304,6 +292,16 @@ const styles = StyleSheet.create({
     position: 'absolute', 
     alignSelf: 'center', 
     top: '70%'
+  },
+  searchBar: {
+    position: 'absolute',
+    flex: 1,
+    alignItems: 'stretch',
+    height: 40, 
+    borderColor: 'gray', 
+    borderWidth: 1,
+    width: '100%',
+    top: '11%'
   },
   gauge: {
     alignItems: 'center',
