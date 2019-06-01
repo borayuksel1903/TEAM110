@@ -26,6 +26,9 @@ export default class CarSetting extends Component {
       year: value
     });
   }
+
+  var 
+
   render() {
     return (
           <Form>
@@ -119,6 +122,9 @@ export default class CarSetting extends Component {
               onValueChange={this.onValueChangeModel.bind(this)}
             >
               <Picker.Item label="Model" value="model"/>
+              if(true){
+                <Picker.Item label="1Model" value="model"/>
+              }
             </Picker>
             <Picker
               mode="dropdown"

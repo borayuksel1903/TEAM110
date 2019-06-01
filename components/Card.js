@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
-import{StyleSheet} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Button, Footer, CheckBox,ListItem,Body} from 'native-base';
+import { View, StyleSheet, Text, Alert } from 'react-native';
+import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, ListItem, CheckBox, Right } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
 import Shell from './Shell';
 import SeventySix from './76';
 import SevenEleven from './711';
@@ -11,7 +12,6 @@ import Mobile from './Mobile';
 import Speedway from './Speedway';
 import United from './United';
 import Usa from './Usa';
-import Other from './other'
 import Payment from './Payment';
 import CarSetting from './CarSetting';
 export default class CardComp extends Component {
@@ -21,14 +21,26 @@ export default class CardComp extends Component {
                 otherStatations :false,
                  }
   };
+  
   render() {
     return (
       <Container>
-        <Header>
-          <Text style={{fontWeight: "bold",fontSize:20}}>
-            Settings
-          </Text>
-          </Header>
+        <Header style={styles.header}>
+          <Left>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.openDrawer();
+              }}
+            >
+              <Ionicons name="ios-menu" color="#DE601B" size={32}/>
+            </Button>
+          </Left>
+          <Body>
+            <Title style={styles.textStyle}>Settings</Title>
+          </Body>
+          <Right />
+        </Header>
         <Content>
           <Card>
             <CardItem header>
