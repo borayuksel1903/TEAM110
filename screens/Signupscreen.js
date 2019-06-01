@@ -77,11 +77,7 @@ export default class LinksScreen extends React.Component {
               onChangeText={re_password => this.setState({ re_password })}
             />
           </Item>
-<<<<<<< HEAD
           <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}>
-=======
-          <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}> 
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
             <Text>Create Account!</Text>
           </Button>
           <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
@@ -105,11 +101,7 @@ export default class LinksScreen extends React.Component {
       try{
         firebase.auth().createUserWithEmailAndPassword(email,password)
       .then(() => this.props.navigation.navigate('Settings'))
-<<<<<<< HEAD
       .catch(error => {
-=======
-      .catch(error => {   
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
         alert(error.toString());
      })
       }
@@ -118,11 +110,7 @@ export default class LinksScreen extends React.Component {
     }
     else{
       alert('Please re-enter the same password');
-<<<<<<< HEAD
     }
-=======
-    }  
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
   }
 }
 

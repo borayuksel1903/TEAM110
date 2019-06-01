@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   AppRegistry,
   StyleSheet,
@@ -44,7 +43,6 @@ export default class Shell extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -54,16 +52,9 @@ const styles = StyleSheet.create({
   },
   img: {
     alignItems: 'center',
-<<<<<<< HEAD
-    aspectRatio: 1,
-    height: 50,
-    width: 50,
-
-=======
     height: 55,
     width: 60,
-    
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
+
   },
   textStyle:{
     marginTop: 5,

@@ -12,11 +12,7 @@ var config = {
   storageBucket: "ricoauth.appspot.com",
    messagingSenderId: "748133694175"
 };
-<<<<<<< HEAD
-export let app = firebase.initializeApp(config)
-=======
 firebase.initializeApp(config)
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
 
 export default class SigninScreens extends React.Component {
   constructor(props){
@@ -55,11 +51,7 @@ export default class SigninScreens extends React.Component {
               onChangeText={password => this.setState({ password })}
             />
           </Item>
-<<<<<<< HEAD
           <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}>
-=======
-          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}> 
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
             <Text>Sign In</Text>
           </Button>
           <Button success style = {styles.sigupButton} onPress={this._signUpAsync}>
@@ -92,14 +84,7 @@ export default class SigninScreens extends React.Component {
   signin = (email, password) =>{
   try{
     firebase.auth().signInWithEmailAndPassword(email,password)
-<<<<<<< HEAD
-    .then(firebase.auth().onAuthStateChanged( async () => {
-      console.log(firebase.auth().currentUser.uid);
-      this.props.navigation.navigate('Main');}
-      ))
-=======
     .then(firebase.auth().onAuthStateChanged(async () => this.props.navigation.navigate('Main')))
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
     .catch(error => {alert(error.toString())});
   }
     catch (error) {
