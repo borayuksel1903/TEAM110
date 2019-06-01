@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated, TextInput, Dimensions } from 'react-native';
+import { 
+  View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, 
+  TouchableOpacity, Animated, Linking, Dimensions
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +14,7 @@ import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView from 'react-native-maps';
+import Modal from "react-native-modal";
 
 let { width, height } = Dimensions.get('window');
 
@@ -29,7 +33,7 @@ const Mobil = {
 }
 
 const Shell = {
-  coordinate: {latitude: 32.8785606, longitude: -117.2115184 },
+  coordinate: {latitude: 32.8785606, longitude: -117.2115184},
   regular: 4.07,
   midgrade: 4.20,
   premium: 4.31,
@@ -44,20 +48,32 @@ const Chevron = {
   name: "Chevron"
 }
 
+const Arco = {
+  coordinate: {latitude: 32.8785606, longitude: -117.20916169999998},
+  regular: 3.70,
+  midgrade: 3.90,
+  premium: 4.00,
+  name: "Arco"
+}
+
 export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { 
       gasTankPercent: 10, 
-      animation: true,
+      animation: true, 
+      isModalVisible: false,
+      recommendedAdd:     "Mobil                         0.5mi",
+      cheapeastAdd:       "Shell                          2mi",
+      shortestDistAdd:    "Cheveron                 7mi",
+      fastestDurationAdd: "Arco                           8mi",
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      },
-      text: ''
+      }
     } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -92,7 +108,6 @@ export default class MainScreen extends React.Component {
         });
       }
     );
-    
   }
 
   componentWillUnmount() {
@@ -144,6 +159,7 @@ export default class MainScreen extends React.Component {
 	  region={ this.state.region }
 	>
           <GasPoint 
+	    show={this.state.button}
 	    coordinate={Mobil.coordinate}
 	    title={Mobil.name}
 	    regular={Mobil.regular}
@@ -152,6 +168,7 @@ export default class MainScreen extends React.Component {
 	    diesel={Mobil.diesel}
 	  />
 	  <GasPoint
+	    show={this.state.button}
 	    coordinate={Shell.coordinate}
             title={Shell.name}
             regular={Shell.regular}
@@ -160,6 +177,7 @@ export default class MainScreen extends React.Component {
             diesel={Shell.diesel}
 	  />
 	  <GasPoint
+	    show={this.state.button}
             coordinate={Chevron.coordinate}
             title={Chevron.name}
             regular={Chevron.regular}
@@ -167,11 +185,20 @@ export default class MainScreen extends React.Component {
             premium={Chevron.premium}
             diesel={Chevron.diesel}
           />
+	  <GasPoint
+            show={this.state.button}
+            coordinate={Arco.coordinate}
+            title={Arco.name}
+            regular={Arco.regular}
+            midgrade={Arco.midgrade}
+            premium={Arco.premium}
+            diesel={Arco.diesel}
+          />
 	</MapView>
-	<View style={styles.gasUpComp}>
+        <View style={styles.gasUpComp}>
           <Animated.View>
 	    <View style={styles.gauge}>
-	      <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
+	      <Button transparent onPress={() => {this.toggleModal(); this.setState({button: true})}}>
 	        <Gauge percent={this.state.gasTankPercent} />
 	      </Button>
 	    </View>
@@ -185,13 +212,48 @@ export default class MainScreen extends React.Component {
 	    </View>
           </Animated.View>
         </View>
-	{/*
-          <Input
-            style={styles.searchBar}
-            onChangeText={(text) => this.setState({text})}
-            value={this.state.text}
-          />
-        */}
+
+        {/*popup for gas up*/}
+        <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
+                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                {this.state.recommendedAdd}  
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                                {this.state.cheapeastAdd}
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                                {this.state.shortestDistAdd}
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                                {this.state.fastestDurationAdd}
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                    </View>
+                    <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
+                    <Button large onPress={this.toggleModal} style={styles.backButton}>
+                      <Text>Back</Text> 
+                    </Button>
+                </Modal>
       </Container>
     );
   }
@@ -201,7 +263,6 @@ export default class MainScreen extends React.Component {
 }
 
 class Gauge extends React.Component {
-
   render() {
     var tintColor = "#DE601B";
 
@@ -232,6 +293,8 @@ class Gauge extends React.Component {
 
 class GasPoint extends React.Component {
   render() {
+    if( !this.props.show || this.props.show === false ) return (null);
+
     let priceDescription = "";
 
     if( this.props.regular ) {
