@@ -14,12 +14,8 @@
     "@expo/samples": "2.1.1",
     "cross-spawn": "^6.0.5",
     "expo": "^32.0.0",
-<<<<<<< HEAD
-    "firebase": "^6.0.2",
     "graceful-fs": "^4.1.15",
-=======
     "firebase": "^6.1.0",
->>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
     "native-base": "^2.12.1",
     "react": "16.5.0",
     "react-circular-progressbar": "^2.0.0",
