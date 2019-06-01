@@ -12,9 +12,9 @@ export default class MainScreen extends React.Component {
       </Container>
     );
   }
-  _saveAsync = async () => {
+  /*_saveAsync = async () => {
     this.props.navigation.navigate('Main');
-  };
+  };*/
 }
 
 const styles = StyleSheet.create({
