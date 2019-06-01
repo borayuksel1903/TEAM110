@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "@material-ui/core": "^4.0.1",
+    "@material-ui/icons": "^4.0.1",
     "expo": "^32.0.0",
     "native-base": "^2.12.1",
     "react": "16.5.0",

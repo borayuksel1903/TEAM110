@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +18,7 @@ export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 10, animation: true } 
+    this.state = { gasTankPercent: 10, animation: true, text:"Enter your current location" } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
@@ -40,6 +40,20 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("wokeeey");
+        console.log(position);
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    );
   }
 
   componentWillUnmount() {
@@ -86,6 +100,11 @@ export default class MainScreen extends React.Component {
         </Header>
   
         <MapView style={{flex: 1}} showsUserLocation={true} /> 
+        <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1 , marginBottom: '40%'}}
+        onChangeText={(text) => this.setState({text})}
+        value={this.state.text}
+        />
         <Animated.View>
 	  <View style={styles.gauge}>
 	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
