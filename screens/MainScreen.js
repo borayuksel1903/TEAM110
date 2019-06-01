@@ -20,6 +20,30 @@ const LONGITUDE = 0;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+const Mobil = { 
+  coordinate: {latitude: 32.8710589032578, longitude: -117.233255945994},
+  regular: 4.36, 
+  midgrade: 4.46,
+  premium: 4.56,
+  name: "Mobil"
+}
+
+const Shell = {
+  coordinate: {latitude: 32.8785606, longitude: -117.2115184 },
+  regular: 4.07,
+  midgrade: 4.20,
+  premium: 4.31,
+  name: "Shell"
+}
+
+const Chevron = {
+  coordinate: {latitude: 32.880543494186675, longitude: -117.23468732639935},
+  regular: 4.02,
+  midgrade: 4.16,
+  premium: 4.26,
+  name: "Chevron"
+}
+
 export default class MainScreen extends React.Component {
 
   constructor(props) {
@@ -55,22 +79,6 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
-    /*
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }
-        });
-      },
-    (error) => console.log(error.message),
-    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
-    */
     this.watchID = navigator.geolocation.watchPosition(
       position => {
         this.setState({
@@ -106,7 +114,6 @@ export default class MainScreen extends React.Component {
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
-
   }
 
   render() {
@@ -135,10 +142,30 @@ export default class MainScreen extends React.Component {
 	  showsUserLocation={true} 
 	  region={ this.state.region }
 	>
-	{/*
-	<MapView.Marker
-          coordinate={ this.state.region }
-        />*/}
+          <GasPoint 
+	    coordinate={Mobil.coordinate}
+	    title={Mobil.name}
+	    regular={Mobil.regular}
+	    midgrade={Mobil.midgrade}
+	    premium={Mobil.premium}
+	    diesel={Mobil.diesel}
+	  />
+	  <GasPoint
+	    coordinate={Shell.coordinate}
+            title={Shell.name}
+            regular={Shell.regular}
+            midgrade={Shell.midgrade}
+            premium={Shell.premium}
+            diesel={Shell.diesel}
+	  />
+	  <GasPoint
+            coordinate={Chevron.coordinate}
+            title={Chevron.name}
+            regular={Chevron.regular}
+            midgrade={Chevron.midgrade}
+            premium={Chevron.premium}
+            diesel={Chevron.diesel}
+          />
 	</MapView>
 	<View style={styles.gasUpComp}>
           <Animated.View>
@@ -211,6 +238,43 @@ class Gauge extends React.Component {
           source={require('../assets/images/logo.png')}
         />
         </GaugeProgress>
+    );
+  }
+}
+
+class GasPoint extends React.Component {
+  render() {
+    let priceDescription = "";
+
+    if( this.props.regular ) {
+      priceDescription += "\nRegular: $" + this.props.regular;
+    }
+
+    if( this.props.midgrade ) {
+      priceDescription += "\nMidgrade: $" + this.props.midgrade;
+    }
+
+    if( this.props.premium ) {
+      priceDescription += "\nPremium: $" + this.props.premium;
+    }
+
+    if( this.props.diesel ) {
+      priceDescription += "\nDiesel: $" + this.props.diesel;
+    }
+
+    return(
+      <MapView.Marker
+        coordinate={this.props.coordinate}
+      >
+      <MapView.Callout>
+        <View>
+          <Text>
+            <Text style={{fontWeight: 'bold'}}>{this.props.title}{"\n"}</Text>
+	    {priceDescription}
+          </Text>
+          </View>
+        </MapView.Callout>
+      </MapView.Marker>
     );
   }
 }
