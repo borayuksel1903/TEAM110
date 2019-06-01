@@ -54,10 +54,16 @@ const styles = StyleSheet.create({
   },
   img: {
     alignItems: 'center',
+<<<<<<< HEAD
     aspectRatio: 1,
     height: 50,
     width: 50,
 
+=======
+    height: 55,
+    width: 60,
+    
+>>>>>>> ac28cdeabfe529e33448409579d4730f3a5a4929
   },
   textStyle:{
     marginTop: 5,

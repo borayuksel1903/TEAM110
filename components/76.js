@@ -52,9 +52,8 @@ const styles = StyleSheet.create({
   },
   img: {
     alignItems: 'center',
-    aspectRatio: 1,
-    height: 50,
-    width: 50,
+    height: 55,
+    width: 55,
     
   },
   textStyle:{

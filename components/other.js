@@ -7,10 +7,10 @@ import {
   View,
   Image,
 } from 'react-native';
-import select from '../assets/gaslogo/711color.png';
-import unselect from '../assets/gaslogo/711bw.png';
+import select from '../assets/gaslogo/othercolor.png';
+import unselect from '../assets/gaslogo/otherbw.png';
 
-export default class SevenEleven extends Component {
+export default class Mobile extends Component {
   constructor() {
     super();
     this.state = { showImg: true };
@@ -33,7 +33,7 @@ export default class SevenEleven extends Component {
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) } 
+            onPress={ () => this.setState({ showImg: !this.state.showImg }) }
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>
@@ -46,15 +46,15 @@ export default class SevenEleven extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
   footer: {
     flex: 1,
   },
   img: {
     alignItems: 'center',
     height: 55,
-    width: 57,
-    
+    width: 55,
+
   },
   textStyle:{
     marginTop: 5,

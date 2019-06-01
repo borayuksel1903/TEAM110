@@ -5,11 +5,15 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import CardComp from '../components/Card';
 
 export default class SettingsScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.navigation.navigate('Drawer');
+  }
   render() {
     return (
       <Container style={styles.container}>
         <GeneralStatusBarColor backgroundColor="#fff"barStyle="light-content"/>
-        <CardComp/>
+        <CardComp navigation={this.props.navigation}/>
       </Container>
       
       

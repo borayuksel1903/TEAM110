@@ -13,7 +13,7 @@ import United from './United';
 import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
-import * as firebase from "firebase";
+//import * as firebase from "firebase";
 import { app } from '../screens/Signinscreen'
 /*var config = {
   apiKey: "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
@@ -24,6 +24,7 @@ import { app } from '../screens/Signinscreen'
    messagingSenderId: "748133694175"
 };
 let app = firebase.initializeApp(config);*/
+/*
 const db = app.database();
 let itemsRef = db.ref('/users');
 let uid = firebase.auth().currentUser;
@@ -44,6 +45,7 @@ let addItem = item => {
     carSetting: item.carSetting
   });
 };
+*/
 export default class CardComp extends Component {
   constructor(props){
     super(props);
@@ -67,12 +69,12 @@ export default class CardComp extends Component {
     }
   }
 
-
+/*
   handleSubmit = () => {
     addItem(this.state);
     AlertIOS.alert("Settings saved successfully!");
   }
-
+*/
   handleChange = () => {
     this.setState({
       shell: !(this.state.shell)

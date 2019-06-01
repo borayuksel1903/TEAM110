@@ -33,7 +33,7 @@ export default class Costco extends Component {
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) } 
+            onPress={ () => this.setState({ showImg: !this.state.showImg }) }
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>
@@ -46,16 +46,15 @@ export default class Costco extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
   footer: {
     flex: 1,
   },
   img: {
     alignItems: 'center',
-    aspectRatio: 1,
-    height: 50,
-    width: 50,
-    
+    height: 55,
+    width: 55,
+
   },
   textStyle:{
     marginTop: 5,
