@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated, Linking} from 'react-native';
+import { 
+  View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, 
+  TouchableOpacity, Animated, Linking, Dimensions
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,7 +16,45 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import MapView from 'react-native-maps';
 import Modal from "react-native-modal";
 
-// TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
+let { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height;
+const LATITUDE = 0;
+const LONGITUDE = 0;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const Mobil = { 
+  coordinate: {latitude: 32.8710589032578, longitude: -117.233255945994},
+  regular: 4.36, 
+  midgrade: 4.46,
+  premium: 4.56,
+  name: "Mobil"
+}
+
+const Shell = {
+  coordinate: {latitude: 32.8785606, longitude: -117.2115184},
+  regular: 4.07,
+  midgrade: 4.20,
+  premium: 4.31,
+  name: "Shell"
+}
+
+const Chevron = {
+  coordinate: {latitude: 32.880543494186675, longitude: -117.23468732639935},
+  regular: 4.02,
+  midgrade: 4.16,
+  premium: 4.26,
+  name: "Chevron"
+}
+
+const Arco = {
+  coordinate: {latitude: 32.8785606, longitude: -117.20916169999998},
+  regular: 3.70,
+  midgrade: 3.90,
+  premium: 4.00,
+  name: "Arco"
+}
 
 export default class MainScreen extends React.Component {
 
@@ -23,10 +64,16 @@ export default class MainScreen extends React.Component {
       gasTankPercent: 10, 
       animation: true, 
       isModalVisible: false,
-      recommendedAdd: "Address 1    Price    5mi",
-      cheapeastAdd: "Address 2    Price    6mi",
-      shortestDistAdd: "Address 3    Price    7mi",
-      fastestDurationAdd: "Address 4    Price    8mi"
+      recommendedAdd:     "Mobil     0.5mi",
+      cheapeastAdd:       "Shell     2mi",
+      shortestDistAdd:    "Cheveron  7mi",
+      fastestDurationAdd: "Arco      8mi",
+      region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      }
     } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -54,10 +101,24 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
+
+    this.watchID = navigator.geolocation.watchPosition(
+      position => {
+        this.setState({
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }
+        });
+      }
+    );
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID); 
+    navigator.geolocation.clearWatch(this.watchID);
   }
 
   initAnimation = () => {
@@ -75,7 +136,6 @@ export default class MainScreen extends React.Component {
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
-
   }
 
   render() {
@@ -99,11 +159,52 @@ export default class MainScreen extends React.Component {
           <Right />
         </Header>
   
-        <MapView style={{flex: 1}} showsUserLocation={true} /> 
+        <MapView 
+	  style={{flex: 1}} 
+	  showsUserLocation={true} 
+	  region={ this.state.region }
+	>
+          <GasPoint 
+	    show={this.state.button}
+	    coordinate={Mobil.coordinate}
+	    title={Mobil.name}
+	    regular={Mobil.regular}
+	    midgrade={Mobil.midgrade}
+	    premium={Mobil.premium}
+	    diesel={Mobil.diesel}
+	  />
+	  <GasPoint
+	    show={this.state.button}
+	    coordinate={Shell.coordinate}
+            title={Shell.name}
+            regular={Shell.regular}
+            midgrade={Shell.midgrade}
+            premium={Shell.premium}
+            diesel={Shell.diesel}
+	  />
+	  <GasPoint
+	    show={this.state.button}
+            coordinate={Chevron.coordinate}
+            title={Chevron.name}
+            regular={Chevron.regular}
+            midgrade={Chevron.midgrade}
+            premium={Chevron.premium}
+            diesel={Chevron.diesel}
+          />
+	  <GasPoint
+            show={this.state.button}
+            coordinate={Arco.coordinate}
+            title={Arco.name}
+            regular={Arco.regular}
+            midgrade={Arco.midgrade}
+            premium={Arco.premium}
+            diesel={Arco.diesel}
+          />
+	</MapView>
         <View style={styles.gasUpComp}>
           <Animated.View>
 	    <View style={styles.gauge}>
-	      <Button transparent onPress={this.toggleModal}>
+	      <Button transparent onPress={() => {this.toggleModal(); this.setState({button: !this.state.button})}}>
 	        <Gauge percent={this.state.gasTankPercent} />
 	      </Button>
 	    </View>
@@ -125,7 +226,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                 {this.state.recommendedAdd}  
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.latitude +',' + this.state.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                         </View>
@@ -168,7 +269,6 @@ export default class MainScreen extends React.Component {
 }
 
 class Gauge extends React.Component {
-
   render() {
     var tintColor = "#DE601B";
 
@@ -193,6 +293,45 @@ class Gauge extends React.Component {
           source={require('../assets/images/logo.png')}
         />
         </GaugeProgress>
+    );
+  }
+}
+
+class GasPoint extends React.Component {
+  render() {
+    if( !this.props.show || this.props.show === false ) return (null);
+
+    let priceDescription = "";
+
+    if( this.props.regular ) {
+      priceDescription += "\nRegular: $" + this.props.regular;
+    }
+
+    if( this.props.midgrade ) {
+      priceDescription += "\nMidgrade: $" + this.props.midgrade;
+    }
+
+    if( this.props.premium ) {
+      priceDescription += "\nPremium: $" + this.props.premium;
+    }
+
+    if( this.props.diesel ) {
+      priceDescription += "\nDiesel: $" + this.props.diesel;
+    }
+
+    return(
+      <MapView.Marker
+        coordinate={this.props.coordinate}
+      >
+      <MapView.Callout>
+        <View>
+          <Text>
+            <Text style={{fontWeight: 'bold'}}>{this.props.title}{"\n"}</Text>
+	    {priceDescription}
+          </Text>
+          </View>
+        </MapView.Callout>
+      </MapView.Marker>
     );
   }
 }
