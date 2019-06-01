@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated, TextInput, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,11 +12,28 @@ import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView from 'react-native-maps';
 
+let { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height;
+const LATITUDE = 0;
+const LONGITUDE = 0;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
 export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 10, animation: true, text:"Enter your current location" } 
+    this.state = { 
+      gasTankPercent: 10, 
+      animation: true,
+      region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      }
+    } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
@@ -38,25 +55,40 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
-    /* 
+    /*
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log("wokeeey");
-        console.log(position);
+      position => {
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }
         });
       },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    (error) => console.log(error.message),
+    { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
     */
+    this.watchID = navigator.geolocation.watchPosition(
+      position => {
+        this.setState({
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }
+        });
+      }
+    );
+    
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID); 
+    navigator.geolocation.clearWatch(this.watchID);
   }
 
   initAnimation = () => {
@@ -98,7 +130,16 @@ export default class MainScreen extends React.Component {
           <Right />
         </Header>
   
-        <MapView style={{flex: 1}} showsUserLocation={true} /> 
+        <MapView 
+	  style={{flex: 1}} 
+	  showsUserLocation={true} 
+	  region={ this.state.region }
+	>
+	{/*
+	<MapView.Marker
+          coordinate={ this.state.region }
+        />*/}
+	</MapView>
 	<View style={styles.gasUpComp}>
           <Animated.View>
 	    <View style={styles.gauge}>
