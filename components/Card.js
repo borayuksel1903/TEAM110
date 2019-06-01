@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, ListItem, CheckBox, Right } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, Right,ListItem,CheckBox} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import Shell from './Shell';
 import SeventySix from './76';
@@ -14,6 +14,7 @@ import United from './United';
 import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
+
 export default class CardComp extends Component {
   constructor(props){
     super(props);
@@ -25,7 +26,7 @@ export default class CardComp extends Component {
   render() {
     return (
       <Container>
-        <Header style={{marginTop: 0}}>
+        <Header style={styles.header}>
           <Left>
             <Button
               transparent
@@ -110,4 +111,10 @@ const styles = StyleSheet.create({
     backgroundColor:'#DE601B',
     alignSelf: 'center'
   },
+  textStyle: {
+    color: '#000',
+  },
+  header: {
+    backgroundColor: '#fff'
+  }
 });
