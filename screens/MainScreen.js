@@ -40,6 +40,7 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
+
   }
 
   componentWillUnmount() {
@@ -86,21 +87,23 @@ export default class MainScreen extends React.Component {
         </Header>
   
         <MapView style={{flex: 1}} showsUserLocation={true} /> 
-        <Animated.View>
-	  <View style={styles.gauge}>
-	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
-	      <Gauge percent={this.state.gasTankPercent} />
-	    </Button>
-	  </View>
-	  <View style={styles.gasFillButtons}>
-            <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
-              <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	    </TouchableOpacity>
-            <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
-              <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	    </TouchableOpacity>
-	  </View>
-        </Animated.View>
+	<View style={styles.gasUpComp}>
+          <Animated.View>
+	    <View style={styles.gauge}>
+	      <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
+	        <Gauge percent={this.state.gasTankPercent} />
+	      </Button>
+	    </View>
+	    <View style={styles.gasFillButtons}>
+              <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
+                <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
+	      </TouchableOpacity>
+              <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
+                <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
+	      </TouchableOpacity>
+	    </View>
+          </Animated.View>
+        </View>
       </Container>
     );
   }
@@ -159,6 +162,11 @@ const styles = StyleSheet.create({
     height: 40,
     width: 300,
     borderWidth: 1,
+  },
+  gasUpComp: {
+    position: 'absolute', 
+    alignSelf: 'center', 
+    top: '70%'
   },
   gauge: {
     alignItems: 'center',
