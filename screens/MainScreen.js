@@ -156,7 +156,7 @@ export default class MainScreen extends React.Component {
                     </View>
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
-                      <Text>Save my settings</Text> 
+                      <Text>GO BACK TO THE MAIN PAGE</Text> 
                     </Button>
                 </Modal>
       </Container>
