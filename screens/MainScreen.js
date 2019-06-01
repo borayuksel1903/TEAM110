@@ -204,7 +204,7 @@ export default class MainScreen extends React.Component {
         <View style={styles.gasUpComp}>
           <Animated.View>
 	    <View style={styles.gauge}>
-	      <Button transparent onPress={() => {this.toggleModal(); this.setState({button: !this.state.button})}}>
+	      <Button transparent onPress={() => {this.toggleModal(); this.setState({button: true})}}>
 	        <Gauge percent={this.state.gasTankPercent} />
 	      </Button>
 	    </View>
@@ -257,7 +257,7 @@ export default class MainScreen extends React.Component {
                     </View>
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
-                      <Text>GO BACK TO THE MAIN PAGE</Text> 
+                      <Text>Back</Text> 
                     </Button>
                 </Modal>
       </Container>
