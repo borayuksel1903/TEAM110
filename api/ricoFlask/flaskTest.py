@@ -2,13 +2,11 @@ from flask import Flask , redirect, url_for, request, jsonify
 import googlemaps
 import json
 import pprint
-from flask_api import FlaskAPI, status, exceptions
-
 
 # Set up the client with the API key
 maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
 
-app = FlaskAPI(__name__)
+app = Flask(__name__)
 
 
 # Functions to call when at the basic localhost URL
@@ -56,43 +54,13 @@ def mainFunc():
 
     return returnString + "<br/><br/>" + pprint.pformat(distanceMatrix)
 
-@app.route('/test',methods=['GET','POST'])
+@app.route('/preferances',methods=['GET'])
 def preferancesJson():
-    
     if request.method == 'GET':
         return jsonify(startLocation="Start Location Coordinates",
                     nearbyStations="Nearby Gas Stations",
                     id="id")
-    if request.method == 'POST':
-        
-        lat = (request.data.get('lat',''))
-        lng = (request.data.get('lng',''))
 
-        yourStationList=getStationsWithinRange(lat,lng,5)
-        
-        stationString = ""
-
-        for station in yourStationList:
-            stationString = stationString + yourStationList[station] + str(station) + '\n'
-        return stationString
-
-
-notes = {
-    0: 'do the shopping',
-    1: 'build the codez',
-    2: 'paint the door',
-}
-
-def note_repr(key):
-    return {
-        'url': request.host_url.rstrip('/') + url_for('notes_detail', key=key),
-        'text': notes[key]
-    }
-
-
-@app.route('/example/')
-def example():
-    return {'request data': request.data}
 
 # Function that gets the user's location in latitude/longitude --- returns a float 2-tuple
 def getGeoLocation():
