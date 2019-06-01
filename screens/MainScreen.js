@@ -64,10 +64,10 @@ export default class MainScreen extends React.Component {
       gasTankPercent: 10, 
       animation: true, 
       isModalVisible: false,
-      recommendedAdd:     "Mobil     0.5mi",
-      cheapeastAdd:       "Shell     2mi",
-      shortestDistAdd:    "Cheveron  7mi",
-      fastestDurationAdd: "Arco      8mi",
+      recommendedAdd:     "Mobil                         0.5mi",
+      cheapeastAdd:       "Shell                          2mi",
+      shortestDistAdd:    "Cheveron                 7mi",
+      fastestDurationAdd: "Arco                           8mi",
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -226,7 +226,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                 {this.state.recommendedAdd}  
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.latitude +',' + this.state.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                         </View>

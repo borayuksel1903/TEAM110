@@ -49,6 +49,7 @@ export default class LinksScreen extends React.Component {
           <Item floatingLabel style={styles.label}>
             <Label>Email Address</Label>
             <Input style={{color: '#fff'}}
+	      returnKeyType={"done"}
               autoCapitalize="none"
               autoCorrect={false}
               onChangeText={email => this.setState({ email })}
@@ -59,6 +60,7 @@ export default class LinksScreen extends React.Component {
           <Item floatingLabel style={styles.label}>
             <Label>Password</Label>
             <Input style={{color: '#fff'}}
+	      returnKeyType={"done"}
               secureTextEntry={true}
               autoCapitalize="none"
               autoCorrect={false}
@@ -68,6 +70,7 @@ export default class LinksScreen extends React.Component {
           <Item floatingLabel style={styles.label}>
             <Label>Confirm Password</Label>
             <Input style={{color: '#fff'}}
+	      returnKeyType={"done"}
               secureTextEntry={true}
               autoCapitalize="none"
               autoCorrect={false}
