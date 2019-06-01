@@ -108,6 +108,11 @@ const styles = StyleSheet.create({
     backgroundColor:'#fff',
     alignSelf: 'center'
   },
+  backButton:{
+    padding:'20%',
+    backgroundColor:'#DE601B',
+    alignSelf: 'center'
+  },
   forgot:{
     marginTop: 5,
     padding: '20%',

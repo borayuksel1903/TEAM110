@@ -25,7 +25,7 @@ export default class CardComp extends Component {
   render() {
     return (
       <Container>
-        <Header style={styles.header}>
+        <Header style={{marginTop: 0}}>
           <Left>
             <Button
               transparent

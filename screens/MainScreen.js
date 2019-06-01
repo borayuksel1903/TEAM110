@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated, Linking} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -100,21 +100,23 @@ export default class MainScreen extends React.Component {
         </Header>
   
         <MapView style={{flex: 1}} showsUserLocation={true} /> 
-        <Animated.View>
-	        <View style={styles.gauge}>
-	          <Button transparent onPress={() =>{this.toggleModal}}>
-	            <Gauge percent={this.state.gasTankPercent} />
-	          </Button>
-	        </View>
-	        <View style={styles.gasFillButtons}>
-            <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
-              <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	          </TouchableOpacity>
-            <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
-              <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	          </TouchableOpacity>
-	        </View>
-        </Animated.View>
+        <View style={styles.gasUpComp}>
+          <Animated.View>
+	    <View style={styles.gauge}>
+	      <Button transparent onPress={this.toggleModal}>
+	        <Gauge percent={this.state.gasTankPercent} />
+	      </Button>
+	    </View>
+	    <View style={styles.gasFillButtons}>
+              <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
+                <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
+	      </TouchableOpacity>
+              <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
+                <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
+	      </TouchableOpacity>
+	    </View>
+          </Animated.View>
+        </View>
 
         {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
@@ -123,32 +125,39 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                 {this.state.recommendedAdd}  
                             </Text>
-                        <Button title="->"
-                            onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=100.5816,121.4944') }} color="#FFFFFF" />
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
                                 {this.state.cheapeastAdd}
                             </Text>
-                            <Button title="->"
-                                onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=138.5816,-21.4944') }} color="#FFFFFF" />
-                        </View>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
                                 {this.state.shortestDistAdd}
                             </Text>
-                            <Button title="->"
-                                onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" />
-                        </View>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
                                 {this.state.fastestDurationAdd}
                             </Text>
-                            <Button title="->"
-                                onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" />
-                        </View>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
                     </View>
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
+                    <Button large onPress={this.toggleModal} style={styles.backButton}>
+                      <Text>Save my settings</Text> 
+                    </Button>
                 </Modal>
       </Container>
     );
@@ -222,6 +231,11 @@ const styles = StyleSheet.create({
     top: 60,
     marginBottom: '30%'
   },
+  gasUpComp: {
+    position: 'absolute', 
+    alignSelf: 'center', 
+    top: '70%'
+  },
   addButton: {
     marginHorizontal: 50 
   },
@@ -232,5 +246,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 300,
     top: 100,
-  }
+  },
+  backButton:{
+    padding:'20%',
+    backgroundColor:'#DE601B',
+    alignSelf: 'center',
+    bottom: '18%'
+  },
 });
