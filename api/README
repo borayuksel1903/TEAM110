@@ -7,4 +7,11 @@ If on Windows, use chromedriver.exe
 To locally run, run it with 
 $ python server.py
 
-Unless someone comes up with something better! Any questions let me know
+Unless someone comes up with something better! Any questions let me know.
+
+
+Changes:
+Nicole's backend code --> client.py
+Mihai's script --> getMPG.py
+Gavin's script --> getPrices.py
+Gavin/Ralph/Mihai's backend --> server.py (main server that ONLY runs flask)
