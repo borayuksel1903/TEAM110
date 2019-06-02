@@ -16,7 +16,6 @@ import Modal from "react-native-modal";
 let { width, height } = Dimensions.get('window');
 
 // TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
-
 export default class MainScreen extends React.Component {
 
   constructor(props) {
@@ -42,10 +41,12 @@ export default class MainScreen extends React.Component {
       this.setState({ isModalVisible: !this.state.isModalVisible });
   }
 
+  // add gas to meter
   addGas = () => {
     this.setState({ gasTankPercent: Math.min(this.state.gasTankPercent + 5, 100), animation: false });
   }
   
+  // subtract gas from meter
   removeGas = () => {
     this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 0), animation: false });
   }
@@ -92,9 +93,7 @@ export default class MainScreen extends React.Component {
   }
 
   gasUP = (latitude, longitude ) => {
-
     var data = {lat: latitude, lng:longitude};
-
     fetch(('http://127.0.0.1:5000/test'),{
       method: 'POST',
       headers:{
