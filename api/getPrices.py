@@ -25,6 +25,8 @@ def getPrice():
      # For Windows
 #    driver = webdriver.Chrome("./chromedriver.exe")
     
+    # TODO: Handle get and post requests in a similar way such as server.py
+
     # For Linux/Mac
     driver = webdriver.Chrome("./chromedriver")
 
@@ -82,3 +84,5 @@ def getPrice():
 
     # close the webdriver
     driver.quit()
+
+    # TODO: Return a certain return value for the prices

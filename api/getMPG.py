@@ -26,9 +26,23 @@ url = "https://www.fueleconomy.gov/feg/findacar.shtml"
 #    print(string)
 
 @getMPG_api.route('/getMPG', methods=['GET', 'POST'])
-def getMPG( year, make , model):
-    
+#def getMPG( year, make , model):
+def getMPG():
+    # Not sure how to handle get requests
+    if request.method == 'GET':
+        return ("Why are you even getting")
+
+    # Store the year, make, and model
+    if request.method == 'POST':
+        # TODO ask Mihai to see if this is correct (all should be strings)
+        year = (request.data.get('year',''))
+        make = (request.data.get('make',''))
+        model = (request.data.get('model',''))
+
+    # Start up the chromedriver
     driver = webdriver.Chrome(executable_path='./chromedriver');
+
+    # Initialize local variables
     count = 0
     rangeSum = 0
     mpgSum = 0
@@ -36,6 +50,7 @@ def getMPG( year, make , model):
     avgMpg =0
     noRangeBool = 0
 
+    # Go to url
     driver.get(url)
     time.sleep(1)
 
@@ -129,8 +144,10 @@ def getMPG( year, make , model):
         returnString = ( "AVG MPG : " , avgMpg)
 
     driver.quit()
-    return returnString
+   # return returnString
 
+    # TODO: Need to return in JSON format but unsure how. Mihai???
+    return jsonify(Range=avgRange, MPG=avgMpg)
 
 
 #import firebase_admin
