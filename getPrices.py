@@ -1,31 +1,26 @@
 # import necessary selenium stuff
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import requests
-import json
+# import json
 import time
 
-# function to get current zipcode
-def getCurrentZipcode():
-    r = requests.get('https://ipinfo.io')
-    zipcode = r.json()['postal']
-    return zipcode
+# get address from somewhere (another file? idk)
 
-if __name__ == '__main__':
+def getPrices( address ):
     # setup the webdriver for chrome with the local executable
-    driver = webdriver.Chrome("./chromedriver.exe")
+    
+    driver = webdriver.Chrome(executable_path='./chromedriver');
 
     # go to gasbuddy.com
     driver.get("https://www.gasbuddy.com")
 
     # search nearby stations with our current zipcode
-    zipcode=getCurrentZipcode()
     searchBar = driver.find_element_by_name("search")
     searchBar.clear()
-    searchBar.send_keys(zipcode)
+    searchBar.send_keys(address)
     searchBar.send_keys(Keys.RETURN)
 
-    time.sleep(2)
+    time.sleep(3)
 
     # get to an appropriate amount of search results
     moreStationsButton = driver.find_element_by_xpath("""//*[@id="container"]/div/div[3]/div/div/div[1]/a""")
@@ -62,10 +57,4 @@ if __name__ == '__main__':
         stationData[stationAddress]['name'] = stationNames[stationIndex].text
         stationData[stationAddress]['price'] = stationPrice
 
-    print("NUMBER OF STATIONS: " + str(len(stationData)))
-    print(stationData)
-
-    print("END OF FUNCTION")
-
-    # close the webdriver
-    driver.quit()
+    return(stationData)

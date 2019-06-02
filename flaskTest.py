@@ -3,7 +3,8 @@ import googlemaps
 import json
 import pprint
 from flask_api import FlaskAPI, status, exceptions
-
+from getMPG import getMPG
+from getPrices import getPrices
 
 # Set up the client with the API key
 maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
@@ -20,7 +21,6 @@ def mainFunc():
 
     # Get all the relevant data
     lat, lng = getGeoLocation()
-    MPG = getCarMPG()
     gasLeft = getGasRemaining()
     drivingRange = MPG * gasLeft
 
@@ -30,8 +30,7 @@ def mainFunc():
     # Set up a return string for flask rendering (to see if output is corect)
     returnString = "<h3>If you see this, it might not be broken</h3><br/>"\
                    + "Location (latitude,longitude): (" + str(lat)\
-                   + ", " + str(lng) + ")<br/>" + "MPG: " + \
-                   str(MPG) + "<br/>" + "Gas Left: " + str(gasLeft) + \
+                   + ", " + str(lng) + ")<br/>Gas Left: " + str(gasLeft) + \
                    " gallons<br/>" + "Maximum Range: " + str(drivingRange)\
                    + " miles<br/>"
 
@@ -107,9 +106,34 @@ def getGeoLocation():
     return (lat,lng) #(32.8794112,-117.23816959999998)
 
 # Function that gets the MPG of the user's car --- returns an int
-def getCarMPG():
-    # TODO: get actual car MPG
-    return 30
+
+@app.route('/getMPG',methods=['POST'])
+def getMPGRequest():
+    if request.method == 'POST':
+        
+        year = (request.data.get('year',''))
+        make = (request.data.get('make',''))
+        model = (request.data.get('model',''))
+
+
+        myDataString = getMPG(year,make,model)
+
+
+        return (str(myDataString))
+
+
+@app.route('/getPrices',methods=['POST'])
+def getPricesRequest():
+    if request.method == 'POST':
+        
+
+        address = (request.data.get('address',''))
+        myDataString = getPrices(address)
+
+        print(myDataString)
+
+        return (str(myDataString))
+
 
 # Function that gets how much gas the user's car has left --- returns an int
 def getGasRemaining():
