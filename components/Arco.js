@@ -27,13 +27,18 @@ export default class Arco extends Component {
       />
     );
   }
+
+  callBackFunction = () => {
+    this.setState({ showImg: !this.state.showImg });
+    this.props.callbackFromParent(this.state.showImg);
+  }
   render(){
     return (
       <View style={ styles.container }>
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) }
+            onPress={() => this.callBackFunction()}
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>

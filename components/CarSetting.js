@@ -12,22 +12,21 @@ export default class CarSetting extends Component {
     };
   }
   onValueChangeMake(value) {
-    this.setState({
-      make: value
-    });
+    this.state.make=  value;  
+    this.props.callbackFromParent(this.state.make);
+
   }
   onValueChangeModel(value) {
-    this.setState({
-      model: value
-    });
+    this.state.model=  value;
+    this.props.callbackFromParent(this.state.model);
+
   }
   onValueChangeYear(value) {
-    this.setState({
-      year: value
-    });
+    this.state.year=  value;
+    this.props.callbackFromParent(this.state.year);
   }
 
-  var 
+  var
 
   render() {
     return (

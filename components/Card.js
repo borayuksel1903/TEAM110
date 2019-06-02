@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import{StyleSheet, AlertIOS} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Text, Button, Footer } from 'native-base';
+
+import { Container, Header, Content, Card, CardItem, Text, Button, Footer, Form, Item, Label, Input } from 'native-base';
 import Shell from './Shell';
 import SeventySix from './76';
 import SevenEleven from './711';
@@ -50,16 +51,16 @@ export default class CardComp extends Component {
   constructor(props){
     super(props);
     this.state = {
-      shell: true,
-      seveneleven: true,
-      seventysix: true,
-      arco: true,
-      chevron: true,
-      costco: true,
-      mobil: true,
-      speedway: true,
-      united: true,
-      usa: true,
+      shell: false,
+      seveneleven: false,
+      seventysix: false,
+      arco: false,
+      chevron: false,
+      costco: false,
+      mobil: false,
+      speedway: false,
+      united: false,
+      usa: false,
       payment: "Credit Card",
       carSetting:{
         make: '',
@@ -67,6 +68,7 @@ export default class CardComp extends Component {
         year: ''
       }
     }
+    //this.handleChange = this.handleChange.bind(this);
   }
 
 /*
@@ -75,16 +77,82 @@ export default class CardComp extends Component {
     AlertIOS.alert("Settings saved successfully!");
   }
 */
-  handleChange = () => {
-    this.setState({
-      shell: !(this.state.shell)
-    });
-    this.handleSubmit();
-    AlertIOS.alert("Hi");
-  }
+
+
+
+  handleSubmit = (shell, seveneleven, seventysix, arco, chevron, costco, mobil, speedway, united, usa, payment, carSetting) => {
+
+    var data = {shell: shell, seveneleven: seveneleven, seventysix: seventysix, arco: arco,
+      chevron: chevron, costco: costco, mobil: mobil, speedway: speedway, united: united, usa: usa,
+      payment: payment, carSetting: carSetting};
+    //var data2 = {seveneleven: seveneleven};
+    //var data11 = {payment: payment};
+    //var data12 = {carSetting: carSetting};
+    fetch('http://127.0.0.1:5000/result', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) =>{
+      alert("Settings saved successfully!")
+    })
+
+    //AlertIOS.alert(this.state.name);
+}
+    //action = "http://localhost:5000/result";
+    //method = "get";
+    //name = "place";
+    //type="submit";
+    //value="Submit";
+    //AlertIOS.alert("Settings saved successfully!");
+myCallbackShell = (dataFromChild) => {
+  this.setState({shell: dataFromChild})
+}
+myCallbackSeven = (dataFromChild) => {
+  this.setState({seveneleven: dataFromChild})
+}
+myCallbackSeventySix = (dataFromChild) => {
+  this.setState({seventysix: dataFromChild})
+}
+myCallbackArco = (dataFromChild) => {
+  this.setState({arco: dataFromChild})
+}
+myCallbackChevron = (dataFromChild) => {
+  this.setState({chevron: dataFromChild})
+}
+myCallbackCostco = (dataFromChild) => {
+  this.setState({costco: dataFromChild})
+}
+myCallbackMobil = (dataFromChild) => {
+  this.setState({mobil: dataFromChild})
+}
+myCallbackSpeedway = (dataFromChild) => {
+  this.setState({speedway: dataFromChild})
+}
+myCallbackUnited = (dataFromChild) => {
+  this.setState({united: dataFromChild})
+}
+myCallbackUSA = (dataFromChild) => {
+  this.setState({usa: dataFromChild})
+}
+myCallbackPayment = (dataFromChild) => {
+  this.setState({payment: dataFromChild})
+}
+myCallbackCarSetting = (dataFromChild1, dataFromChild2, dataFromChild3) => {
+  this.setState({carSetting: {
+    make: dataFromChild1,
+    model: dataFromChild2,
+    year: dataFromChild3
+  }})
+}
 
   render() {
     return (
+
+
+
       <Container>
         <Header>
           <Text style={{fontWeight: "bold",fontSize:20}}>
@@ -97,26 +165,26 @@ export default class CardComp extends Component {
             <Text>Gas station preference</Text>
             </CardItem>
             <CardItem>
-              <Shell/>
-              <SevenEleven/>
-              <SeventySix/>
+              <Shell callbackFromParent= {this.myCallbackShell}/>
+              <SevenEleven callbackFromParent= {this.myCallbackSeven}/>
+              <SeventySix callbackFromParent= {this.myCallbackSeventySix}/>
             </CardItem>
             <CardItem>
-              <Arco/>
-              <Chevron/>
-              <Costco/>
-              <Mobile/>
+              <Arco callbackFromParent= {this.myCallbackArco}/>
+              <Chevron callbackFromParent= {this.myCallbackChevron}/>
+              <Costco callbackFromParent= {this.myCallbackCostco}/>
+              <Mobile callbackFromParent= {this.myCallbackMobil}/>
             </CardItem>
             <CardItem>
-              <Speedway/>
-              <United/>
-              <Usa/>
+              <Speedway callbackFromParent= {this.myCallbackSpeedway}/>
+              <United callbackFromParent= {this.myCallbackUnited}/>
+              <Usa callbackFromParent= {this.myCallbackUSA}/>
             </CardItem>
          </Card>
          <Card>
            <CardItem header>
             <Text>Payment Type</Text>
-              <Payment/>
+              <Payment callbackFromParent= {this.myCallbackPayment}/>
             </CardItem>
           </Card>
           <Card>
@@ -124,16 +192,61 @@ export default class CardComp extends Component {
               <Text>Car Setting</Text>
             </CardItem>
             <CardItem style={{alignItems:'stretch'}}>
-              <CarSetting/>
+              <CarSetting callbackFromParent= {this.myCallbackCarSetting}/>
             </CardItem>
           </Card>
         </Content>
+
         <Footer>
-        <Button onPress={this.handleChange} style={styles.backButton}>
+
+
+        <Button onPress={() => this.handleSubmit(this.state.shell, this.state.seveneleven,
+          this.state.seventysix, this.state.arco, this.state.chevron, this.state.costco, this.state.mobil, this.state.speedway,
+          this.state.united, this.state.usa, this.state.payment, this.state.carSetting)} style={styles.backButton}>
           <Text>Save my settings</Text>
         </Button>
         </Footer>
+
       </Container>
+
+
+        /*
+        <Form action="http://localhost:5000/result" method="get">
+          <Item inlineLabel>
+            <Label>Username</Label>
+            <Text>Place</Text><Input type="text" onChangeText={this.handleChange} name="place"/>
+            <Input type="submit" value="Submit"/>
+
+          </Item>
+          <Item inlineLabel last>
+            <Label>Password</Label>
+            <Input />
+          </Item>
+
+        </Form>
+        <Button onClick={this.handleSubmit}>
+        <Text>Push</Text>
+        </Button>
+
+
+
+        }<Form onSubmit="http://localhost:5000/result" method="get">
+          Place: <input type="text" name="place"/>
+          <input type="submit" value="Submit"/>
+        </Form>
+
+        <Form onSubmit={this.handleChange} >
+
+          <Input type="text" name="place" />
+          <Input type="submit" value="Submit"/>
+          <Button onPress={this.handleChange} >
+            <Text>Save my settings</Text>
+          </Button>
+      </Form>*/
+
+
+
+
     );
   }
   _saveAsync = async () => {
