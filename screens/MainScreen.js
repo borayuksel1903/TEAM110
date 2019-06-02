@@ -89,12 +89,10 @@ export default class MainScreen extends React.Component {
 
   addGas = () => {
     this.setState({ gasTankPercent: Math.min(this.state.gasTankPercent + 5, 100), animation: false });
-    console.log( this.state.gasTankPercent );
   }
   
   removeGas = () => {
     this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 1), animation: false });
-    console.log( this.state.gasTankPercent );
   }
 
   componentDidMount() {
@@ -130,7 +128,7 @@ export default class MainScreen extends React.Component {
        this.increment = this.increment * -1;
        this.cycle = this.cycle + 1;
     }
-    else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
+    else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 50 ) {
       this.setState({ animation: false }); 
       return 
     }
@@ -146,9 +144,9 @@ export default class MainScreen extends React.Component {
           <Left>
             <Button
               transparent
-              onPress={() => {
-	        this.props.navigation.openDrawer();
-	      }}
+              onPress={() => { 
+                this.props.navigation.openDrawer();
+              }}
             >
               <Ionicons name="ios-menu" color="#DE601B" size={32}/>
             </Button>
@@ -160,30 +158,30 @@ export default class MainScreen extends React.Component {
         </Header>
   
         <MapView 
-	  style={{flex: 1}} 
-	  showsUserLocation={true} 
-	  region={ this.state.region }
-	>
+          style={{flex: 1}} 
+          showsUserLocation={true} 
+          region={ this.state.region }
+        >
           <GasPoint 
-	    show={this.state.button}
-	    coordinate={Mobil.coordinate}
-	    title={Mobil.name}
-	    regular={Mobil.regular}
-	    midgrade={Mobil.midgrade}
-	    premium={Mobil.premium}
-	    diesel={Mobil.diesel}
-	  />
-	  <GasPoint
-	    show={this.state.button}
-	    coordinate={Shell.coordinate}
+            show={this.state.button}
+            coordinate={Mobil.coordinate}
+            title={Mobil.name}
+            regular={Mobil.regular}
+            midgrade={Mobil.midgrade}
+            premium={Mobil.premium}
+            diesel={Mobil.diesel}
+          />
+          <GasPoint
+            show={this.state.button}
+            coordinate={Shell.coordinate}
             title={Shell.name}
             regular={Shell.regular}
             midgrade={Shell.midgrade}
             premium={Shell.premium}
             diesel={Shell.diesel}
-	  />
-	  <GasPoint
-	    show={this.state.button}
+          />
+          <GasPoint
+            show={this.state.button}
             coordinate={Chevron.coordinate}
             title={Chevron.name}
             regular={Chevron.regular}
@@ -191,7 +189,7 @@ export default class MainScreen extends React.Component {
             premium={Chevron.premium}
             diesel={Chevron.diesel}
           />
-	  <GasPoint
+	        <GasPoint
             show={this.state.button}
             coordinate={Arco.coordinate}
             title={Arco.name}
@@ -200,66 +198,73 @@ export default class MainScreen extends React.Component {
             premium={Arco.premium}
             diesel={Arco.diesel}
           />
-	</MapView>
+	      </MapView>
         <View style={styles.gasUpComp}>
           <Animated.View>
-	    <View style={styles.gauge}>
-	      <Button transparent onPress={() => {this.toggleModal(); this.setState({button: true})}}>
-	        <Gauge percent={this.state.gasTankPercent} />
-	      </Button>
-	    </View>
-	    <View style={styles.gasFillButtons}>
+            {/* ---------------------------Main Gauge Component---------------------------- */}
+            <View style={styles.gauge}>
+              <Button transparent onPress={() => {this.toggleModal(); this.setState({button: true})}}>
+                <Gauge percent={this.state.gasTankPercent} />
+              </Button>
+            </View>
+
+            {/* -------------------------------Gauge Add/Sub------------------------------- */}
+            <View style={styles.gasFillButtons}>
               <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
                 <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	      </TouchableOpacity>
+              </TouchableOpacity>
+              <Text style = {styles.gasPercentText}>{this.state.gasTankPercent}%</Text>
               <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
                 <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	      </TouchableOpacity>
-	    </View>
+              </TouchableOpacity>
+            </View>
           </Animated.View>
         </View>
 
-        {/*popup for gas up*/}
+        {/* ------------------------------------GasUp Results------------------------------------ */}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{ color: 'white', fontSize: 25}}>
-                                {this.state.recommendedAdd}  
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                        </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.cheapeastAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.shortestDistAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.fastestDurationAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                    </View>
-                    <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
-                    <Button large onPress={this.toggleModal} style={styles.backButton}>
-                      <Text>Back</Text> 
-                    </Button>
-                </Modal>
+            <View style={styles.modalColumn}>
+                {/* ----------------------------ROW 1---------------------------- */}
+                <View style={styles.modalRow}>
+                  <Text style={{ color: 'white', fontSize: 25}}>
+                      {this.state.recommendedAdd}  
+                  </Text>
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                  </Button>
+                </View>
+                {/* ----------------------------ROW 2---------------------------- */}
+                <View style={styles.modalRow}>
+                  <Text style={{ color: 'white', fontSize: 25 }}>
+                      {this.state.cheapeastAdd}
+                  </Text>
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                  </Button>
+                </View>
+                {/* ----------------------------ROW 3---------------------------- */}
+                <View style={styles.modalRow}>
+                  <Text style={{ color: 'white', fontSize: 25 }}>
+                      {this.state.shortestDistAdd}
+                  </Text>
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                  </Button>
+                </View>
+                {/* ----------------------------ROW 4---------------------------- */}
+                <View style={styles.modalRow}>
+                  <Text style={{ color: 'white', fontSize: 25 }}>
+                      {this.state.fastestDurationAdd}
+                  </Text>
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                  </Button>
+                </View>
+            </View>            
+            <Button large onPress={this.toggleModal} style={styles.backButton}>
+              <Text>Back</Text> 
+            </Button>
+          </Modal>
       </Container>
     );
   }
@@ -271,10 +276,6 @@ export default class MainScreen extends React.Component {
 class Gauge extends React.Component {
   render() {
     var tintColor = "#DE601B";
-
-    if( this.props.percent <= 20 ) {
-      tintColor = "#773b00";
-    }
 
     return(
       <GaugeProgress
@@ -343,6 +344,18 @@ const styles = StyleSheet.create({
   textStyle: {
     color: '#000',
   },
+  modalColumn: {
+    flex: 1, 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    marginTop: '40%', 
+    marginLeft: '5%'
+  },
+  modalRow: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
   logo: {
     width: 170.8,
     height: 173.8,
@@ -356,6 +369,9 @@ const styles = StyleSheet.create({
     height: 40,
     width: 300,
     borderWidth: 1,
+  },
+  gasPercentText: {
+    fontSize: 24,
   },
   gauge: {
     alignItems: 'center',
