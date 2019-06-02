@@ -1,0 +1,10 @@
+Change chromedriver.mac to chromedriver if you are on a Mac
+- change chromedriver to chromedriver.linux
+- Make sure to change it back
+
+If on Windows, use chromedriver.exe
+
+To locally run, run it with 
+$ python server.py
+
+Unless someone comes up with something better! Any questions let me know
