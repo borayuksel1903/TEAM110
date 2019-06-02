@@ -6,27 +6,15 @@ export default class CarSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      make: "make",
-      model:"model",
       year: "year",
     };
   }
-  onValueChangeMake(value) {
-    this.setState({
-      make: value
-    });
-  }
-  onValueChangeModel(value) {
-    this.setState({
-      model: value
-    });
-  }
+
   onValueChangeYear(value) {
-    this.setState({
-      year: value
-    });
+    this.state.year=  value;
+    this.props.callbackFromParent(this.state.year);
   }
-  yearByCar(make,model){
+  yearByCar(){
     return(
       <Picker
               mode="dropdown"
