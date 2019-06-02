@@ -1,6 +1,6 @@
-Change chromedriver.mac to chromedriver if you are on a Mac
-- change chromedriver to chromedriver.linux
-- Make sure to change it back
+If you are on a Mac AND ONLY IF chromedriver.mac EXISTS!!! 
+- Change chromedriver to chromedriver.linux
+- Change chromedriver.mac to chromedriver
 
 If on Windows, use chromedriver.exe
 
