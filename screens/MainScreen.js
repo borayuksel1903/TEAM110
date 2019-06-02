@@ -127,10 +127,10 @@ export default class MainScreen extends React.Component {
         result = obj[i];
         this.state.myrecsName.push( result.name );
         this.state.myrecsCoord.push(result.coordinates);
-
+        
       }
-      this.setState({ isModalVisible: !this.state.isModalVisible });
- 
+      //this.setState({ isModalVisible: !this.state.isModalVisible });
+      alert(this.state.myrecsCoord)
     })
 
   }
