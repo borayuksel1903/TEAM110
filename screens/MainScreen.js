@@ -18,12 +18,13 @@ export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 10, animation: true, text:"Enter your current location" } 
+    this.state = { gasTankPercent: 10, animation: true, text:"Enter your current location" ,latitude: null, longitude:null } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
     this.intervalID = 0; 
     this.maxCycles = 1;
+
   }
 
   addGas = () => {
@@ -43,8 +44,6 @@ export default class MainScreen extends React.Component {
     
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log("wokeeey");
-        console.log(position);
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -57,7 +56,21 @@ export default class MainScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalID); 
+    clearInterval(this.intervalID);
+    navigator.geolocation.getCurrentPosition(
+
+      (position) => {
+        console.log(position);
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    );
+
   }
 
   initAnimation = () => {
@@ -77,6 +90,26 @@ export default class MainScreen extends React.Component {
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
 
   }
+
+  gasUP = (latitude, longitude ) => {
+
+    var data = {lat: latitude, lng:longitude};
+
+    fetch(('http://127.0.0.1:5000/test'),{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(response => {
+
+      alert(response);  
+    })
+
+  }
+
 
   render() {
   let { init } = this.state;
@@ -107,7 +140,7 @@ export default class MainScreen extends React.Component {
         />
         <Animated.View>
 	  <View style={styles.gauge}>
-	    <Button transparent onPress={() =>{Alert.alert("Gas Up")}}>
+	    <Button transparent onPress={()=>this.gasUP(this.state.latitude, this.state.longitude)}>
 	      <Gauge percent={this.state.gasTankPercent} />
 	    </Button>
 	  </View>

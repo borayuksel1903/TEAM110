@@ -60,9 +60,7 @@ def mainFunc():
 def preferancesJson():
     
     if request.method == 'GET':
-        return jsonify(startLocation="Start Location Coordinates",
-                    nearbyStations="Nearby Gas Stations",
-                    id="id")
+        return ("startLocation")
     if request.method == 'POST':
         
         lat = (request.data.get('lat',''))
@@ -74,7 +72,7 @@ def preferancesJson():
 
         for station in yourStationList:
             stationString = stationString + yourStationList[station] + str(station) + '\n'
-        return stationString
+        return (stationString)
 
 
 notes = {
