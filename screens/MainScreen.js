@@ -11,6 +11,7 @@ import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView from 'react-native-maps';
+import Modal from "react-native-modal";
 
 // TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
 
@@ -18,12 +19,20 @@ export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 10, animation: true, text:"Enter your current location" ,latitude: null, longitude:null } 
+    this.state = { gasTankPercent: 10,
+       animation: true, 
+       text:"Enter your current location" ,
+       latitude: null,
+       longitude:null ,
+       myrecsName: [],
+       myrecsCoord:[]
+      } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
     this.intervalID = 0; 
     this.maxCycles = 1;
+         
 
   }
 
@@ -105,7 +114,23 @@ export default class MainScreen extends React.Component {
     .then(response => response.text())
     .then(response => {
 
-      alert(response);  
+      recomandationsJSON = response;
+      
+      var obj = JSON.parse(recomandationsJSON)
+    
+      mylen =obj.length
+
+      mystring = ""
+
+      for( i = 0; i<mylen; ++i){
+
+        result = obj[i];
+        this.state.myrecsName.push( result.name );
+        this.state.myrecsCoord.push(result.coordinates);
+
+      }
+      this.setState({ isModalVisible: !this.state.isModalVisible });
+ 
     })
 
   }
@@ -152,7 +177,46 @@ export default class MainScreen extends React.Component {
               <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
 	    </TouchableOpacity>
 	  </View>
-        </Animated.View>
+    </Animated.View>
+    <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
+                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                {(this.state.myrecsName)[0]}  
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                        </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                                {(this.state.myrecsName)[1]}  
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                              {(this.state.myrecsName[2])}                              </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ color: 'white', fontSize: 25 }}>
+                              {(this.state.myrecsName[3])}  
+                            </Text>
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                              <Text style={{color: '#FFF'}}>  Go  </Text>
+                            </Button>
+                            </View>
+                    </View>
+                    <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
+                    <Button large onPress={this.toggleModal} style={styles.backButton}>
+                      <Text>Back</Text> 
+                    </Button>
+                </Modal>
       </Container>
     );
   }

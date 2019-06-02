@@ -69,10 +69,13 @@ def preferancesJson():
         yourStationList=getStationsWithinRange(lat,lng,5)
         
         stationString = ""
-
+        counter= 1
+        mylist=[]
         for station in yourStationList:
-            stationString = stationString + yourStationList[station] + str(station) + '\n'
-        return (stationString)
+            mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station)})
+            counter=counter+1
+
+        return jsonify(results=mylist)
 
 
 notes = {
