@@ -92,7 +92,7 @@ export default class MainScreen extends React.Component {
   }
   
   removeGas = () => {
-    this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 1), animation: false });
+    this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 0), animation: false });
   }
 
   componentDidMount() {
