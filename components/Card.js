@@ -15,6 +15,8 @@ import Usa from './Usa';
 import Payment from './Payment';
 import CarSetting from './CarSetting';
 
+import TestCar from './testCar';
+
 export default class CardComp extends Component {
   constructor(props){
     super(props);
@@ -85,6 +87,9 @@ export default class CardComp extends Component {
             <CardItem header>
               <Text>Car Setting</Text>
             </CardItem>
+            <CardItem style={{alignItems:'stretch',marginBottom:'5%'}}>
+              <TestCar/>
+            </CardItem>
             <CardItem style={{alignItems:'stretch'}}>
               <CarSetting/>
             </CardItem>
@@ -92,7 +97,7 @@ export default class CardComp extends Component {
         </Content>
         <Footer>
         <Button onPress={this._saveAsync} style={styles.backButton}>
-          <Text>Save my settings</Text> 
+          <Text style={{color: '#fff'}}>Save my settings</Text> 
         </Button>
         </Footer>
       </Container>

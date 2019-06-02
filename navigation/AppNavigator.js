@@ -25,7 +25,7 @@ export default createAppContainer(createSwitchNavigator(
     Main: MainScreen,
   },
   {
-    initialRouteName: 'Settings',
+    initialRouteName: 'Main',
   }
 ));
 
