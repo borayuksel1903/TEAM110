@@ -1,8 +1,5 @@
 import React from 'react';
-import { 
-  View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, 
-  TouchableOpacity, Animated, Linking, Dimensions
-} from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput, Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -55,26 +52,21 @@ const Arco = {
   premium: 4.00,
   name: "Arco"
 }
+// TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
 
 export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { 
-      gasTankPercent: 10, 
-      animation: true, 
-      isModalVisible: false,
-      recommendedAdd:     "Mobil                         0.5mi",
-      cheapeastAdd:       "Shell                          2mi",
-      shortestDistAdd:    "Cheveron                 7mi",
-      fastestDurationAdd: "Arco                           8mi",
-      region: {
-        latitude: LATITUDE,
-        longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      }
-    } 
+    this.state = { gasTankPercent: 10,
+       animation: true, 
+       text:"Enter your current location" ,
+       latitude: null,
+       longitude:null ,
+       myrecsName: [],
+       myrecsCoordLat:[],
+       myrecsCoordLong:[]
+      } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
@@ -134,7 +126,55 @@ export default class MainScreen extends React.Component {
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
+
   }
+
+  gasUP = (latitude, longitude ) => {
+
+    var data = {lat: latitude, lng:longitude};
+
+    fetch(('http://127.0.0.1:5000/test'),{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.text())
+    .then(response => {
+
+      recomandationsJSON = response;
+      
+      var obj = JSON.parse(recomandationsJSON)
+    
+      mylen =obj.length
+
+      mystring = ""
+
+      for( i = 0; i<mylen; ++i){
+
+        result = obj[i];
+        this.state.myrecsName.push( result.name );
+        var str = result.coordinates;
+        str = str.replace(',','')
+        str = str.replace('(','')
+        str = str.replace(')','')
+
+        var separateArray = str.split(" ")
+
+        var myLat = separateArray[0]
+        var myLong = separateArray[1] 
+
+        this.state.myrecsCoordLat.push(myLat) 
+        this.state.myrecsCoordLong.push(myLong)
+        
+      }
+      this.setState({ isModalVisible: !this.state.isModalVisible });
+      //alert(this.state.myrecsName)
+    })
+
+  }
+
 
   render() {
   let { init } = this.state;
@@ -203,7 +243,7 @@ export default class MainScreen extends React.Component {
           <Animated.View>
             {/* ---------------------------Main Gauge Component---------------------------- */}
             <View style={styles.gauge}>
-              <Button transparent onPress={() => {this.toggleModal(); this.setState({button: true})}}>
+              <Button transparent onPress={()=>this.gasUP(this.state.latitude, this.state.longitude)}>
                 <Gauge percent={this.state.gasTankPercent} />
               </Button>
             </View>
@@ -227,36 +267,35 @@ export default class MainScreen extends React.Component {
                 {/* ----------------------------ROW 1---------------------------- */}
                 <View style={styles.modalRow}>
                   <Text style={{ color: 'white', fontSize: 25}}>
-                      {this.state.recommendedAdd}  
+                      {(this.state.myrecsName)[0]}  
                   </Text>
-                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                     <Text style={{color: '#FFF'}}>  Go  </Text>
                   </Button>
                 </View>
                 {/* ----------------------------ROW 2---------------------------- */}
-                <View style={styles.modalRow}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ color: 'white', fontSize: 25 }}>
-                      {this.state.cheapeastAdd}
+                      {(this.state.myrecsName)[1]}  
                   </Text>
-                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                     <Text style={{color: '#FFF'}}>  Go  </Text>
                   </Button>
                 </View>
                 {/* ----------------------------ROW 3---------------------------- */}
-                <View style={styles.modalRow}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ color: 'white', fontSize: 25 }}>
-                      {this.state.shortestDistAdd}
-                  </Text>
-                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    {(this.state.myrecsName[2])}                              </Text>
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
                     <Text style={{color: '#FFF'}}>  Go  </Text>
                   </Button>
                 </View>
                 {/* ----------------------------ROW 4---------------------------- */}
-                <View style={styles.modalRow}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ color: 'white', fontSize: 25 }}>
-                      {this.state.fastestDurationAdd}
+                    {(this.state.myrecsName[3])}  
                   </Text>
-                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                  <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                     <Text style={{color: '#FFF'}}>  Go  </Text>
                   </Button>
                 </View>
