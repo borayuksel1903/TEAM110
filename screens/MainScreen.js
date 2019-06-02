@@ -142,7 +142,7 @@ export default class MainScreen extends React.Component {
         
       }
       this.setState({ isModalVisible: !this.state.isModalVisible });
-      //alert(this.state.myrecsCoordLat)
+      //alert(this.state.myrecsName)
     })
 
   }

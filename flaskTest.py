@@ -75,7 +75,7 @@ def preferancesJson():
             mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station)})
             counter=counter+1
 
-        return jsonify(results=mylist)
+        return jsonify(mylist)
 
 
 notes = {
