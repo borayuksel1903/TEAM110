@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput, Linking } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,7 +25,8 @@ export default class MainScreen extends React.Component {
        latitude: null,
        longitude:null ,
        myrecsName: [],
-       myrecsCoord:[]
+       myrecsCoordLat:[],
+       myrecsCoordLong:[]
       } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -126,11 +127,22 @@ export default class MainScreen extends React.Component {
 
         result = obj[i];
         this.state.myrecsName.push( result.name );
-        this.state.myrecsCoord.push(result.coordinates);
+        var str = result.coordinates;
+        str = str.replace(',','')
+        str = str.replace('(','')
+        str = str.replace(')','')
+
+        var separateArray = str.split(" ")
+
+        var myLat = separateArray[0]
+        var myLong = separateArray[1] 
+
+        this.state.myrecsCoordLat.push(myLat) 
+        this.state.myrecsCoordLong.push(myLong)
         
       }
-      //this.setState({ isModalVisible: !this.state.isModalVisible });
-      alert(this.state.myrecsCoord)
+      this.setState({ isModalVisible: !this.state.isModalVisible });
+      //alert(this.state.myrecsCoordLat)
     })
 
   }
@@ -184,7 +196,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                 {(this.state.myrecsName)[0]}  
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude +',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude + '') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                         </View>
@@ -192,14 +204,14 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25 }}>
                                 {(this.state.myrecsName)[1]}  
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
                               {(this.state.myrecsName[2])}                              </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
@@ -207,7 +219,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25 }}>
                               {(this.state.myrecsName[3])}  
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
