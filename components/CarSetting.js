@@ -1,38 +1,63 @@
 import React, { Component } from "react";
 import{StyleSheet} from 'react-native';
-import { Container, Header, Content, Icon, Picker, Form, Text} from "native-base";
+import { Container, Header, Content, Icon, Picker, Form, Text,List, ListItem,} from "native-base";
 
 export default class CarSetting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      make: "make",
-      model:"model",
-      year: "year"
+      year: "year",
     };
   }
-  onValueChangeMake(value) {
-    this.setState({
-      make: value
-    });
-  }
-  onValueChangeModel(value) {
-    this.setState({
-      model: value
-    });
-  }
+
   onValueChangeYear(value) {
-    this.setState({
-      year: value
-    });
+    this.state.year=  value;
+    this.props.callbackFromParent(this.state.year);
   }
-
-  var 
-
+  yearByCar(){
+    return(
+      <Picker
+              mode="dropdown"
+              iosIcon={<Icon name="arrow-down" />}
+              headerStyle={{ backgroundColor: "#DE601B" }}
+              headerBackButtonTextStyle={{ color: "#000" }}
+              headerTitleStyle={{ color: "#000" }}
+              selectedValue={this.state.year}
+              onValueChange={this.onValueChangeYear.bind(this)}
+      >
+        <Picker.Item label='Year' value ='year'/>
+        <Picker.Item label='2019' value ='2019'/>
+        <Picker.Item label='2018' value ='2018'/>
+        <Picker.Item label='2017' value ='2017'/>
+        <Picker.Item label='2016' value ='2016'/>
+        <Picker.Item label='2015' value ='2015'/>
+        <Picker.Item label='2014' value ='2014'/>
+        <Picker.Item label='2013' value ='2013'/>
+        <Picker.Item label='2012' value ='2012'/>
+        <Picker.Item label='2011' value ='2011'/>
+        <Picker.Item label='2010' value ='2010'/>
+        <Picker.Item label='2009' value ='2009'/>
+        <Picker.Item label='2008' value ='2008'/>
+        <Picker.Item label='2007' value ='2007'/>
+        <Picker.Item label='2006' value ='2006'/>
+        <Picker.Item label='2005' value ='2005'/>
+        <Picker.Item label='2004' value ='2004'/>
+        <Picker.Item label='2003' value ='2003'/>
+        <Picker.Item label='2002' value ='2002'/>
+        <Picker.Item label='2001' value ='2001'/> 
+        <Picker.Item label='2000' value ='2000'/>    
+        <Picker.Item label='1999' value ='1999'/>  
+        <Picker.Item label='1998' value ='1998'/>
+        <Picker.Item label='1997' value ='1997'/>
+        <Picker.Item label='1996' value ='1996'/>
+        <Picker.Item label='1995' value ='1995'/>
+      </Picker>
+    )
+  }
   render() {
     return (
           <Form>
-            <Picker
+            {/*<Picker
               mode="dropdown"
               iosIcon={<Icon name="arrow-down"/>}
               headerStyle={{ backgroundColor: "#DE601B" }}
@@ -41,7 +66,7 @@ export default class CarSetting extends Component {
               selectedValue={this.state.make}
               onValueChange={this.onValueChangeMake.bind(this)}
             >
-              <Picker.Item label="Make" value="make"/>
+              <Picker.Item label="Make" value="make" onValueChange={this.modelByMake.bind()}/>
               <Picker.Item label="Acura" value="Acura"/>
               <Picker.Item label="Alfa Romeo" value="Alfa Romeo"/>
               <Picker.Item label="AMC" value="AMC"/>
@@ -91,7 +116,7 @@ export default class CarSetting extends Component {
               <Picker.Item label="Nissan" value="Nissan"/>
               <Picker.Item label="Oldsmobile" value="Oldsmobile"/>
               <Picker.Item label="Peugeot" value="Peugeot"/>
-              <Picker.Item label="Plymouth" value="Plymouth"/>
+              <Picker.Item label="Plymouth" value="Plymouth" />
               <Picker.Item label="Pontiac" value="Pontiac"/>
               <Picker.Item label="Porsche" value="Porsche"/>
               <Picker.Item label="RAM" value="RAM"/>
@@ -111,32 +136,8 @@ export default class CarSetting extends Component {
               <Picker.Item label="Volkswagen" value="Volkswagen"/>
               <Picker.Item label="Volvo" value="Volvo"/>
               <Picker.Item label="Yugo" value="Yugo"/>
-            </Picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              headerStyle={{ backgroundColor: "#DE601B" }}
-              headerBackButtonTextStyle={{ color: "#000" }}
-              headerTitleStyle={{ color: "#000" }}
-              selectedValue={this.state.model}
-              onValueChange={this.onValueChangeModel.bind(this)}
-            >
-              <Picker.Item label="Model" value="model"/>
-              if(true){
-                <Picker.Item label="1Model" value="model"/>
-              }
-            </Picker>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
-              headerStyle={{ backgroundColor: "#DE601B" }}
-              headerBackButtonTextStyle={{ color: "#000" }}
-              headerTitleStyle={{ color: "#000" }}
-              selectedValue={this.state.year}
-              onValueChange={this.onValueChangeYear.bind(this)}
-            >
-              <Picker.Item label="Year" value="year"/>
-            </Picker>
+            </Picker>*/}
+            {this.yearByCar()}
           </Form>
     );
   }

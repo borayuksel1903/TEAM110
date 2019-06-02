@@ -13,22 +13,21 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import MapView from 'react-native-maps';
 import Modal from "react-native-modal";
 
-let { width, height } = Dimensions.get('window');
-
 // TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
 export default class MainScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { gasTankPercent: 10,
-       animation: true, 
-       text:"Enter your current location" ,
-       latitude: null,
-       longitude:null ,
-       myrecsName: [],
-       myrecsCoordLat:[],
-       myrecsCoordLong:[]
-      } 
+    this.state = { 
+      gasTankPercent: 10,
+      animation: true, 
+      text:"Enter your current location" ,
+      latitude: null,
+      longitude:null ,
+      myrecsName: [],
+      myrecsCoordLat:[],
+      myrecsCoordLong:[]
+    } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
