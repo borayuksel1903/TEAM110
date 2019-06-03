@@ -263,7 +263,7 @@ export default class MainScreen extends React.Component {
               <Left>
                 <Thumbnail square source={require('../assets/gaslogo/chevroncolor.png')}  style={{
                     height: 55,
-                    width: 44,}} 
+                    width: 49,}} 
                 />
               </Left>
               <Body>
@@ -296,7 +296,7 @@ export default class MainScreen extends React.Component {
               <Left>
                 <Thumbnail square source={require('../assets/gaslogo/mobilecolor.png')}  style={{
                     height: 55,
-                    width: 49,}} 
+                    width: 44,}} 
                 />
               </Left>
               <Body>

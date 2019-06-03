@@ -19,7 +19,6 @@ export default class Payment extends Component {
             <Picker
 
               mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
               headerStyle={{ backgroundColor: "#DE601B" }}
               headerBackButtonTextStyle={{ color: "#000" }}
               headerTitleStyle={{ color: "#000" }}

@@ -18,7 +18,7 @@ const AppDrawerNavigator = createDrawerNavigator ({
   },
   Profile: {
     screen: ProfileScreen,
-  }
+  },
 });
 
 export default createAppContainer(createSwitchNavigator(

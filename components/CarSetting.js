@@ -18,7 +18,7 @@ export default class CarSetting extends Component {
     return(
       <Picker
               mode="dropdown"
-              iosIcon={<Icon name="arrow-down" />}
+	      iosIcon={<Icon name="arrow-down"/>}
               headerStyle={{ backgroundColor: "#DE601B" }}
               headerBackButtonTextStyle={{ color: "#000" }}
               headerTitleStyle={{ color: "#000" }}
