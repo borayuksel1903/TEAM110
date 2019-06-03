@@ -26,7 +26,8 @@ export default class MainScreen extends React.Component {
       longitude:null ,
       myrecsName: [],
       myrecsCoordLat:[],
-      myrecsCoordLong:[]
+      myrecsCoordLong:[],
+      isMounted: false,
     } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -51,26 +52,33 @@ export default class MainScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.intervalID = setInterval(() => {
-      this.initAnimation();
-    }, 25);
- 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-    );
+    this.setState({ isMounted: true }, () => {
+      if(this.state.isMounted) {
+        this.setState({isMounted: false});
+        {
+          this.intervalID = setInterval(() => {
+            this.initAnimation();
+          }, 25);
+       
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              this.setState({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                error: null,
+              });
+              // alert(this.state.latitude + " -------- " + this.state.longitude);
+            },
+            (error) => this.setState({ error: error.message }),
+            { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+          );
+        }
+      }
+    })
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID); 
-    navigator.geolocation.clearWatch(this.watchID);
   }
 
   initAnimation = () => {
@@ -92,6 +100,7 @@ export default class MainScreen extends React.Component {
   }
 
   gasUP = (latitude, longitude ) => {
+    this.toggleModal();
     var data = {lat: latitude, lng:longitude};
     fetch(('http://127.0.0.1:5000/test'),{
       method: 'POST',
@@ -100,15 +109,14 @@ export default class MainScreen extends React.Component {
       },
       body: JSON.stringify(data)
     })
-    .then(response => response.text())
-    .then(response => {
+    .then(res => res.text())
+    .then(res => {
 
-      recomandationsJSON = response;
+      recomandationsJSON = res;
       
-      var obj = JSON.parse(recomandationsJSON)
-      console.log(obj);
+      var obj = JSON.parse(recomandationsJSON);
     
-      mylen =obj.length
+      mylen = obj.length
 
       mystring = ""
 

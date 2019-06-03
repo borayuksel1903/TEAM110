@@ -70,11 +70,9 @@ def mainFunc():
 
 @app.route('/test',methods=['GET','POST'])
 def preferancesJson():
-    
     if request.method == 'GET':
         return ("startLocation")
     if request.method == 'POST':
-        
         lat = (request.data.get('lat',''))
         lng = (request.data.get('lng',''))
 
