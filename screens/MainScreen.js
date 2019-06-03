@@ -5,7 +5,7 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
 import { 
   Container, Icon, Item, Form, Input, Button, Label, Header, Left,
-  Body, Title, Right,Content, List, ListItem,Thumbnail
+  Body, Title, Right,Content, List, ListItem,Thumbnail 
 } from "native-base";
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
@@ -30,7 +30,7 @@ const Mobil = {
 }
 
 const Shell = {
-  coordinate: {latitude: 32.8785606, longitude: -117.2115184 },
+  coordinate: {latitude: 32.853534, longitude: -117.254081 },
   regular: 4.07,
   midgrade: 4.20,
   premium: 4.31,
@@ -38,7 +38,7 @@ const Shell = {
 }
 
 const Chevron = {
-  coordinate: {latitude: 32.880543494186675, longitude: -117.23468732639935},
+  coordinate: {latitude: 32.868502, longitude: -117.215751},
   regular: 4.02,
   midgrade: 4.16,
   premium: 4.26,
@@ -219,6 +219,7 @@ export default class MainScreen extends React.Component {
 
         {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
+	            {/*
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={{ color: 'white', fontSize: 25}}>
@@ -253,7 +254,81 @@ export default class MainScreen extends React.Component {
                             </Button>
                             </View>          
                     </View>
-                    <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
+		    Andrew */}
+		   
+                    <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
+        <View>
+          <List>
+            <ListItem thumbnail >
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/chevroncolor.png')}  style={{
+                    height: 55,
+                    width: 44,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.02    1.4 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Chevron.coordinate.latitude + ',' + Chevron.coordinate.longitude) }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/shellcolor.png')}  style={{
+                    height: 50,
+                    width: 54,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.07    1.7 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Shell.coordinate.latitude + ',' + Shell.coordinate.longitude) }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/mobilecolor.png')}  style={{
+                    height: 55,
+                    width: 49,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.36     1.9 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude) }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/costcocolor.png')} style={{
+                    height: 55,
+                    width: 55,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $3.60    6.1 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Costco.coordinate.latitude + ',' + Costco.coordinate.longitude) }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+          </List>
+        </View>
+      </Container>
+
+		    <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
                       <Text>GO BACK TO THE MAIN PAGE</Text> 
                     </Button>
