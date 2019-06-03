@@ -18,11 +18,12 @@ export default class LinksScreen extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+                name: '',
                 email :'',
                 password:'',
                 re_password:'',
                 validated: true ,
-                 }
+    }
   };
 
   validate = (text) => {
@@ -46,6 +47,17 @@ export default class LinksScreen extends React.Component {
           source={require('../assets/images/signUp.png')}
         />
         <Form>
+        <Item floatingLabel style={styles.label}>
+          <Label>Name</Label>
+          <Input style={{color: '#fff'}}
+      returnKeyType={"done"}
+            autoCapitalize="words"
+            autoCorrect={false}
+            onChangeText={name => this.setState({ name })}
+            //onChangeText={(text) => this.validate(text)}
+            //value={this.state.email}
+          />
+        </Item>
           <Item floatingLabel style={styles.label}>
             <Label>Email Address</Label>
             <Input style={{color: '#fff'}}
@@ -77,7 +89,7 @@ export default class LinksScreen extends React.Component {
               onChangeText={re_password => this.setState({ re_password })}
             />
           </Item>
-          <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}> 
+          <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}>
             <Text>Create Account!</Text>
           </Button>
           <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
@@ -100,8 +112,13 @@ export default class LinksScreen extends React.Component {
     if(this.state.password == this.state.re_password){
       try{
         firebase.auth().createUserWithEmailAndPassword(email,password)
-      .then(() => this.props.navigation.navigate('Settings'))
-      .catch(error => {   
+          .then(() => {
+            firebase.auth().signInWithEmailAndPassword(email,password);
+            this.props.navigation.navigate('Settings');
+            firebase.auth().currentUser.updateProfile({
+              displayName: this.state.name
+            })})
+    .catch(error => {
         alert(error.toString());
      })
       }
@@ -110,7 +127,14 @@ export default class LinksScreen extends React.Component {
     }
     else{
       alert('Please re-enter the same password');
-    }  
+    }
+    /*firebase.auth().currentUser.updateProfile({
+      displayName: this.state.name
+    }).then(function() {
+  alert("hi");
+}).catch(function(error) {
+  alert("rip");
+});*/
   }
 }
 

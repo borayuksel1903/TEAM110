@@ -25,7 +25,7 @@ export default class SigninScreens extends React.Component {
   };
   render() {
     return (
-      
+
       <Container style={styles.container}>
         <GeneralStatusBarColor backgroundColor="#000"barStyle="light-content"/>
         <Image style = {styles.logo}
@@ -51,10 +51,10 @@ export default class SigninScreens extends React.Component {
               onChangeText={password => this.setState({ password })}
             />
           </Item>
-          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}> 
+          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}>
             <Text>Sign In</Text>
           </Button>
-          <Button success style = {styles.sigupButton} onPress={this._signUpAsync}> 
+          <Button success style = {styles.sigupButton} onPress={this._signUpAsync}>
             <Text>Sign Up</Text>
           </Button>
           <Button transparent style = {styles.forgot}>
@@ -78,18 +78,21 @@ export default class SigninScreens extends React.Component {
   _signInAsync = async () => {
     this.props.navigation.navigate('Main');
   };
+
   _AsGuestAsync = async () => {
     this.props.navigation.navigate('Main');
-};
-  signin = (email, password) =>{
-  try{
-    firebase.auth().signInWithEmailAndPassword(email,password)
-    .then(firebase.auth().onAuthStateChanged(async () => this.props.navigation.navigate('Main')))
-    .catch(error => {alert(error.toString())});
-  }
-    catch (error) {
-  }
   };
+
+
+  signin = (email, password) =>{
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+    firebase.auth().signInWithEmailAndPassword(email,password)
+    .then(() => this.props.navigation.navigate('Main'))
+    .catch(error => {alert(error.toString())});
+  })}
+
 }
 
 const styles = StyleSheet.create({
@@ -130,5 +133,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
-

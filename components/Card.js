@@ -35,8 +35,8 @@ export default class CardComp extends Component {
       year: '',
       car: '',
       otherStations :false,
-                
-                 }
+
+    }
   };
   handleSubmit = (shell, seveneleven, seventysix, arco, chevron, costco, mobil, speedway, united, usa, payment, year, car, otherStations) => {
 
@@ -102,7 +102,7 @@ myCallbackCar = (dataFromChild) => {
 
   render() {
     return (
-      <Container>
+      <Container style={styles.container}>
         <Header style={styles.header}>
           <Left>
             <Button
@@ -144,10 +144,10 @@ myCallbackCar = (dataFromChild) => {
               <ListItem onPress={() => this.setState({ otherStations: !this.state.otherStations })}
                         style={{alignSelf:'center'}}
               >
-                <CheckBox checked={this.state.otherStations} 
-                          onPress={() => this.setState({ otherStations: !this.state.otherStations })} 
+                <CheckBox checked={this.state.otherStations}
+                          onPress={() => this.setState({ otherStations: !this.state.otherStations })}
                           color="#DE601B"
-                /> 
+                />
                   <Text style={{fontWeight: "bold",fontSize:14}}> Other Stations</Text>
               </ListItem>
             </CardItem>
@@ -174,7 +174,7 @@ myCallbackCar = (dataFromChild) => {
         <Button onPress={() => this.handleSubmit(this.state.shell, this.state.seveneleven,
           this.state.seventysix, this.state.arco, this.state.chevron, this.state.costco, this.state.mobil, this.state.speedway,
           this.state.united, this.state.usa, this.state.payment, this.state.year, this.state.car, this.state.otherStations)} style={styles.backButton}>
-          <Text style={{color: '#fff'}}>Save my settings</Text> 
+          <Text style={{color: '#fff'}}>Save my settings</Text>
         </Button>
         </Footer>
       </Container>
