@@ -120,43 +120,84 @@ export default class MainScreen extends React.Component {
 
         {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{ color: 'white', fontSize: 25}}>
-                                {this.state.recommendedAdd}  
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                        </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.cheapeastAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.shortestDistAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.fastestDurationAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>          
-                    </View>
+                    
+
+      <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
+        <View>
+          <List>
+            <ListItem thumbnail style={styles.gasresults}>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/mobilecolor.png')}  style={{
+                    height: 55,
+                    width: 44,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.13    5 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/shellcolor.png')}  style={{
+                    height: 50,
+                    width: 54,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.13    5 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/chevroncolor.png')}  style={{
+                    height: 55,
+                    width: 49,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.13    5 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+            <ListItem thumbnail>
+              <Left>
+                <Thumbnail square source={require('../assets/gaslogo/costcocolor.png')} style={{
+                    height: 55,
+                    width: 55,}} 
+                />
+              </Left>
+              <Body>
+                <Text style={{color: '#FFF',fontSize: 25}} > $4.13    5 mi </Text>
+              </Body>
+              <Right>
+                <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
+                    <Text style={{color: '#FFF'}}>  Go  </Text>
+                </Button>
+              </Right>
+            </ListItem>
+          </List>
+        </View>
+      </Container>
+                            
+                
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
-                      <Text>GO BACK TO THE MAIN PAGE</Text> 
+                      <Text style={{color: '#FFF',fontSize: 25}}>BACK TO HOME</Text> 
                     </Button>
                 </Modal>
       </Container>
@@ -253,4 +294,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     bottom: '18%'
   },
+  gasresults:{
+    //marginTop: '5%'
+  }
 });
