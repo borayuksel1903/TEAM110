@@ -1,7 +1,13 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {Container, Content, StyleProvider,Button,Text} from "native-base";
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import DrawerNavigator from './navigation/DrawerNavigator';
+
+import { createDrawerNavigator } from 'react-navigation';
+import HomeScreen from './screens/MainScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 export default class App extends React.Component {
   state = {
@@ -11,7 +17,7 @@ export default class App extends React.Component {
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
-        <AppLoading
+          <AppLoading
           startAsync={this._loadResourcesAsync}
           onError={this._handleLoadingError}
           onFinish={this._handleFinishLoading}
@@ -54,6 +60,18 @@ export default class App extends React.Component {
   };
 }
 
+/*
+const AppDrawerNavigator = createDrawerNavigator ({
+
+  Home: {
+    screen: HomeScreen
+  },
+  Settings: {
+    screen : SettingsScreen
+  }
+
+})
+*/
 const styles = StyleSheet.create({
   container: {
     flex: 1,

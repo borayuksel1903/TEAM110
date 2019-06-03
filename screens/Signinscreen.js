@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Container, Item, Form, Input, Button, Label, } from "native-base"
+import { StyleSheet, Text, View, Image, Alert, TouchableHighlight } from 'react-native';
+import { Container, Item, Form, Input, Button, Label } from "native-base"
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import * as firebase from "firebase";
 
@@ -25,7 +25,7 @@ export default class SigninScreens extends React.Component {
   };
   render() {
     return (
-      
+
       <Container style={styles.container}>
         <GeneralStatusBarColor backgroundColor="#000"barStyle="light-content"/>
         <Image style = {styles.logo}
@@ -51,22 +51,22 @@ export default class SigninScreens extends React.Component {
               onChangeText={password => this.setState({ password })}
             />
           </Item>
-          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}> 
+          <Button primary style = {styles.siginButton} onPress={() => this.signin(this.state.email, this.state.password)}>
             <Text>Sign In</Text>
           </Button>
-          <Button success style = {styles.sigupButton} onPress={this._signUpAsync}> 
+          <Button success style = {styles.sigupButton} onPress={this._signUpAsync}>
             <Text>Sign Up</Text>
           </Button>
-          <Button transparent style = {styles.forgot}>
+          <TouchableHighlight style = {styles.forgot} onPress={this.forgotPassword}>
             <Text style={{color: '#fff'}}>
               Forgot Password
             </Text>
-          </Button>
-          <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
+          </TouchableHighlight>
+          <TouchableHighlight style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
             <Text style={{color: '#fff'}}>
-              Continue as guest
+              Continue as Guest
             </Text>
-          </Button>
+          </TouchableHighlight>
         </Form>
       </Container>
     );
@@ -78,18 +78,24 @@ export default class SigninScreens extends React.Component {
   _signInAsync = async () => {
     this.props.navigation.navigate('Main');
   };
+
   _AsGuestAsync = async () => {
     this.props.navigation.navigate('Main');
-};
-  signin = (email, password) =>{
-  try{
-    firebase.auth().signInWithEmailAndPassword(email,password)
-    .then(firebase.auth().onAuthStateChanged(async () => this.props.navigation.navigate('Main')))
-    .catch(error => {alert(error.toString())});
-  }
-    catch (error) {
-  }
   };
+
+  forgotPassword = async () => {
+      this.props.navigation.navigate('ForgotPassword');
+  };
+
+  signin = (email, password) =>{
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+    firebase.auth().signInWithEmailAndPassword(email,password)
+    .then(() => this.props.navigation.navigate('Main'))
+    .catch(error => {alert(error.toString())});
+  })};
+
 }
 
 const styles = StyleSheet.create({
@@ -111,24 +117,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   forgot:{
-    marginTop: 5,
-    padding: '20%',
+    marginTop: '5%',
     alignSelf: 'center',
   },
   logo:{
     marginTop: '7%',
     alignSelf: 'center',
-    height: 300,
-    width: 300,
+    height: 275,
+    width: 275,
     borderWidth: 1,
     borderRadius: 150
   },
   label:{
     alignSelf: 'center',
     width: 300,
-
   }
 
 });
-
-

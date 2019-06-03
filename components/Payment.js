@@ -5,30 +5,32 @@ export default class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: "key2"
+      selected: "Credit Card"
     };
   }
   onValueChange(value) {
-    this.setState({
-      selected: value
-    });
+    this.state.selected = value;
+    this.props.callbackFromParent(this.state.selected);
+
   }
   render() {
     return (
           <Form>
             <Picker
+
               mode="dropdown"
               iosIcon={<Icon name="arrow-down" />}
               headerStyle={{ backgroundColor: "#DE601B" }}
               headerBackButtonTextStyle={{ color: "#000" }}
               headerTitleStyle={{ color: "#000" }}
               selectedValue={this.state.selected}
+
               onValueChange={this.onValueChange.bind(this)}
             >
-              <Picker.Item label="Cash" value="key0" style={{color: '#fff'}}/>
-              <Picker.Item label="Debit Card" value="key1" />
-              <Picker.Item label="Credit Card" value="key2" />
-              <Picker.Item label="Apple Pay" value="key4" />
+              <Picker.Item label="Cash" value="Cash" style={{color: '#fff'}}/>
+              <Picker.Item label="Debit Card" value="Debit Card" />
+              <Picker.Item label="Credit Card" value="Credit Card" />
+              <Picker.Item label="Apple Pay" value="Apple Pay" />
             </Picker>
           </Form>
     );

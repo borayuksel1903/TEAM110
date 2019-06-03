@@ -33,7 +33,7 @@ export default class Mobile extends Component {
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) } 
+            onPress={ () => this.setState({ showImg: !this.state.showImg }) }
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>
@@ -46,7 +46,7 @@ export default class Mobile extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
   footer: {
     flex: 1,
   },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 55,
     width: 55,
-    
+
   },
   textStyle:{
     marginTop: 5,
