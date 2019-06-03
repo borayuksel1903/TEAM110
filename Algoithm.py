@@ -87,10 +87,13 @@ def sortByPreference(stations, driver):
         for type, value in driver['gasStations'].items():
             if (value == True):
                 preferences.update({type: value})
+
         for places in stations.items():
             if(places[1]['name'] in preferences):
                 results.update({places[0] : places[1]})
-                #print(stations)
+
+        if(len(results) == 0):
+            return stations
 
         results = sortByDistance(results)
 
@@ -105,4 +108,3 @@ stations = getStations(locations)
 #results = sortByPrice(stations)
 results = sortByPreference(stations, driver)
 print(results)
-
