@@ -94,7 +94,7 @@ export default class MainScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title style={styles.textStyle}>HomeScreen</Title>
+            <Title style={styles.textStyle}>Home</Title>
           </Body>
           <Right />
         </Header>
