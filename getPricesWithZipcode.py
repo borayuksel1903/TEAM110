@@ -59,8 +59,8 @@ if __name__ == '__main__':
 
         # add the name and price for the address in question
         stationData[stationAddress] = {}
-        stationData[stationAddress]['name'] = stationNames[stationIndex].text
-        stationData[stationAddress]['price'] = stationPrice
+        stationData[stationAddress]['Name'] = stationNames[stationIndex].text
+        stationData[stationAddress]['Price'] = stationPrice
 
     print("NUMBER OF STATIONS: " + str(len(stationData)))
     print(stationData)
