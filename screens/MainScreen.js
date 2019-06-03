@@ -90,7 +90,7 @@ export default class MainScreen extends React.Component {
   }
   
   removeGas = () => {
-    this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 1), animation: false });
+    this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 0), animation: false });
     console.log( this.state.gasTankPercent );
   }
 
@@ -210,6 +210,9 @@ export default class MainScreen extends React.Component {
               <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
                 <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
 	      </TouchableOpacity>
+        <Text style = {{fontSize: 24}}>
+          {this.state.gasTankPercent}%
+        </Text>
               <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
                 <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
 	      </TouchableOpacity>
