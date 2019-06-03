@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView,
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
-import { 
+import {
   Container, Icon, Item, Form, Input, Button, Label, Header, Left,
   Body, Title, Right
 } from "native-base";
@@ -20,7 +20,7 @@ export default class MainScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { gasTankPercent: 10,
-       animation: true, 
+       animation: true,
        text:"Enter your current location" ,
        latitude: null,
        longitude:null ,
@@ -29,13 +29,13 @@ export default class MainScreen extends React.Component {
        myrecsCoordLong:[],
        search: "",
        valueSearch: ""
-      } 
+      }
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
-    this.intervalID = 0; 
+    this.intervalID = 0;
     this.maxCycles = 1;
-         
+
 
   }
 
@@ -43,7 +43,7 @@ export default class MainScreen extends React.Component {
     this.setState({ gasTankPercent: Math.min(this.state.gasTankPercent + 5, 100), animation: false });
     console.log( this.state.gasTankPercent );
   }
-  
+
   removeGas = () => {
     this.setState({ gasTankPercent: Math.max(this.state.gasTankPercent - 5, 1), animation: false });
     console.log( this.state.gasTankPercent );
@@ -53,7 +53,7 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
-    
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
@@ -67,7 +67,7 @@ export default class MainScreen extends React.Component {
     );
   }
 
-  
+
 
   componentWillUnmount() {
     clearInterval(this.intervalID);
@@ -97,8 +97,8 @@ export default class MainScreen extends React.Component {
        this.cycle = this.cycle + 1;
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
-      this.setState({ animation: false }); 
-      return 
+      this.setState({ animation: false });
+      return
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
@@ -120,9 +120,9 @@ export default class MainScreen extends React.Component {
     .then(response => {
 
       recomandationsJSON = response;
-      
+
       var obj = JSON.parse(recomandationsJSON)
-    
+
       mylen =obj.length
 
       mystring = ""
@@ -139,11 +139,11 @@ export default class MainScreen extends React.Component {
         var separateArray = str.split(" ")
 
         var myLat = separateArray[0]
-        var myLong = separateArray[1] 
+        var myLong = separateArray[1]
 
-        this.state.myrecsCoordLat.push(myLat) 
+        this.state.myrecsCoordLat.push(myLat)
         this.state.myrecsCoordLong.push(myLong)
-        
+
       }
       this.setState({ isModalVisible: !this.state.isModalVisible });
       //alert(this.state.myrecsName)
@@ -220,8 +220,8 @@ export default class MainScreen extends React.Component {
 
 
                 debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-            /> 
-        <MapView style={{flex: 1, marginBottom:80}} showsUserLocation={true} /> 
+            />
+        <MapView style={{flex: 1, marginBottom:80}} showsUserLocation={true} />
         <Animated.View>
 	  <View style={styles.gauge}>
 	    <Button transparent onPress={()=>this.gasUP(this.state.latitude, this.state.longitude)}>
@@ -241,7 +241,7 @@ export default class MainScreen extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                {(this.state.myrecsName)[0]}  
+                                {(this.state.myrecsName)[0]}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -249,7 +249,7 @@ export default class MainScreen extends React.Component {
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                                {(this.state.myrecsName)[1]}  
+                                {(this.state.myrecsName)[1]}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -264,7 +264,7 @@ export default class MainScreen extends React.Component {
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                              {(this.state.myrecsName[3])}  
+                              {(this.state.myrecsName[3])}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -273,7 +273,7 @@ export default class MainScreen extends React.Component {
                     </View>
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
-                      <Text>Back</Text> 
+                      <Text>Back</Text>
                     </Button>
                 </Modal>
       </Container>
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     marginBottom: '30%'
   },
   addButton: {
-    marginHorizontal: 50 
+    marginHorizontal: 50
   },
   removeButton: {
     marginHorizontal: 50
