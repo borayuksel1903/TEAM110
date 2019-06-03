@@ -5,12 +5,26 @@ import pprint
 from flask_api import FlaskAPI, status, exceptions
 from getMPG import getMPG
 from getPrices import getPrices
+import pyrebase
 
 # Set up the client with the API key
 maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
 
 app = FlaskAPI(__name__)
-
+config = {
+  "apiKey": "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
+  "authDomain": "ricoauth.firebaseapp.com",
+  "databaseURL": "https://ricoauth.firebaseio.com",
+  "projectId":"ricoauth",
+  "storageBucket": "ricoauth.appspot.com",
+   "messagingSenderId": "748133694175"
+}
+#firebase = firebase.FirebaseApplication('https://ricoauth.firebaseio.com', None)
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+auth = firebase.auth()
+#authenticate a user
+user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
@@ -112,14 +126,12 @@ def getMPGRequest():
     if request.method == 'POST':
         
         year = (request.data.get('year',''))
-        make = (request.data.get('make',''))
-        model = (request.data.get('model',''))
+        car = (request.data.get('car',''))
 
+        data = getMPG(year,car)
+        db.child("users").child("Nicole").update(data, user['idToken'])
 
-        myDataString = getMPG(year,make,model)
-
-
-        return (str(myDataString))
+        return (str(data))
 
 
 @app.route('/getPrices',methods=['POST'])

@@ -22,11 +22,13 @@ from firebase_admin import firestore
 import firebase_admin
 from firebase_admin import credentials
 
+'''
 cred = credentials.Certificate("./testcarsKey.json")
 firebase_admin.initialize_app(cred)
 
 
 db = firestore.client()
+'''
 
 
 
@@ -40,11 +42,36 @@ resource = boto3.resource('s3')
 
 listModels = []
 
+def parseCar(car):
+    if (car.split(None, 1)[0] != "Alfa" and car.split(None, 1)[0] != "Aston" and car.split(None, 1)[0] != "Land"):
+            make = car.split(None, 1)[0]
+            model = car.split(None,1)[1]
+    elif (car.split(None, 1)[0] == "Alfa" or car.split(None, 1)[0] == "Aston"):
+            makes = car.split()
+            make = makes[0] + ' ' + makes[1]
+            model = makes[2]
+    else:
+            makes = car.split()
+            make = makes[0] + ' ' + makes[1]
+            if makes[2] == "Discovery":
+                model = makes[2]
+            else:
+                print(car)
+                model = makes[2] + ' '+ makes[3]
+        
+    returnDict = {
+        "make":make,
+        "model":model
+    }
 
+    return returnDict
 
-def getMPG( year, make , model):
+def getMPG( year, car):
 
+    myDict = parseCar(car)
 
+    make = myDict["make"]
+    model = myDict["model"]
     
     count = 0
     rangeSum = 0
@@ -60,6 +87,7 @@ def getMPG( year, make , model):
     Select(driver.find_element_by_id('mnuYear1')).select_by_visible_text(year)
     time.sleep(1)
 
+    print(make)
     # Select make
     Select(driver.find_element_by_id('mnuMake')).select_by_visible_text(make)
     time.sleep(1)
@@ -133,19 +161,27 @@ def getMPG( year, make , model):
         print(" One model")
         try:
             rangeText = driver.find_element_by_class_name("totalRange").text
-            rangeEachInt = [int(s) for s in rangeText.split() if s.isdigit()]
-            avgRange = (int)(rangeEachInt[0])
-
-        except NoSuchElementException:
-            print("NOT WORKING")
-
-    
-    
+            rangeEach = [int(s) for s in rangeText.split() if s.isdigit()]
+            mpgText = driver.find_element_by_class_name('combinedMPG').text
+            avgMpg = (int)(mpgText)
+            avgRange = (int)(rangeEach[0])
+        except:
+            try:
+                mpgText = driver.find_element_by_class_name('combinedMPG').text
+                avgMpg = (int)(mpgText)
+            except:
+                avgMpg = 24
+                try:
+                    rangeText = driver.find_element_by_class_name("totalRange").text
+                    avgRange = (int)(rangeText)
+                except:
+                    avgRange = 200
    
-    if (noRangeBool == 0):
-        returnString = ("AVG Range :" , avgRange , "AVG MPG : " , avgMpg)
-    else:
-        returnString = ( "AVG MPG : " , avgMpg)
+    data = {
+        "Avg Range": avgRange,
+        "Avg MPG": avgMpg
+    }
 
-    return returnString
+
+    return data
 

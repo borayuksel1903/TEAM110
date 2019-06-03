@@ -9,7 +9,7 @@ import time
 def getPrices( address ):
     # setup the webdriver for chrome with the local executable
     
-    driver = webdriver.Chrome(executable_path='./chromedriver');
+    driver = webdriver.Chrome(executable_path='./chromedriver')
 
     # go to gasbuddy.com
     driver.get("https://www.gasbuddy.com")
