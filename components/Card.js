@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, Right,ListItem,CheckBox} from 'native-base';
+import { Container, Header, Content, Card, CardItem, Button, Footer, Icon, Left, Body, Title, Right,ListItem,CheckBox} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import Shell from './Shell';
 import SeventySix from './76';

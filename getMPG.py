@@ -8,10 +8,11 @@ from selenium.common.exceptions import NoSuchElementException
 
 ##from tabulate import tabulate
 import os
-import boto3
+#import boto3
 import json
 import time
 
+'''
 import firebase_admin
 import firebase_admin
 from firebase_admin import credentials
@@ -22,7 +23,7 @@ from firebase_admin import firestore
 import firebase_admin
 from firebase_admin import credentials
 
-'''
+
 cred = credentials.Certificate("./testcarsKey.json")
 firebase_admin.initialize_app(cred)
 
@@ -36,11 +37,12 @@ db = firestore.client()
 url = "https://www.fueleconomy.gov/feg/findacar.shtml"
 
 driver = webdriver.Chrome(executable_path='./chromedriver');
-
+'''
 client = boto3.client('s3')
 resource = boto3.resource('s3')
 
 listModels = []
+'''
 
 def parseCar(car):
     if (car.split(None, 1)[0] != "Alfa" and car.split(None, 1)[0] != "Aston" and car.split(None, 1)[0] != "Land"):
@@ -58,7 +60,7 @@ def parseCar(car):
             else:
                 print(car)
                 model = makes[2] + ' '+ makes[3]
-        
+
     returnDict = {
         "make":make,
         "model":model
@@ -72,7 +74,7 @@ def getMPG( year, car):
 
     make = myDict["make"]
     model = myDict["model"]
-    
+
     count = 0
     rangeSum = 0
     mpgSum = 0
@@ -105,18 +107,22 @@ def getMPG( year, car):
         Select(driver.find_element_by_id('rowlimitdisp')).select_by_visible_text('View 200')
 
         makes=driver.find_elements_by_xpath("//*[starts-with(@id,'chk')]")
-        
+
         searchURL = driver.current_url
 
         makeyIDS = []
 
+        i=0
         # get the make IDs for all the types to loop thru all URLs
         for makey in makes:
+            #if i == 4:
+                #driver.execute_script("window.scroppTo(0, document.body.scrollHeight);")
             makey.click()
             time.sleep(1)
             makeyIDS.append(makey.get_property("id").strip('chk'))
-            
-       
+            #i+=1
+
+
         # loop thru all URLs and get the range of each
         for makeyID in makeyIDS:
 
@@ -134,7 +140,7 @@ def getMPG( year, car):
 
 
 
-            if(noRangeBool == 0): 
+            if(noRangeBool == 0):
                 rangeEach = [int(s) for s in rangeText.split() if s.isdigit()]
                 rangeEachInt = (int)(rangeEach[0])
                 rangeSum = rangeSum + rangeEachInt
@@ -142,7 +148,7 @@ def getMPG( year, car):
             mpg = (int)(mpgText)
             mpgSum = mpgSum + mpg
             count = count + 1
-            
+
                         #mySum = mySum + int(makey.text,10)
 
         ##print ("Sum is " , rangeSum)
@@ -150,7 +156,7 @@ def getMPG( year, car):
         ##print ("The average range for the selected make is \n " , float(rangeSum/count))
         if( noRangeBool == 0):
             avgRange = float(rangeSum/count)
-           
+
         avgMpg = float(mpgSum/count)
 
         # go to initial url
@@ -176,7 +182,7 @@ def getMPG( year, car):
                     avgRange = (int)(rangeText)
                 except:
                     avgRange = 200
-   
+
     data = {
         "Avg Range": avgRange,
         "Avg MPG": avgMpg
@@ -184,4 +190,3 @@ def getMPG( year, car):
 
 
     return data
-
