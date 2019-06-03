@@ -25,6 +25,8 @@ db = firebase.database()
 auth = firebase.auth()
 #authenticate a user
 user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
+userList = user['email'].split('@')
+userStr = userList[0]
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
@@ -71,16 +73,16 @@ def mainFunc():
 
 @app.route('/test',methods=['GET','POST'])
 def preferancesJson():
-    
+
     if request.method == 'GET':
         return ("startLocation")
     if request.method == 'POST':
-        
+
         lat = (request.data.get('lat',''))
         lng = (request.data.get('lng',''))
 
         yourStationList=getStationsWithinRange(lat,lng,5)
-        
+
         stationString = ""
         counter= 1
         mylist=[]
@@ -124,12 +126,12 @@ def getGeoLocation():
 @app.route('/getMPG',methods=['POST'])
 def getMPGRequest():
     if request.method == 'POST':
-        
+
         year = (request.data.get('year',''))
         car = (request.data.get('car',''))
 
         data = getMPG(year,car)
-        db.child("users").child("Nicole").update(data, user['idToken'])
+        db.child("users").child(userStr).update(data, user['idToken'])
 
         return (str(data))
 
@@ -137,7 +139,7 @@ def getMPGRequest():
 @app.route('/getPrices',methods=['POST'])
 def getPricesRequest():
     if request.method == 'POST':
-        
+
 
         address = (request.data.get('address',''))
         myDataString = getPrices(address)
@@ -185,7 +187,8 @@ def result():
         #if shell:
             #db.child("users").push(shell, user['idToken'])
             #db.child("users").child("Nicole").set(shell, user['idToken'])
-        db.child("users").child("Nicole").update(data, user['idToken'])
+
+        db.child("users").child(userStr).update(data, user['idToken'])
         '''
         db.child("users").child(user.localId).update({"seveneleven": seveneleven}, user['idToken'])
         db.child("users").child(user).update({"seventysix": seventysix}, user['idToken'])
@@ -239,4 +242,3 @@ def getTopFiveStations(stationList):
 
 if __name__ == '__main__':
     app.run()
-
