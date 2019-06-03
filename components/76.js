@@ -27,13 +27,18 @@ export default class SeventySix extends Component {
       />
     );
   }
+
+  callBackFunction = () => {
+    this.setState({ showImg: !this.state.showImg });
+    this.props.callbackFromParent(this.state.showImg);
+  }
   render(){
     return (
       <View style={ styles.container }>
         <View style={ styles.footer }>
           <TouchableOpacity
             style={ styles.button }
-            onPress={ () => this.setState({ showImg: !this.state.showImg }) } 
+            onPress={() => this.callBackFunction()}
           >
             {this.renderImage()}
             <Text style={styles.textStyle}>Shell</Text>
@@ -46,16 +51,15 @@ export default class SeventySix extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
   footer: {
     flex: 1,
   },
   img: {
     alignItems: 'center',
-    aspectRatio: 1,
-    height: 50,
-    width: 50,
-    
+    height: 55,
+    width: 55,
+
   },
   textStyle:{
     marginTop: 5,
