@@ -38,6 +38,10 @@ export default class MainScreen extends React.Component {
 
 
   }
+  // function to toggle the appearance of pop-up screen
+  toggleModal = () => {
+      this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
 
   addGas = () => {
     this.setState({ gasTankPercent: Math.min(this.state.gasTankPercent + 5, 100), animation: false });
@@ -54,7 +58,7 @@ export default class MainScreen extends React.Component {
       this.initAnimation();
     }, 25);
 
-    navigator.geolocation.getCurrentPosition(
+    this.watchID = navigator.geolocation.watchPosition(
       (position) => {
         this.setState({
           latitude: position.coords.latitude,
@@ -67,23 +71,22 @@ export default class MainScreen extends React.Component {
     );
   }
 
-
-
   componentWillUnmount() {
     clearInterval(this.intervalID);
-    navigator.geolocation.getCurrentPosition(
-
-      (position) => {
-        console.log(position);
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //
+    //   (position) => {
+    //     console.log(position);
+    //     this.setState({
+    //       latitude: position.coords.latitude,
+    //       longitude: position.coords.longitude,
+    //       error: null,
+    //     });
+    //   },
+    //   (error) => this.setState({ error: error.message }),
+    //   { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
+    // );
+    navigator.geolocation.clearWatch(this.watchID);
 
   }
 
@@ -172,56 +175,8 @@ export default class MainScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-        <GooglePlacesAutocomplete
-                placeholder='Search'
-                minLength={2} // minimum length of text to search
-                autoFocus={true}
-                listViewDisplayed='auto'    // true/false/undefined
-                fetchDetails={true}
-                renderDescription={(row) => row.description} // custom description render
-                onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                    console.log(data);
-                    console.log(details);
-                }}
-                getDefaultValue={() => {
-                    return ''; // text input default value
-                }}
-                query={{
-                    // available options: https://developers.google.com/places/web-service/autocomplete
-                    key: 'AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ',
-                    language: 'en', // language of the results
-                }}
-                styles={{
-                    description: {
-                        fontWeight: 'bold',
-                    },
-                    predefinedPlacesDescription: {
-                        color: '#1faadb',
-                    },
-                    container:{
-                      height:50
-                    }
-                }}
-
-                currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
-                currentLocationLabel="Current location"
-                nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-                GoogleReverseGeocodingQuery={{
-                    // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-                }}
-                GooglePlacesSearchQuery={{
-                    // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-                    rankby: 'distance',
-                    types: ''
-                }}
-
-
-                filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-
-
-                debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-            />
         <MapView style={{flex: 1, marginBottom:80}} showsUserLocation={true} />
+        <View style={styles.gasUpComp}>
         <Animated.View>
 	  <View style={styles.gauge}>
 	    <Button transparent onPress={()=>this.gasUP(this.state.latitude, this.state.longitude)}>
@@ -237,11 +192,15 @@ export default class MainScreen extends React.Component {
 	    </TouchableOpacity>
 	  </View>
     </Animated.View>
+    </View>
     <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={{ color: 'white', fontSize: 25}}>
                                 {(this.state.myrecsName)[0]}
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                     0.5mi
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -251,20 +210,31 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25 }}>
                                 {(this.state.myrecsName)[1]}
                             </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                    2mi
+                            </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                              {(this.state.myrecsName[2])}                              </Text>
+                              {(this.state.myrecsName[2])}
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                    7mi
+                            </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
+
                             </Button>
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
                               {(this.state.myrecsName[3])}
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                    8mi
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -340,6 +310,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
   },
+  gasUpComp: {
+  position: 'absolute',
+  alignSelf: 'center',
+  top: '70%'
+  },
   gasFillButtons: {
     alignSelf: 'center',
     alignItems: 'center',
@@ -358,5 +333,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 300,
     top: 100,
-  }
+  },
+  backButton:{
+   padding:'20%',
+   backgroundColor:'#DE601B',
+   alignSelf: 'center',
+   bottom: '18%'
+ },
 });
