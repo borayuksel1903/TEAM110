@@ -7,6 +7,7 @@ import Signupscreen from '../screens/Signupscreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import MainScreen from '../screens/MainScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import ForgotPassword from '../screens/ForgotPassword';
 
 const AppDrawerNavigator = createDrawerNavigator ({
   Home: {
@@ -27,7 +28,8 @@ export default createAppContainer(createSwitchNavigator(
     SignUp: Signupscreen,
     Settings: SettingsScreen,
     Main: MainScreen,
-    Profile: ProfileScreen
+    Profile: ProfileScreen,
+    ForgotPassword: ForgotPassword
   },
   {
     initialRouteName: 'SignIn',

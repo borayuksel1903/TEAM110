@@ -78,7 +78,7 @@ export default class Profile extends React.Component{
       <Content>
           <Title style={styles.label} > Hi, {this.state.name}!</Title>
 
-          <ModalExample modalVisible={this.state.modalVisible}/>
+          <ChangePasswordModal modalVisible={this.state.modalVisible}/>
           <Button style={styles.backButton} onPress={this.handleLogOut}><Text>Log Out</Text></Button>
       </Content>
       </Container>
@@ -86,7 +86,7 @@ export default class Profile extends React.Component{
   }
 }
 
-class ModalExample extends React.Component {
+class ChangePasswordModal extends React.Component {
   state = {
     modalVisible: false,
     oldPassword: '',

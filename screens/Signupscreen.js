@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet,Text,Image} from 'react-native';
+import { ScrollView, StyleSheet,Text,Image, TouchableHighlight} from 'react-native';
 import { Container, Item, Form, Input, Button, Label, } from "native-base"
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import * as firebase from "firebase";
@@ -92,11 +92,11 @@ export default class LinksScreen extends React.Component {
           <Button success style = {styles.sigupButton} onPress={() => this.signup(this.state.email, this.state.password)}>
             <Text>Create Account!</Text>
           </Button>
-          <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
+          <TouchableHighlight style = {styles.forgot} onPress={this.goBack}>
             <Text style={{color: '#fff'}}>
-              Continue as guest
+              Go Back
             </Text>
-          </Button>
+          </TouchableHighlight>
         </Form>
       </Container>
     );
@@ -107,7 +107,9 @@ export default class LinksScreen extends React.Component {
   _AsGuestAsync = async () => {
     this.props.navigation.navigate('Main');
 };
-
+goBack = () => {
+  this.props.navigation.navigate('SignIn');
+}
   signup = (email, password) =>{
     if(this.state.password == this.state.re_password){
       try{
@@ -141,13 +143,12 @@ export default class LinksScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
     backgroundColor: '#000',
     justifyContent: 'flex-start',
   },
   backButton:{
-    marginTop: 50,
-    padding: '20%',
+    marginTop: 10,
+    padding: '10%',
     backgroundColor:'#DE601B',
     alignSelf: 'center'
   },
@@ -162,16 +163,15 @@ const styles = StyleSheet.create({
     width: 300
   },
   logo:{
-    marginTop: '20%',
+    marginTop: '7%',
     alignSelf: 'center',
-    height: 150,
-    width: 150,
+    height: 200,
+    width: 200,
     borderWidth: 1,
     borderRadius: 75
   },
   forgot:{
-    marginTop: 30,
-    padding: '20%',
+    marginTop: 15,
     alignSelf: 'center',
   }
 });

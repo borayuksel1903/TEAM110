@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Container, Item, Form, Input, Button, Label, } from "native-base"
+import { StyleSheet, Text, View, Image, Alert, TouchableHighlight } from 'react-native';
+import { Container, Item, Form, Input, Button, Label } from "native-base"
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import * as firebase from "firebase";
 
@@ -57,16 +57,16 @@ export default class SigninScreens extends React.Component {
           <Button success style = {styles.sigupButton} onPress={this._signUpAsync}>
             <Text>Sign Up</Text>
           </Button>
-          <Button transparent style = {styles.forgot}>
+          <TouchableHighlight style = {styles.forgot} onPress={this.forgotPassword}>
             <Text style={{color: '#fff'}}>
               Forgot Password
             </Text>
-          </Button>
-          <Button transparent style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
+          </TouchableHighlight>
+          <TouchableHighlight style = {styles.forgot} onPress={()=>this._AsGuestAsync()}>
             <Text style={{color: '#fff'}}>
-              Continue as guest
+              Continue as Guest
             </Text>
-          </Button>
+          </TouchableHighlight>
         </Form>
       </Container>
     );
@@ -83,6 +83,9 @@ export default class SigninScreens extends React.Component {
     this.props.navigation.navigate('Main');
   };
 
+  forgotPassword = async () => {
+      this.props.navigation.navigate('ForgotPassword');
+  };
 
   signin = (email, password) =>{
 
@@ -91,7 +94,7 @@ export default class SigninScreens extends React.Component {
     firebase.auth().signInWithEmailAndPassword(email,password)
     .then(() => this.props.navigation.navigate('Main'))
     .catch(error => {alert(error.toString())});
-  })}
+  })};
 
 }
 
@@ -114,22 +117,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   forgot:{
-    marginTop: 5,
-    padding: '20%',
+    marginTop: '5%',
     alignSelf: 'center',
   },
   logo:{
     marginTop: '7%',
     alignSelf: 'center',
-    height: 300,
-    width: 300,
+    height: 275,
+    width: 275,
     borderWidth: 1,
     borderRadius: 150
   },
   label:{
     alignSelf: 'center',
     width: 300,
-
   }
 
 });
