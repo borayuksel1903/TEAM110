@@ -5,7 +5,7 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
 import { 
   Container, Icon, Item, Form, Input, Button, Label, Header, Left,
-  Body, Title, Right
+  Body, Title, Right,Content, List, ListItem,Thumbnail
 } from "native-base";
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
@@ -23,10 +23,10 @@ export default class MainScreen extends React.Component {
       gasTankPercent: 10, 
       animation: true, 
       isModalVisible: false,
-      recommendedAdd: "Address 1    Price    5mi",
-      cheapeastAdd: "Address 2    Price    6mi",
-      shortestDistAdd: "Address 3    Price    7mi",
-      fastestDurationAdd: "Address 4    Price    8mi"
+      recommendedAdd: "   Mobil:  $3.80    5mi",
+        cheapeastAdd: "   Shell:  $3.90    6mi",
+     shortestDistAdd: "Cheveron:  $4.10    7mi",
+  fastestDurationAdd: "    Arco:  $4.15    8mi"
     } 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -152,7 +152,7 @@ export default class MainScreen extends React.Component {
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
-                            </View>
+                            </View>          
                     </View>
                     <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
