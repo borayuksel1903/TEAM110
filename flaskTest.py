@@ -145,7 +145,6 @@ def getPricesRequest():
         myDataString = getPrices(address)
 
         print(myDataString)
-
         return (str(myDataString))
 
 
@@ -153,6 +152,9 @@ def getPricesRequest():
 def result():
     if request.method == 'POST':
         #place = (request.data.get('place',''))
+        gasStations = request.data.get('gasStations', '')
+        otherStations = request.data.get('otherStations', '')
+        '''
         shell = request.data.get('shell', '')
         seveneleven = request.data.get('seveneleven', '')
         seventysix = request.data.get('seventysix', '')
@@ -163,25 +165,18 @@ def result():
         speedway = request.data.get('speedway', '')
         united = request.data.get('united', '')
         usa = request.data.get('usa', '')
+        '''
         payment = request.data.get('payment', '')
         year = request.data.get('year', '')
         car = request.data.get('car', '')
-        otherStations = request.data.get('otherStations', '')
+        #otherStations = request.data.get('otherStations', '')
+
         data = {
-            "shell": shell,
-            "seveneleven": seveneleven,
-            "seventysix": seventysix,
-            "arco": arco,
-            "chevron": chevron,
-            "costco": costco,
-            "mobil": mobil,
-            "speedway": speedway,
-            "united": united,
-            "usa": usa,
+            "gasStations": gasStations,
+            "otherStations": otherStations,
             "payment": payment,
             "year": year,
             "car": car,
-            "otherStations": otherStations
         }
         #print(shell)
         #if shell:
@@ -189,19 +184,6 @@ def result():
             #db.child("users").child("Nicole").set(shell, user['idToken'])
 
         db.child("users").child(userStr).update(data, user['idToken'])
-        '''
-        db.child("users").child(user.localId).update({"seveneleven": seveneleven}, user['idToken'])
-        db.child("users").child(user).update({"seventysix": seventysix}, user['idToken'])
-        db.child("users").child(user).update({"arco": arco}, user['idToken'])
-        db.child("users").child(user).update({"chevron": chevron}, user['idToken'])
-        db.child("users").child(user).update({"costco": costco}, user['idToken'])
-        db.child("users").child(user).update({"mobil": mobil}, user['idToken'])
-        db.child("users").child(user).update({"speedway": speedway}, user['idToken'])
-        db.child("users").child(user).update({"united": united}, user['idToken'])
-        db.child("users").child(user).update({"usa": usa}, user['idToken'])
-        db.child("users").child(user).update({"payment": payment}, user['idToken'])
-        db.child("users").child(user).update({"carSetting": carSetting}, user['idToken'])
-        '''
 
         return "No place information is given"
 '''
