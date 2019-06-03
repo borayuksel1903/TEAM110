@@ -112,8 +112,7 @@ export default class MainScreen extends React.Component {
             longitudeDelta: LONGITUDE_DELTA,
           }
         });
-      }
-    );
+      }, (error)=>console.log(error));
   }
 
   componentWillUnmount() {
