@@ -76,7 +76,7 @@ export default class Profile extends React.Component{
         <Right />
       </Header>
       <Content>
-          <Title style={styles.label} > Hi, {this.state.name}!</Title>
+          <Title style={styles.greeting} > Hi, {this.state.name}!</Title>
 
           <ChangePasswordModal modalVisible={this.state.modalVisible}/>
           <Button style={styles.backButton} onPress={this.handleLogOut}><Text>Log Out</Text></Button>
@@ -212,9 +212,15 @@ const styles = StyleSheet.create({
     padding: '20%',
     alignSelf: 'center',
   },
-  label:{
+  greeting:{
     paddingTop: "10%",
     paddingBottom: "10%",
+    alignSelf: 'center',
+    width: 300,
+    fontSize: 30
+  },
+  label:{
+    paddingTop: "5%",
     alignSelf: 'center',
     width: 300,
     fontSize: 30
