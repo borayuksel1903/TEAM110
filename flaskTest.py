@@ -101,8 +101,9 @@ def preferancesJson():
             location = geolocator.reverse(str(station))
             price = getPrices(location.address)
             mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station), 'price': ''})
+            #TODO: do ralph's thingies here
+            
             #dictionary[str(station)]
-            #prices thingy here!
             #yourStationList[str(station)].update({{'name': yourStationList[station], 'price': '4.35'}})
 
             counter=counter+1
