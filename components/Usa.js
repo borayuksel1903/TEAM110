@@ -30,7 +30,7 @@ export default class Usa extends Component {
 
   callBackFunction = () => {
     this.setState({ showImg: !this.state.showImg });
-    this.props.callbackFromParent(this.state.showImg);
+    this.props.callbackFromParent(!this.state.showImg);
   }
   render(){
     return (

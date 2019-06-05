@@ -6,8 +6,13 @@ from flask_api import FlaskAPI, status, exceptions
 from getMPG import getMPG
 from getPrices import getPrices
 import pyrebase
+from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreference, getStations
+from geopy.geocoders import Nominatim
+
 
 # Set up the client with the API key
+geolocator = Nominatim(user_agent="rico")
+
 maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
 
 app = FlaskAPI(__name__)
@@ -80,17 +85,30 @@ def preferancesJson():
 
         lat = (request.data.get('lat',''))
         lng = (request.data.get('lng',''))
+        tank = (request.data.get('tank',''))
+
+        data = { "tank":tank}
+
+        db.child("users").child(userStr).update(data, user['idToken'])
 
         yourStationList=getStationsWithinRange(lat,lng,5)
+
 
         stationString = ""
         counter= 1
         mylist=[]
         for station in yourStationList:
-            mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station)})
+            location = geolocator.reverse(str(station))
+            price = getPrices(location.address)
+            mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station), 'price': ''})
+            #dictionary[str(station)]
+            #prices thingy here!
+            #yourStationList[str(station)].update({{'name': yourStationList[station], 'price': '4.35'}})
+
             counter=counter+1
 
-        return jsonify(mylist)
+        return mylist
+        #return jsonify(yourStationList)
 
 
 notes = {
@@ -198,24 +216,6 @@ def result():
 def getGasRemaining():
     # TODO: get actual amount of gas left (in gallons?)
     return 4
-
-# Function that gets a list of all the gas stations inside the given range --- returns a dict of (latitude,longitude)=stationName
-def getStationsWithinRange(lat, lng, range):
-
-    # Convert the input range(miles) to meters
-    rangeInMeters = range*1609.34
-
-    # Make google maps API call to get gas stations within range
-    stationList = maps.places_nearby(location=(lat,lng), \
-        radius=rangeInMeters, type="gas_station")
-
-    # Setup a dict of stations; the coordinates are the key, and the corresponding station name is the data
-    stationDict = {}
-    for station in stationList["results"]:
-        location = (station["geometry"]["location"]["lat"],station["geometry"]["location"]["lng"])
-        stationDict[location] = station["name"]
-
-    return stationDict
 
 def getTopFiveStations(stationList):
     # TODO: calculate the best five gas stations to go to

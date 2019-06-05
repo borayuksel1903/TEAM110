@@ -15,6 +15,37 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 // TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
 
+// const Mobil = {
+//   coordinate: {latitude: 32.8710589032578, longitude: -117.233255945994},
+//   regular: 4.36,
+//   midgrade: 4.46,
+//   premium: 4.56,
+//   //name: "Mobil"
+// }
+//
+// const Shell = {
+//   coordinate: {latitude: 32.853534, longitude: -117.254081 },
+//   regular: 4.07,
+//   midgrade: 4.20,
+//   premium: 4.31,
+//   //name: "Shell"
+// }
+//
+// const Chevron = {
+//   coordinate: {latitude: 32.868502, longitude: -117.215751},
+//   regular: 4.02,
+//   midgrade: 4.16,
+//   premium: 4.26,
+//   //name: "Chevron"
+// }
+//
+// const Costco = {
+//   coordinate: {latitude: 32.824904, longitude: -117.226281},
+//   regular: 3.60,
+//   premium: 3.80,
+//   //name: "Costco"
+// }
+
 export default class MainScreen extends React.Component {
 
   constructor(props) {
@@ -28,8 +59,10 @@ export default class MainScreen extends React.Component {
        myrecsCoordLat:[],
        myrecsCoordLong:[],
        search: "",
-       valueSearch: ""
+       valueSearch: "",
+       //showGasPins: false,
       }
+
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
     this.increment = 5;
@@ -108,9 +141,9 @@ export default class MainScreen extends React.Component {
 
   }
 
-  gasUP = (latitude, longitude ) => {
+  gasUP = (latitude, longitude, gasTankPercent ) => {
 
-    var data = {lat: latitude, lng:longitude};
+    var data = {lat: latitude, lng:longitude, tank: gasTankPercent};
 
     fetch(('http://127.0.0.1:5000/test'),{
       method: 'POST',
@@ -148,7 +181,7 @@ export default class MainScreen extends React.Component {
         this.state.myrecsCoordLong.push(myLong)
 
       }
-      this.setState({ isModalVisible: !this.state.isModalVisible });
+      //this.setState({ isModalVisible: !this.state.isModalVisible });
       //alert(this.state.myrecsName)
     })
 
@@ -175,23 +208,30 @@ export default class MainScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-        <MapView style={{flex: 1, marginBottom:80}} showsUserLocation={true} />
-        <View style={styles.gasUpComp}>
+
+        <MapView style={{flex: 1}} showsUserLocation={true} />
+
+
+    <View style={styles.gasUpComp}>
         <Animated.View>
-	  <View style={styles.gauge}>
-	    <Button transparent onPress={()=>this.gasUP(this.state.latitude, this.state.longitude)}>
-	      <Gauge percent={this.state.gasTankPercent} />
-	    </Button>
-	  </View>
-	  <View style={styles.gasFillButtons}>
+	       <View style={styles.gauge}>
+	        <Button transparent onPress={()=> {
+            this.gasUP(this.state.latitude, this.state.longitude, this.state.gasTankPercent);
+            //this.setState({showGasPins: true});
+            this.toggleModal();
+          }}>
+	         <Gauge percent={this.state.gasTankPercent} />
+	        </Button>
+	       </View>
+	       <View style={styles.gasFillButtons}>
             <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
               <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
-	    </TouchableOpacity>
+	          </TouchableOpacity>
             <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
               <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
-	    </TouchableOpacity>
-	  </View>
-    </Animated.View>
+	          </TouchableOpacity>
+	        </View>
+        </Animated.View>
     </View>
     <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
@@ -245,7 +285,7 @@ export default class MainScreen extends React.Component {
                     <Button large onPress={this.toggleModal} style={styles.backButton}>
                       <Text>Back</Text>
                     </Button>
-                </Modal>
+        </Modal>
       </Container>
     );
   }
@@ -283,6 +323,46 @@ class Gauge extends React.Component {
     );
   }
 }
+
+// class GasPoint extends React.Component {
+//   render() {
+//     //
+//     // if( this.props.show !== true ) return (null);
+//     //
+//     // let priceDescription = "";
+//     //
+//     // if( this.props.regular ) {
+//     //   priceDescription += "\nRegular: $" + this.props.regular;
+//     // }
+//     //
+//     // if( this.props.midgrade ) {
+//     //   priceDescription += "\nMidgrade: $" + this.props.midgrade;
+//     // }
+//     //
+//     // if( this.props.premium ) {
+//     //   priceDescription += "\nPremium: $" + this.props.premium;
+//     // }
+//     //
+//     // if( this.props.diesel ) {
+//     //   priceDescription += "\nDiesel: $" + this.props.diesel;
+//     // }
+//
+//     return(
+//       <MapView.Marker
+//         coordinate={this.props.coordinate}
+//       >
+//       <MapView.Callout>
+//         <View>
+//       //     <Text>
+//       //       <Text style={{fontWeight: 'bold'}}>{this.props.title}{"\n"}</Text>
+// 	    // {priceDescription}
+//       //     </Text>
+//           </View>
+//         </MapView.Callout>
+//       </MapView.Marker>
+//     );
+//   }
+// }
 
 const styles = StyleSheet.create({
   container: {
