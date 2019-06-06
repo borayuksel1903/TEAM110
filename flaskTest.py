@@ -99,7 +99,7 @@ def preferancesJson():
         mylist=[]
         for station in yourStationList:
             location = geolocator.reverse(str(station)) #this gives exception because str(station) is in parentheses, need to parse
-            price = getPrices(location.address) #calling getPrices from getPrices.py 
+            price = getPrices(location.address) #calling getPrices from getPrices.py
             mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station), 'price': ''})
             #TODO: do ralph's thingies here
 
@@ -128,6 +128,13 @@ def note_repr(key):
 @app.route('/example/')
 def example():
     return {'request data': request.data}
+
+@app.route('/signin', methods=['POST'])
+def signIn():
+    if request.method == 'POST':
+        email = (request.data.get('email', ''))
+        password = (request.data.get('password',''))
+        user = auth.sign_in_with_email_and_password(email, password)
 
 # Function that gets the user's location in latitude/longitude --- returns a float 2-tuple
 def getGeoLocation():
