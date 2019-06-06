@@ -19,12 +19,12 @@ export default class Result extends PureComponent {
 
   _onValueChange(value) {
     //this.state.selected = value;
-    
+
     this.setState({
       selected: value
     });
     this.props.callbackFromParent(value);
-    
+
   }
 
   render() {
@@ -242,14 +242,14 @@ export default class Result extends PureComponent {
       {id: "Maserati Mirage", name: "Maserati Mirage"},
       {id: "Maserati Outlander", name: "Maserati Outlander"},
       {id: "Nissan 370Z", name: "Nissan 370Z"},
-      {id: "issan Altima", name: "Nissan Altima"},
+      {id: "Nissan Altima", name: "Nissan Altima"},
       {id: "Nissan Armada", name: "Nissan Armada"},
       {id: "Subaru Ascent", name: "Subaru Ascent"},
       {id: "Toyota Corolla", name: "Toyota Corolla"},
-      {id: "Toyota sienna", name: "Toyota sienna"},
+      {id: "Toyota Sienna", name: "Toyota Sienna"},
     {id: "Toyota Supra", name: "Toyota Supra"},
     ];
-    
+
     const {selected} = this.state;
 
     return (

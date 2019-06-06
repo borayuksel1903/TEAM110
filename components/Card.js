@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
-import { Container, Header, Content, Card, CardItem, Button, Footer, Left, Body, Title, Right,ListItem,CheckBox} from 'native-base';
+import { Container, Header, Content, Card, CardItem, Button, Footer, Icon, Left, Body, Title, Right,ListItem,CheckBox} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import Shell from './Shell';
 import SeventySix from './76';
@@ -21,31 +21,30 @@ export default class CardComp extends Component {
   constructor(props){
     super(props);
     this.state = {
-      shell: false,
-      seveneleven: false,
-      seventysix: false,
-      arco: false,
-      chevron: false,
-      costco: false,
-      mobil: false,
-      speedway: false,
-      united: false,
-      usa: false,
+      gasStations: {
+        shell: true,
+        seveneleven: true,
+        seventysix: true,
+        arco: true,
+        chevron: true,
+        costco: true,
+        mobil: true,
+        speedway: true,
+        united: true,
+        usa: true,
+      },
+      otherStations :true,
       payment: "Credit Card",
       year: '',
       car: '',
-      otherStations :false,
-
     }
   };
-  handleSubmit = (shell, seveneleven, seventysix, arco, chevron, costco, mobil, speedway, united, usa, payment, year, car, otherStations) => {
 
-    var data = {shell: shell, seveneleven: seveneleven, seventysix: seventysix, arco: arco,
-      chevron: chevron, costco: costco, mobil: mobil, speedway: speedway, united: united, usa: usa,
-      payment: payment, year: year, car: car, otherStations: otherStations};
-    //var data2 = {seveneleven: seveneleven};
-    //var data11 = {payment: payment};
-    //var data12 = {carSetting: carSetting};
+  handleSubmit = (gasStations, otherStations, payment, year, car) => {
+    var data = {gasStations: gasStations, otherStations: otherStations, payment: payment, year: year, car: car};
+    var data2 = {year: year, car:car};
+
+    //for gas preferences
     fetch('http://127.0.0.1:5000/result', {
       method: 'POST',
       headers:{
@@ -57,38 +56,156 @@ export default class CardComp extends Component {
       alert("Settings saved successfully!");
     })
 
+    fetch('http://127.0.0.1:5000/getMPG', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data2)
+    })
     //AlertIOS.alert(this.state.name);
 }
 
+
 myCallbackShell = (dataFromChild) => {
-  this.setState({shell: dataFromChild})
+  this.setState({ gasStations: {
+      shell: dataFromChild,
+      seveneleven: this.state.gasStations.seveneleven,
+      seventysix: this.state.gasStations.seventysix,
+      arco: this.state.gasStations.arco,
+      chevron: this.state.gasStations.chevron,
+      costco: this.state.gasStations.costco,
+      mobil: this.state.gasStations.mobil,
+      speedway: this.state.gasStations.speedway,
+      united: this.state.gasStations.united,
+      usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackSeven = (dataFromChild) => {
-  this.setState({seveneleven: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: dataFromChild,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackSeventySix = (dataFromChild) => {
-  this.setState({seventysix: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.seveneleven,
+    seventysix: dataFromChild,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackArco = (dataFromChild) => {
-  this.setState({arco: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: dataFromChild,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackChevron = (dataFromChild) => {
-  this.setState({chevron: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: dataFromChild,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackCostco = (dataFromChild) => {
-  this.setState({costco: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: dataFromChild,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackMobil = (dataFromChild) => {
-  this.setState({mobil: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: dataFromChild,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackSpeedway = (dataFromChild) => {
-  this.setState({speedway: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: dataFromChild,
+    united: this.state.gasStations.united,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackUnited = (dataFromChild) => {
-  this.setState({united: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: dataFromChild,
+    usa: this.state.gasStations.usa,
+  }})
 }
 myCallbackUSA = (dataFromChild) => {
-  this.setState({usa: dataFromChild})
+  this.setState({gasStations: {
+    shell: this.state.gasStations.shell,
+    seveneleven: this.state.gasStations.shell,
+    seventysix: this.state.gasStations.seventysix,
+    arco: this.state.gasStations.arco,
+    chevron: this.state.gasStations.chevron,
+    costco: this.state.gasStations.costco,
+    mobil: this.state.gasStations.mobil,
+    speedway: this.state.gasStations.speedway,
+    united: this.state.gasStations.united,
+    usa: dataFromChild,
+  }})
 }
 myCallbackPayment = (dataFromChild) => {
   this.setState({payment: dataFromChild})
@@ -141,11 +258,11 @@ myCallbackCar = (dataFromChild) => {
             <Usa callbackFromParent= {this.myCallbackUSA}/>
             </CardItem>
             <CardItem style={{ paddingTop: 0}}>
-              <ListItem onPress={() => this.setState({ otherStations: !this.state.otherStations })}
+              <ListItem onPress={() => this.setState({ otherStations: !(this.state.otherStations) })}
                         style={{alignSelf:'center'}}
               >
                 <CheckBox checked={this.state.otherStations}
-                          onPress={() => this.setState({ otherStations: !this.state.otherStations })}
+                          onPress={() => this.setState({ otherStations: !(this.state.otherStations) })}
                           color="#DE601B"
                 />
                   <Text style={{fontWeight: "bold",fontSize:14}}> Other Stations</Text>
@@ -171,9 +288,7 @@ myCallbackCar = (dataFromChild) => {
           </Card>
         </Content>
         <Footer>
-        <Button onPress={() => this.handleSubmit(this.state.shell, this.state.seveneleven,
-          this.state.seventysix, this.state.arco, this.state.chevron, this.state.costco, this.state.mobil, this.state.speedway,
-          this.state.united, this.state.usa, this.state.payment, this.state.year, this.state.car, this.state.otherStations)} style={styles.backButton}>
+        <Button  onPress={() => this.handleSubmit(this.state.gasStations, this.state.otherStations, this.state.payment, this.state.year, this.state.car)} style={styles.backButton}>
           <Text style={{color: '#fff'}}>Save my settings</Text>
         </Button>
         </Footer>

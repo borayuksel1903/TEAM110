@@ -89,12 +89,29 @@ export default class SigninScreens extends React.Component {
 
   signin = (email, password) =>{
 
+<<<<<<< HEAD
+=======
+    var data = {email: email, password: password};
+>>>>>>> 7d161d62501973f0c7d728f233dc7e83e1bd5e83
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(() => {
     firebase.auth().signInWithEmailAndPassword(email,password)
     .then(() => this.props.navigation.navigate('Main'))
     .catch(error => {alert(error.toString())});
+<<<<<<< HEAD
   })};
+=======
+  })
+
+  fetch(('http://127.0.0.1:5000/signin'),{
+    method: 'POST',
+    headers:{
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+};
+>>>>>>> 7d161d62501973f0c7d728f233dc7e83e1bd5e83
 
 }
 

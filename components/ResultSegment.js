@@ -38,7 +38,7 @@ const ResultSegment = props => {
           iosIcon={
             <Right>
               <Icon
-                name="ios-arrow-down-outline"
+                name="ios-arrow-dropdown"
                 style={{ color: "white" }}
               />
             </Right>
