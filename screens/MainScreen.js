@@ -132,7 +132,6 @@ export default class MainScreen extends React.Component {
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
-
   }
 
   render() {
@@ -203,7 +202,7 @@ export default class MainScreen extends React.Component {
           <Animated.View>
 	    <View style={styles.gauge}>
 	      <Button transparent onPress={() => {this.setState({showGasPins: true}); this.toggleModal(); }}>
-	        <Gauge percent={this.state.gasTankPercent} />
+	        <Gauge percent={this.state.gasTankPercent + 1} />
 	      </Button>
 	    </View>
 	    <View style={styles.gasFillButtons}>
@@ -222,44 +221,7 @@ export default class MainScreen extends React.Component {
 
         {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
-	            {/*
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text style={{ color: 'white', fontSize: 25}}>
-                                {this.state.recommendedAdd}  
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude ) }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                        </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.cheapeastAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.shortestDistAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>
-                        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: 'white', fontSize: 25 }}>
-                                {this.state.fastestDurationAdd}
-                            </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=32.8801,-117.2340&destination=38.5816,-121.4944') }} color="#FFFFFF" >
-                              <Text style={{color: '#FFF'}}>  Go  </Text>
-                            </Button>
-                            </View>          
-                    </View>
-		    Andrew */}
-		   
-                    <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
+          <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
         <View>
           <List>
             <ListItem thumbnail >
