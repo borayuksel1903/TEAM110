@@ -2,10 +2,10 @@ from flask import Flask , redirect, url_for, request, jsonify
 import googlemaps
 import json
 import pprint
+import pyrebase
 from flask_api import FlaskAPI, status, exceptions
 from getMPG import getMPG
 from getPrices import getPrices
-import pyrebase
 from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreference, getStations
 from geopy.geocoders import Nominatim
 
@@ -76,6 +76,8 @@ def mainFunc():
 
     return returnString + "<br/><br/>" + pprint.pformat(distanceMatrix)
 
+
+#TODO: Should I change this route name?
 @app.route('/test',methods=['GET','POST'])
 def preferancesJson():
 
@@ -112,6 +114,7 @@ def preferancesJson():
         #return jsonify(yourStationList)
 
 
+#TODO what are these?
 notes = {
     0: 'do the shopping',
     1: 'build the codez',

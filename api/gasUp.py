@@ -1,4 +1,4 @@
-from flask import Flask , redirect, url_for, request, jsonify
+#from flask import Flask , redirect, url_for, request, jsonify
 import googlemaps
 import json
 import pprint
@@ -11,7 +11,7 @@ import pyrebase
 # Set up the client with the API key
 maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
 
-app = FlaskAPI(__name__)
+#app = FlaskAPI(__name__)
 config = {
   "apiKey": "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
   "authDomain": "ricoauth.firebaseapp.com",

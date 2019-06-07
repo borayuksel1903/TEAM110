@@ -4,8 +4,8 @@ from selenium.webdriver.common.keys import Keys
 # import json
 import time
 
-# get address from somewhere (another file? idk)
 
+# Get the prices of gas stations nearby the address
 def getPrices( address ):
     # setup the webdriver for chrome with the local executable
     

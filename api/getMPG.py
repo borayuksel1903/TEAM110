@@ -5,61 +5,32 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
-
-##from tabulate import tabulate
 import os
-#import boto3
 import json
 import time
-
-'''
-import firebase_admin
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
-
-# Use the application default credentials
-
-import firebase_admin
-from firebase_admin import credentials
-
-
-cred = credentials.Certificate("./testcarsKey.json")
-firebase_admin.initialize_app(cred)
-
-
-db = firestore.client()
-'''
-
 
 
 # launch url
 url = "https://www.fueleconomy.gov/feg/findacar.shtml"
 
 driver = webdriver.Chrome(executable_path='./chromedriver');
-'''
-client = boto3.client('s3')
-resource = boto3.resource('s3')
-
-listModels = []
-'''
 
 def parseCar(car):
     if (car.split(None, 1)[0] != "Alfa" and car.split(None, 1)[0] != "Aston" and car.split(None, 1)[0] != "Land"):
-            make = car.split(None, 1)[0]
-            model = car.split(None,1)[1]
+        make = car.split(None, 1)[0]
+        model = car.split(None,1)[1]
     elif (car.split(None, 1)[0] == "Alfa" or car.split(None, 1)[0] == "Aston"):
-            makes = car.split()
-            make = makes[0] + ' ' + makes[1]
-            model = makes[2]
+        makes = car.split()
+        make = makes[0] + ' ' + makes[1]
+        model = makes[2]
     else:
-            makes = car.split()
-            make = makes[0] + ' ' + makes[1]
-            if makes[2] == "Discovery":
-                model = makes[2]
-            else:
-                print(car)
-                model = makes[2] + ' '+ makes[3]
+        makes = car.split()
+        make = makes[0] + ' ' + makes[1]
+        if makes[2] == "Discovery":
+            model = makes[2]
+        else:
+            print(car)
+            model = makes[2] + ' '+ makes[3]
 
     returnDict = {
         "make":make,
@@ -70,11 +41,13 @@ def parseCar(car):
 
 def getMPG( year, car):
 
+    # Create a dictionary for the cars
     myDict = parseCar(car)
 
     make = myDict["make"]
     model = myDict["model"]
 
+    # Initialize values
     count = 0
     rangeSum = 0
     mpgSum = 0
@@ -82,6 +55,7 @@ def getMPG( year, car):
     avgMpg =0
     noRangeBool = 0
 
+    # Get to the page
     driver.get(url)
     time.sleep(1)
 
@@ -103,7 +77,6 @@ def getMPG( year, car):
     # Multiple engine sizes for the model
     try:
         driver.find_element_by_id('sort')
-        ##print(" Multiple engines")
         Select(driver.find_element_by_id('rowlimitdisp')).select_by_visible_text('View 200')
 
         makes=driver.find_elements_by_xpath("//*[starts-with(@id,'chk')]")
@@ -149,11 +122,7 @@ def getMPG( year, car):
             mpgSum = mpgSum + mpg
             count = count + 1
 
-                        #mySum = mySum + int(makey.text,10)
 
-        ##print ("Sum is " , rangeSum)
-        ##print ("The make has ", count ," models fabricated " )
-        ##print ("The average range for the selected make is \n " , float(rangeSum/count))
         if( noRangeBool == 0):
             avgRange = float(rangeSum/count)
 
