@@ -14,7 +14,7 @@ def getPrices( addresses ):
     # set up final dict of station data
     stationData= {}
 
-    for address in addresses
+    for address in addresses:
         # go to gasbuddy.com
         driver.get("https://www.gasbuddy.com")
 
