@@ -28,6 +28,7 @@ def getPrices( addresses ):
         time.sleep(3)
 
         # get to an appropriate amount of search results
+        '''
         moreStationsButton = driver.find_element_by_xpath("""//*[@id="container"]/div/div[3]/div/div/div[1]/a""")
         moreStationsButton.click()
         time.sleep(2)
@@ -35,6 +36,7 @@ def getPrices( addresses ):
         time.sleep(2)
         moreStationsButton.click()
         time.sleep(2)
+        '''
 
         # get the station names, addresses, and prices
         stationNames = driver.find_elements_by_css_selector('h3.header__header3___1b1oq.header__header___1zII0.header__snug___lRSNK.GenericStationListItem__stationNameHeader___1an6Y')
