@@ -95,24 +95,27 @@ def preferancesJson():
         yourStationList=getStationsWithinRange(lat,lng,5)
 
 
-        mylist=[]
+        myList=[]
         stationData = {}
         for station in yourStationList:
             location = maps.reverse_geocode((station[0], station[1])) #this gives exception because str(station) is in parentheses, need to parse
             streetAddress = location[0]['address_components'][1]['long_name']
             streetNumber = location[0]['address_components'][0]['long_name']
+	    myList.append(streetNumber + " " + streetAddress)
 
-            #print(location[0])
+	stationData = getPrices(myList)
+	print(stationData)
+	    #print(location[0])
             #print(streetNumber + " " + streetAddress)
 
-            price = getPrices(streetNumber + " " + streetAddress) #calling getPrices from getPrices.py
-            stationData.update(price)
+            #price = getPrices(streetNumber + " " + streetAddress) #calling getPrices from getPrices.py
+            #stationData.update(price)
 
-        print("Here")
-        stationData = sortByPrice(stationData)
-        print(stationData)
+        # print("Here")
+        #stationData = sortByPrice(stationData)
+        #print(stationData)
 
-        return mylist
+        return myList
         #return jsonify(yourStationList)
 
 
