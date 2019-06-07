@@ -34,6 +34,8 @@ user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
 userList = user['email'].split('@')
 userStr = userList[0]
 
+driver = db.child("users").child(userStr).get(user['idToken']).val()
+
 # Functions to call when at the basic localhost URL
 @app.route('/')
 
@@ -103,8 +105,13 @@ def preferancesJson():
             streetNumber = location[0]['address_components'][0]['long_name']
 	    myList.append(streetNumber + " " + streetAddress)
 
-	stationData = getPrices(myList)
-	print(stationData)
+	
+	stations = getPrices(["3233 La Jolla Village"])
+	stations = getStations(stations)
+	results = sortByPreference(stations, driver)
+
+
+
 	    #print(location[0])
             #print(streetNumber + " " + streetAddress)
 
@@ -210,6 +217,7 @@ def result():
             #db.child("users").child("Nicole").set(shell, user['idToken'])
 
         db.child("users").child(userStr).update(data, user['idToken'])
+	
 
         return "No place information is given"
 '''

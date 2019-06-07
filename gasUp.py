@@ -11,7 +11,15 @@ import pyrebase
 #from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreference, getStations
 
 # Set up the client with the API key
-maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
+
+API_KEY = "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ"
+gmaps = googlemaps.Client(key= API_KEY)
+loc = gmaps.geolocate()
+lat = str(loc['location']['lat'])
+lng = str(loc['location']['lng'])
+
+
+
 
 app = FlaskAPI(__name__)
 config = {
@@ -35,14 +43,14 @@ def getStations(locations):
     # api-endpoint
     data = {}
     for names in locations:
-        URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat + ', ' + long + '&destinations=' + names + '&key=' + API_KEY
+        URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat + ', ' + lng + '&destinations=' + names + '&key=' + API_KEY
 
         # sending get request and saving the response as response object
         r = requests.get(url=URL)
 
         # extracting data in json format
         data[names] = r.json()
-        locations[names].update({'Distance' : str(data[names]['rows'][0]['elements'][0]['distance']['text']).strip(' mi')})
+        locations[names].update({'distance' : str(data[names]['rows'][0]['elements'][0]['distance']['text']).strip(' mi')})
 
     return locations
 
@@ -50,7 +58,7 @@ def getStations(locations):
 # Takes distance data from getStations function (stations dict)
 # Returns Gas Station dict {name, {Location, Distance (in miles)}}
 def sortByDistance(stations):
-    sorted_x = sorted(stations.items(), key=lambda kv: (kv[1]['Distance']))
+    sorted_x = sorted(stations.items(), key=lambda kv: (kv[1]['distance']))
     sorted_dict = collections.OrderedDict(sorted_x)
     return sorted_dict
 
@@ -66,6 +74,7 @@ def sortByPrice(stations):
 
 def sortByPreference(stations, driver):
     if(driver['otherStations'] == True):
+    	print("Here")
         return stations
     else:
         preferences = {}
@@ -86,7 +95,8 @@ def sortByPreference(stations, driver):
         for i in stations.items():
             if(not i[1]['name'] in preferences):
                 results.update({i[0] : i[1]})
-        return results
+        print(results)
+	return results
 
 # Function that gets a list of all the gas stations inside the given range --- returns a dict of (latitude,longitude)=stationName
 def getStationsWithinRange(lat, lng, range):
@@ -95,7 +105,7 @@ def getStationsWithinRange(lat, lng, range):
     rangeInMeters = range*1609.34
 
     # Make google maps API call to get gas stations within range
-    stationList = maps.places_nearby(location=(lat,lng), \
+    stationList = gmaps.places_nearby(location=(lat,lng), \
         radius=rangeInMeters, type="gas_station")
 
     # Setup a dict of stations; the coordinates are the key, and the corresponding station name is the data
