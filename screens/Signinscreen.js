@@ -89,7 +89,7 @@ export default class SigninScreens extends React.Component {
 
   signin = (email, password) =>{
 
-    var data = {email: email, password: password};
+    //var data = {email: email, password: password};
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(() => {
     firebase.auth().signInWithEmailAndPassword(email,password)
@@ -97,13 +97,13 @@ export default class SigninScreens extends React.Component {
     .catch(error => {alert(error.toString())});
   })
 
-  fetch(('http://127.0.0.1:5000/signin'),{
-    method: 'POST',
-    headers:{
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
+  // fetch(('http://127.0.0.1:5000/signin'),{
+  //   method: 'POST',
+  //   headers:{
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(data)
+  // })
 };
 
 }

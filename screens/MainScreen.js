@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput, Linking } from 'react-native';
+import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput, Linking, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,38 +13,13 @@ import MapView from 'react-native-maps';
 import Modal from "react-native-modal";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-// TESTING TO MAKE SURE MAP SHOWS FOR MIHAI
+let { width, height } = Dimensions.get('window');
 
-// const Mobil = {
-//   coordinate: {latitude: 32.8710589032578, longitude: -117.233255945994},
-//   regular: 4.36,
-//   midgrade: 4.46,
-//   premium: 4.56,
-//   //name: "Mobil"
-// }
-//
-// const Shell = {
-//   coordinate: {latitude: 32.853534, longitude: -117.254081 },
-//   regular: 4.07,
-//   midgrade: 4.20,
-//   premium: 4.31,
-//   //name: "Shell"
-// }
-//
-// const Chevron = {
-//   coordinate: {latitude: 32.868502, longitude: -117.215751},
-//   regular: 4.02,
-//   midgrade: 4.16,
-//   premium: 4.26,
-//   //name: "Chevron"
-// }
-//
-// const Costco = {
-//   coordinate: {latitude: 32.824904, longitude: -117.226281},
-//   regular: 3.60,
-//   premium: 3.80,
-//   //name: "Costco"
-// }
+const ASPECT_RATIO = width / height;
+const LATITUDE = 0;
+const LONGITUDE = 0;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class MainScreen extends React.Component {
 
@@ -53,14 +28,18 @@ export default class MainScreen extends React.Component {
     this.state = { gasTankPercent: 10,
        animation: true,
        text:"Enter your current location" ,
-       latitude: null,
-       longitude:null ,
        myrecsName: [],
        myrecsCoordLat:[],
        myrecsCoordLong:[],
        search: "",
        valueSearch: "",
-       //showGasPins: false,
+       showGasPins: false,
+       region: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
       }
 
     this.props.navigation.navigate('Drawer');
@@ -68,9 +47,8 @@ export default class MainScreen extends React.Component {
     this.increment = 5;
     this.intervalID = 0;
     this.maxCycles = 1;
-
-
   }
+
   // function to toggle the appearance of pop-up screen
   toggleModal = () => {
       this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -92,35 +70,21 @@ export default class MainScreen extends React.Component {
     }, 25);
 
     this.watchID = navigator.geolocation.watchPosition(
-      (position) => {
+      position => {
         this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+	          latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }
         });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-    );
+      }, (error)=>console.log(error));
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID);
-    // navigator.geolocation.getCurrentPosition(
-    //
-    //   (position) => {
-    //     console.log(position);
-    //     this.setState({
-    //       latitude: position.coords.latitude,
-    //       longitude: position.coords.longitude,
-    //       error: null,
-    //     });
-    //   },
-    //   (error) => this.setState({ error: error.message }),
-    //   { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 },
-    // );
     navigator.geolocation.clearWatch(this.watchID);
-
   }
 
   initAnimation = () => {
@@ -187,7 +151,6 @@ export default class MainScreen extends React.Component {
 
   }
 
-
   render() {
   let { init } = this.state;
     return (
@@ -209,15 +172,26 @@ export default class MainScreen extends React.Component {
           <Right />
         </Header>
 
-        <MapView style={{flex: 1}} showsUserLocation={true} />
+        <MapView
+	        style={{flex: 1}}
+	        showsUserLocation={true}
+	        region={ this.state.region }
+	      >
+          <TopGasPoints
+            show={this.state.showGasPins}
+            myrecsName={this.state.myrecsName}
+            myrecsCoordLat={this.state.myrecsCoordLat}
+            myrecsCoordLong={this.state.myrecsCoordLong}
+          />
+        </MapView>
 
 
-    <View style={styles.gasUpComp}>
+  <View style={styles.gasUpComp}>
         <Animated.View>
 	       <View style={styles.gauge}>
 	        <Button transparent onPress={()=> {
-            this.gasUP(this.state.latitude, this.state.longitude, this.state.gasTankPercent);
-            //this.setState({showGasPins: true});
+            this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
+            this.setState({showGasPins: true});
             this.toggleModal();
           }}>
 	         <Gauge percent={this.state.gasTankPercent} />
@@ -227,6 +201,9 @@ export default class MainScreen extends React.Component {
             <TouchableOpacity transparent style={styles.removeButton} onPress={this.removeGas}>
               <Ionicons name="ios-remove-circle" color="#DE601B" size={64}/>
 	          </TouchableOpacity>
+            <Text style = {{fontSize: 24}}>
+              {this.state.gasTankPercent}%
+            </Text>
             <TouchableOpacity transparent style={styles.addButton} onPress={this.addGas}>
               <Ionicons name="ios-add-circle" color="#DE601B" size={64} />
 	          </TouchableOpacity>
@@ -242,7 +219,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                      0.5mi
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                         </View>
@@ -253,7 +230,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                     2mi
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
@@ -264,7 +241,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                     7mi
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
 
                             </Button>
@@ -276,7 +253,7 @@ export default class MainScreen extends React.Component {
                             <Text style={{ color: 'white', fontSize: 25}}>
                                     8mi
                             </Text>
-                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.latitude+','+ this.state.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
+                            <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
                             </Button>
                             </View>
@@ -324,45 +301,87 @@ class Gauge extends React.Component {
   }
 }
 
-// class GasPoint extends React.Component {
-//   render() {
-//     //
-//     // if( this.props.show !== true ) return (null);
-//     //
-//     // let priceDescription = "";
-//     //
-//     // if( this.props.regular ) {
-//     //   priceDescription += "\nRegular: $" + this.props.regular;
-//     // }
-//     //
-//     // if( this.props.midgrade ) {
-//     //   priceDescription += "\nMidgrade: $" + this.props.midgrade;
-//     // }
-//     //
-//     // if( this.props.premium ) {
-//     //   priceDescription += "\nPremium: $" + this.props.premium;
-//     // }
-//     //
-//     // if( this.props.diesel ) {
-//     //   priceDescription += "\nDiesel: $" + this.props.diesel;
-//     // }
-//
-//     return(
-//       <MapView.Marker
-//         coordinate={this.props.coordinate}
-//       >
-//       <MapView.Callout>
-//         <View>
-//       //     <Text>
-//       //       <Text style={{fontWeight: 'bold'}}>{this.props.title}{"\n"}</Text>
-// 	    // {priceDescription}
-//       //     </Text>
-//           </View>
-//         </MapView.Callout>
-//       </MapView.Marker>
-//     );
-//   }
-// }
+class TopGasPoints extends React.Component {
+  constructor(props){
+    super(props);
+  }
+
+  render() {
+    let gasPointList = [];
+
+    for(let index = 0; index < this.props.myrecsName.length; index++) {
+      let name = this.props.myrecsName[index];
+      let latitude = this.props.myrecsCoordLat[index];
+      let longitude = this.props.myrecsCoordLong[index];
+
+      let station = new GasStation(name, latitude, longitude, 0);
+      gasPointList.push(
+        <GasPoint
+          key={index}
+          show={this.props.show}
+          coordinate={station.coordinate}
+          title={station.name}
+          regular={station.price}
+        />
+      );
+    }
+
+    return (
+      gasPointList
+    );
+  }
+}
+
+class GasStation {
+  constructor(name, latitude, longitude, price) {
+    this.name = name,
+    this.price = price,
+    this.coordinate = {
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude)
+    }
+  }
+}
+
+class GasPoint extends React.Component {
+  render() {
+
+    if( this.props.show !== true ) return (null);
+
+    let priceDescription = "";
+
+    if( this.props.regular ) {
+      priceDescription += "\nRegular: $" + this.props.regular;
+    }
+
+    if( this.props.midgrade ) {
+      priceDescription += "\nMidgrade: $" + this.props.midgrade;
+    }
+
+    if( this.props.premium ) {
+      priceDescription += "\nPremium: $" + this.props.premium;
+    }
+
+    if( this.props.diesel ) {
+      priceDescription += "\nDiesel: $" + this.props.diesel;
+    }
+
+    return(
+      <MapView.Marker
+        coordinate={this.props.coordinate}
+      >
+      <MapView.Callout>
+        <View>
+          <Text>
+            <Text style={{fontWeight: 'bold'}}>{this.props.title}{"\n"}</Text>
+	    {priceDescription}
+          </Text>
+          </View>
+        </MapView.Callout>
+      </MapView.Marker>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
