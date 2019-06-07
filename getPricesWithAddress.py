@@ -14,7 +14,7 @@ def getPrices( addresses ):
     # set up final dict of station data
     stationData= {}
 
-    for address in addresses
+    for address in addresses:
         # go to gasbuddy.com
         driver.get("https://www.gasbuddy.com")
 
@@ -42,22 +42,22 @@ def getPrices( addresses ):
         stationPrices = driver.find_elements_by_class_name('GenericStationListItem__price___vxvav')
 
         # populate dict with actual station information
-        for 1 in range(len(stationNames)):
+        for stationIndex in range(len(stationNames)):
             # if no price, i.e. station is not in operation, ignore it
-            if stationPrices[1].text == '---':
+            if stationPrices[stationIndex].text == '---':
                 continue
 
             # make the addresses more readable
-            addressArray = stationAddresses[1].text.split('\n')
+            addressArray = stationAddresses[stationIndex].text.split('\n')
             stationAddress = addressArray[0]
 
             # remove extra characters from the prices
-            priceArray = stationPrices[1].text.split('$')
+            priceArray = stationPrices[stationIndex].text.split('$')
             stationPrice = priceArray[1]
 
             # add the name and price for the address in question
             stationData[stationAddress] = {}
-            stationData[stationAddress]['name'] = stationNames[1].text
+            stationData[stationAddress]['name'] = stationNames[stationIndex].text
             stationData[stationAddress]['price'] = stationPrice
 
     return stationData
