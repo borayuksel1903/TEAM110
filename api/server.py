@@ -38,6 +38,8 @@ driver = db.child("users").child(userStr).get(user['idToken']).val()
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
+def mainRoute():
+    return('Hello World!')
 
 # Function that calls other funcs to get relevant data, calculates search
 # radius, and returns a string of all the data to be rendered
