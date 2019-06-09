@@ -174,7 +174,7 @@ export default class MainScreen extends React.Component {
 
     var data = {lat: latitude, lng:longitude, tank: gasTankPercent};
 
-    fetch(('http://54.149.202.12:5000/test'),{
+    fetch(('http://18.236.93.161:5000/test'),{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -395,13 +395,13 @@ class GasStationOnModal extends React.Component {
         tag = "GA$UP Station!"
         break;
       case 1:
-        tag = "Closest Station"
-        break;
-      case 2:
         tag = "Lowest Price"
         break;
-      case 3:
+      case 2:
         tag = "Good Choice!"
+        break;
+      case 3:
+        tag = "Closest Station"
         break;
       default:
 

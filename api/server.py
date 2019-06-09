@@ -132,7 +132,7 @@ def preferancesJson():
 
 
         finalGasStations = [finalPrefAndPrice, finalPrice1, finalPrice2, finalPrefAndDist, finalDist1, finalDist2]
-
+        console.log( finaGasStations.length );
 
 
 
