@@ -1,5 +1,7 @@
-#from flask import Flask , redirect, url_for, request, jsonify
+from flask import Flask , redirect, url_for, request, jsonify
 import googlemaps
+import collections
+import requests
 import json
 import pprint
 from flask_api import FlaskAPI, status, exceptions
@@ -9,8 +11,8 @@ import pyrebase
 #from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreference, getStations
 
 # Set up the client with the API key
-maps = googlemaps.Client(key= "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ")
-
+API_KEY = "AIzaSyDmH8hyjX9rAWQ1i1ZxxNoF-S-wbC3wnaQ"
+maps = googlemaps.Client(key= API_KEY)
 #app = FlaskAPI(__name__)
 config = {
   "apiKey": "AIzaSyCFqMS1BaTBWSQNAehmmb1sYvQt4wsbTyY",
@@ -29,11 +31,11 @@ user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
 userList = user['email'].split('@')
 userStr = userList[0]
 
-def getStations(locations):
+def getStations(locations, lat, long):
     # api-endpoint
     data = {}
     for names in locations:
-        URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + lat + ', ' + long + '&destinations=' + names + '&key=' + API_KEY
+        URL = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=' + str(lat) + ', ' + str(long) + '&destinations=' + names + '&key=' + API_KEY
 
         # sending get request and saving the response as response object
         r = requests.get(url=URL)
@@ -41,6 +43,8 @@ def getStations(locations):
         # extracting data in json format
         data[names] = r.json()
         locations[names].update({'Distance' : str(data[names]['rows'][0]['elements'][0]['distance']['text']).strip(' mi')})
+        #locations[names].update({'Lat' : lat2})
+        #locations[names].update({'Long' : lng2})
 
     return locations
 
@@ -62,7 +66,8 @@ def sortByPrice(stations):
     sorted_dict = collections.OrderedDict(sorted_x)
     return sorted_dict
 
-def sortByPreference(stations, driver):
+def sortByPreferenceandPrice(stations, driver):
+
     if(driver['otherStations'] == True):
         return stations
     else:
@@ -73,9 +78,33 @@ def sortByPreference(stations, driver):
                 preferences.update({type: value})
 
         for places in stations.items():
-            if(places[1]['name'] in preferences):
+            if(str(places[1]['name']).lower() in preferences):
                 results.update({places[0] : places[1]})
+        if(len(results) == 0):
+            return stations
 
+        results = sortByPrice(results)
+
+        for i in stations.items():
+            if(not i[1]['name'] in preferences):
+                results.update({i[0] : i[1]})
+
+        return results
+
+def sortByPreferenceandDist(stations, driver):
+
+    if(driver['otherStations'] == True):
+        return stations
+    else:
+        preferences = {}
+        results = {}
+        for type, value in driver['gasStations'].items():
+            if (value == True):
+                preferences.update({type: value})
+
+        for places in stations.items():
+            if(str(places[1]['name']).lower() in preferences):
+                results.update({places[0] : places[1]})
         if(len(results) == 0):
             return stations
 
@@ -84,6 +113,7 @@ def sortByPreference(stations, driver):
         for i in stations.items():
             if(not i[1]['name'] in preferences):
                 results.update({i[0] : i[1]})
+
         return results
 
 # Function that gets a list of all the gas stations inside the given range --- returns a dict of (latitude,longitude)=stationName

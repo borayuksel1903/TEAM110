@@ -31,6 +31,8 @@ export default class MainScreen extends React.Component {
        myrecsName: [],
        myrecsCoordLat:[],
        myrecsCoordLong:[],
+       myrecsPrice: [],
+       myrecsDist: [],
        search: "",
        valueSearch: "",
        showGasPins: false,
@@ -98,11 +100,11 @@ export default class MainScreen extends React.Component {
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       this.setState({ animation: false });
+      this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
       return
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
-
   }
 
   gasUP = (latitude, longitude, gasTankPercent ) => {
@@ -131,18 +133,21 @@ export default class MainScreen extends React.Component {
 
         result = obj[i];
         this.state.myrecsName.push( result.name );
-        var str = result.coordinates;
-        str = str.replace(',','')
-        str = str.replace('(','')
-        str = str.replace(')','')
 
-        var separateArray = str.split(" ")
+        //var str = result.coordinates;
+        //str = str.replace(',','')
+        ///str = str.replace('(','')
+        //str = str.replace(')','')
 
-        var myLat = separateArray[0]
-        var myLong = separateArray[1]
+        //var separateArray = str.split(" ")
 
-        this.state.myrecsCoordLat.push(myLat)
-        this.state.myrecsCoordLong.push(myLong)
+        //var myLat = separateArray[0]
+        //var myLong = separateArray[1]
+        this.state.myrecsPrice.push(result.price)
+        this.state.myrecsCoordLat.push(result.lat)
+        this.state.myrecsCoordLong.push(result.lng)
+        this.state.myrecsDist.push(result.Distance)
+
 
       }
       //this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -190,7 +195,7 @@ export default class MainScreen extends React.Component {
         <Animated.View>
 	       <View style={styles.gauge}>
 	        <Button transparent onPress={()=> {
-            this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
+            //this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
             this.setState({showGasPins: true});
             this.toggleModal();
           }}>
@@ -214,10 +219,13 @@ export default class MainScreen extends React.Component {
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                {(this.state.myrecsName)[0]}
+                                {(this.state.myrecsName)[0]} {/*sorted by preferences and price */}
                             </Text>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                     0.5mi
+                                     {(this.state.myrecsDist)[0]}mi
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                     ${(this.state.myrecsPrice)[0]}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[0]+','+(this.state.myrecsCoordLong)[0]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -225,10 +233,13 @@ export default class MainScreen extends React.Component {
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                                {(this.state.myrecsName)[1]}
+                                {(this.state.myrecsName)[1]} {/*sorted by best price */}
                             </Text>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                    2mi
+                                {(this.state.myrecsDist)[1]}mi
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                     ${(this.state.myrecsPrice)[1]}mi
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[1]+','+(this.state.myrecsCoordLong)[1]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -236,10 +247,13 @@ export default class MainScreen extends React.Component {
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                              {(this.state.myrecsName[2])}
+                              {(this.state.myrecsName[2])} {/*sorted by preferences and distance */}
                             </Text>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                    7mi
+                                {(this.state.myrecsDist)[2]}mi
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                     ${(this.state.myrecsPrice)[2]}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[2]+','+(this.state.myrecsCoordLong)[2]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>
@@ -248,10 +262,13 @@ export default class MainScreen extends React.Component {
                             </View>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={{ color: 'white', fontSize: 25 }}>
-                              {(this.state.myrecsName[3])}
+                              {(this.state.myrecsName[3])} {/*sorted by shortest distance */}
                             </Text>
                             <Text style={{ color: 'white', fontSize: 25}}>
-                                    8mi
+                                {(this.state.myrecsDist)[3]}mi
+                            </Text>
+                            <Text style={{ color: 'white', fontSize: 25}}>
+                                     ${(this.state.myrecsPrice)[3]}
                             </Text>
                             <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin='+ this.state.region.latitude+','+ this.state.region.longitude+ '&destination='+ (this.state.myrecsCoordLat)[3]+','+(this.state.myrecsCoordLong)[3]) }} color="#FFFFFF" >
                               <Text style={{color: '#FFF'}}>  Go  </Text>

@@ -2,12 +2,13 @@ from flask import Flask , redirect, url_for, request, jsonify
 import googlemaps
 import json
 import pprint
-import pyrebase
 from flask_api import FlaskAPI, status, exceptions
 from getMPG import getMPG
-from getPrices import getPrices
-from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreference, getStations
+#from getPrices import getPrices
+import pyrebase
+from gasUp import getStationsWithinRange, sortByPrice, sortByDistance, sortByPreferenceandPrice, sortByPreferenceandDist, getStations
 from geopy.geocoders import Nominatim
+from getPrices import getPrices
 
 
 # Set up the client with the API key
@@ -32,6 +33,8 @@ auth = firebase.auth()
 user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
 userList = user['email'].split('@')
 userStr = userList[0]
+
+driver = db.child("users").child(userStr).get(user['idToken']).val()
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
@@ -76,8 +79,6 @@ def mainFunc():
 
     return returnString + "<br/><br/>" + pprint.pformat(distanceMatrix)
 
-
-#TODO: Should I change this route name?
 @app.route('/test',methods=['GET','POST'])
 def preferancesJson():
 
@@ -95,26 +96,56 @@ def preferancesJson():
 
         yourStationList=getStationsWithinRange(lat,lng,5)
 
-
-        stationString = ""
-        counter= 1
-        mylist=[]
+        myList=[]
+        lats = []
+        stationData = {}
         for station in yourStationList:
-            # location = geolocator.reverse(str(station)) #this gives exception because str(station) is in parentheses, need to parse
-            # price = getPrices(location.address) #calling getPrices from getPrices.py
-            mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station)})
-            #TODO: do ralph's thingies here
+            location = maps.reverse_geocode((station[0], station[1])) #this gives exception because str(station) is in parentheses, need to parse
 
-            #dictionary[str(station)]
-            #yourStationList[str(station)].update({{'name': yourStationList[station], 'price': '4.35'}})
+            lat2 = location[2]['geometry']['location']['lat']
+            lng2 = location[2]['geometry']['location']['lng']
+            streetAddress = location[0]['address_components'][1]['long_name']
+            streetNumber = location[0]['address_components'][0]['long_name']
+            myList.append(streetNumber + " " + streetAddress)
+            #lats.append('lat,' + lat2 , 'lng' : lng2})
 
-            counter=counter+1
 
-        return mylist
+        #print(myList[0])
+        stations = getPrices(["3233 La Jolla Village Drive"])
+        stations = getStations(stations, lat, lng)
+
+
+        prefAndPrice = sortByPreferenceandPrice(stations, driver)
+        #print(prefAndPrice)
+        finalPrefAndPrice = prefAndPrice[list(prefAndPrice)[0]]
+        prefAndDist = sortByPreferenceandDist(stations, driver)
+        #print(prefAndDist)
+        finalPrefAndDist = prefAndDist[list(prefAndDist)[0]]
+
+        price = sortByPrice(stations)
+        finalPrice = price[list(price)[0]]
+        dist = sortByDistance(stations)
+        finalDist = dist[list(dist)[0]]
+
+        finalGasStations = [finalPrefAndPrice, finalPrice, finalPrefAndDist, finalDist]
+
+
+
+
+	    #print(location[0])
+            #print(streetNumber + " " + streetAddress)
+
+            #price = getPrices(streetNumber + " " + streetAddress) #calling getPrices from getPrices.py
+            #stationData.update(price)
+
+        # print("Here")
+        #stationData = sortByPrice(stationData)
+        #print(stationData)
+
+        return finalGasStations
         #return jsonify(yourStationList)
 
 
-#TODO what are these?
 notes = {
     0: 'do the shopping',
     1: 'build the codez',
@@ -131,13 +162,6 @@ def note_repr(key):
 @app.route('/example/')
 def example():
     return {'request data': request.data}
-
-# @app.route('/signin', methods=['POST'])
-# def signIn():
-#     if request.method == 'POST':
-#         email = (request.data.get('email', ''))
-#         password = (request.data.get('password',''))
-#         user = auth.sign_in_with_email_and_password(email, password)
 
 # Function that gets the user's location in latitude/longitude --- returns a float 2-tuple
 def getGeoLocation():
@@ -213,6 +237,7 @@ def result():
             #db.child("users").child("Nicole").set(shell, user['idToken'])
 
         db.child("users").child(userStr).update(data, user['idToken'])
+
 
         return "No place information is given"
 '''
