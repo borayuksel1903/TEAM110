@@ -64,6 +64,7 @@ export default class MainScreen extends React.Component {
        search: "",
        valueSearch: "",
        showGasPins: false,
+       maxGasStations: 7,
        region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -148,6 +149,7 @@ export default class MainScreen extends React.Component {
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       this.setState({ animation: false });
+      this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
       return
     }
 
@@ -229,6 +231,7 @@ export default class MainScreen extends React.Component {
             myrecsName={this.state.myrecsName}
             myrecsCoordLat={this.state.myrecsCoordLat}
             myrecsCoordLong={this.state.myrecsCoordLong}
+	    max={this.state.maxGasStations}
           />
         </MapView>
 
@@ -258,82 +261,21 @@ export default class MainScreen extends React.Component {
         </Animated.View>
     </View>
 
-
-    {/*
-    const imageMap = {
-  "76" :       {source: seventySix,  dimension: {width: 0, height: 0}},
-  "711" :      {source: sevenEleven, dimension: {width: 0, height: 0}},
-  "arco" :     {source: arco,        dimension: {width: 0, height: 0}},
-  "chevron" :  {source: chevron,     dimension: {width: 0, height: 0}},
-  "costco" :   {source: costco,      dimension: {width: 0, height: 0}},
-  "mobil" :    {source: mobil,       dimension: {width: 0, height: 0}},
-  "shell" :    {source: shell,       dimension: {width: 0, height: 0}},
-  "speedway" : {source: speedway,    dimension: {width: 0, height: 0}},
-  "united" :   {source: united,      dimension: {width: 0, height: 0}},
-  "usa" :      {source: usa,         dimension: {width: 0, height: 0}},
-  "other" :    {source: other,       dimension: {width: 0, height: 0}},
-}
-
-
-    */}
-
-    {/*popup for gas up*/}
+        {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
           <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
-            <List>
-	    <GasStationOnModal 
-              station={{
-	        name: 'shellajshfg',
-		price: 4.50,
-		miles: 0.5,
-		latitude: 0,
-		longitude: 0
-	      }}
+	    <TopGasStationsOnModal
 	      origin={{
                 latitude: this.state.region.latitude,
-		longitude: this.state.region.longitude
-	      }} index={0}
+                longitude: this.state.region.longitude
+              }}
+              myrecsName={this.state.myrecsName}
+              myrecsCoordLat={this.state.myrecsCoordLat}
+              myrecsCoordLong={this.state.myrecsCoordLong}
+	      maxGasStations={this.state.max}
+              max={this.state.maxGasStations}
 	    />
-           <GasStationOnModal 
-              station={{
-	        name: 'speedway',
-		price: 4.50,
-		miles: 0.5,
-		latitude: 0,
-		longitude: 0
-	      }}
-	      origin={{
-                latitude: this.state.region.latitude,
-		longitude: this.state.region.longitude
-	      }} index={1}
-	    />
-            <GasStationOnModal 
-              station={{
-	        name: 'united',
-		price: 4.50,
-		miles: 0.5,
-		latitude: 0,
-		longitude: 0
-	      }}
-	      origin={{
-                latitude: this.state.region.latitude,
-		longitude: this.state.region.longitude
-        }} index={2}
-	    />
-           <GasStationOnModal 
-              station={{
-	        name: 'usa',
-		price: 4.50,
-		miles: 0.5,
-		latitude: 0,
-		longitude: 0
-	      }}
-	      origin={{
-                latitude: this.state.region.latitude,
-		longitude: this.state.region.longitude
-	      }} index={3}
-	    />
-      </List>
+	    
 
           </Container>
           <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
@@ -434,12 +376,48 @@ class Gauge extends React.Component {
     );
   }
 }
-
+// needed props: orgin(lat, lon), myrecs arrays
 class TopGasStationsOnModal extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  render() {
+    let gasStationList = [];
+    let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
+
+    for(let index = 0; index < max; index++) {
+      let name = this.props.myrecsName[index];
+      let latitude = this.props.myrecsCoordLat[index];
+      let longitude = this.props.myrecsCoordLong[index];
+      let price = 0;
+      let miles = 0;
+
+      let station = new GasStation(name, latitude, longitude, price);
+
+      gasStationList.push(
+        <GasStationOnModal
+          key={index}
+	  station={{
+	    name: station.name,
+	    latitude: station.latitude,
+	    longitude: station.longitude,
+	    price: station.price,
+	    miles: miles
+	  }}
+    origin={this.props.origin} 
+    index={index}
+        />
+      );
+
+    }
+
+    return(
+      gasStationList
+    );
+  }
 }
+
 
 class GasStationOnModal extends React.Component {
   constructor(props) {
@@ -454,13 +432,13 @@ class GasStationOnModal extends React.Component {
     let tag = "";
     switch(this.props.index) {
       case 0:
-        tag = "GA$UP  Station"
+        tag = "GA$UP Station!"
         break;
       case 1:
-        tag = "Closest   Station"
+        tag = "Closest Station"
         break;
       case 2:
-        tag = "Lowest!  $Price$"
+        tag = "Lowest Price"
         break;
       case 3:
         tag = "Good Choice!"
@@ -477,12 +455,12 @@ class GasStationOnModal extends React.Component {
         </Left>
         <Body>
           <Text style={{color: '#FFF',fontSize: 25}} > ${this.props.station.price}     {this.props.station.miles} mi </Text>
-          <Text style={{color: '#FFC300', fontSize: 10,fontWeight: 'bold',}}> {tag} </Text>
+          <Text style={{color: '#FFC300', fontSize: 11,fontWeight: 'bold',}}> {tag} </Text>
         </Body>
         
         <Right>
           <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.props.origin.latitude + ',' + this.props.origin.longitude + '&destination=' + this.props.station.latitude + ',' + this.props.station.longitude)}} color="#FFFFFF" >
-            <Text style={{color: '#FFC300'}}>  Go  </Text>
+            <Text style={{color: '#FFF'}}>  Go  </Text>
           </Button>
         </Right>
         
@@ -500,15 +478,21 @@ class TopGasPoints extends React.Component {
   }
 
   render() {
+    let max = this.props.max;
+    if( max < 1 ) {
+      max = 1;
+    }
+
     let gasPointList = [];
-    let maxPoints = (this.props.myrecsName.length < 4) ? this.props.myrecsName.length : 4;
+    max = (this.props.myrecsName.length < max) ? this.props.myrecsName.length : max;
   
-    for(let index = 0; index < this.props.myrecsName.length; index++) {
+    for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
       let latitude = this.props.myrecsCoordLat[index];
       let longitude = this.props.myrecsCoordLong[index];
+      let price = 0;
 
-      let station = new GasStation(name, latitude, longitude, 0);
+      let station = new GasStation(name, latitude, longitude, price);
       gasPointList.push(
         <GasPoint
           key={index}
