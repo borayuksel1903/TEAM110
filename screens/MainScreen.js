@@ -13,6 +13,17 @@ import MapView from 'react-native-maps';
 import Modal from "react-native-modal";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
+import seventySix from '../assets/gaslogo/76color.png'
+import sevenEleven from '../assets/gaslogo/711color.png'
+import arco from '../assets/gaslogo/arcocolor.png'
+import chevron from '../assets/gaslogo/chevroncolor.png'
+import costco from '../assets/gaslogo/costcocolor.png'
+import mobile from '../assets/gaslogo/mobilecolor.png'
+import shell from '../assets/gaslogo/shellcolor.png'
+import speedway from '../assets/gaslogo/speedwaycolor.png'
+import united from '../assets/gaslogo/unitedcolor.png'
+import usa from '../assets/gaslogo/usacolor.png'
+
 let { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height;
@@ -308,7 +319,8 @@ class TopGasPoints extends React.Component {
 
   render() {
     let gasPointList = [];
-
+    let maxPoints = (this.props.myrecsName.length < 4) ? this.props.myrecsName.length : 4;
+  
     for(let index = 0; index < this.props.myrecsName.length; index++) {
       let name = this.props.myrecsName[index];
       let latitude = this.props.myrecsCoordLat[index];
