@@ -16,6 +16,7 @@
     "@material-ui/icons": "^4.0.1",
     "axios": "^0.19.0",
     "expo": "^32.0.0",
+    "firebase": "^6.1.1",
     "material-ui-autocomplete-google-places": "^2.3.0",
     "material-ui-icons": "^1.0.0-beta.36",
     "material-ui-search-bar": "^0.4.2",
