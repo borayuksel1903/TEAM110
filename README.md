@@ -45,4 +45,4 @@ station. They do not accurately represent the distance to the station via road t
 connectivity issues.
 6. Sometimes after pressing the GasUp button too soon after loading the app, nothing will happen. In this case, 
 wait 5 to 10 seconds and then try again.
-7. Sometimes pressing the button will take a long time. If it is not working after 5 minutes, then shake your phone, and press reload to restart the app.
+7. Sometimes pressing the button will take a long time. If it is not working after 2 minutes, then click the "Back to the Main Page" Button and Click the GasUp button again.
