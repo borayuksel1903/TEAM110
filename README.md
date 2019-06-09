@@ -15,7 +15,7 @@ Username: ricoteamtester@gmail.com
 Password: testingcse110
 
 # Requirements
-The application must be run on an iPhone 7 or later. The device must be connected to WiFi and running an 
+The application should be run on an iPhone X. The device must be connected to WiFi and running an 
 iOS version of 12 or higher. The device must have Google Maps installed.
 
 # Installation Instructions 
