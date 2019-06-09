@@ -43,3 +43,5 @@ twice. Only the second option has the actual functionality; the first will cause
 station. They do not accurately represent the distance to the station via road travel.
 5. The server is unstable when multiple users are using the app at the same time. This will potentially cause
 connectivity issues.
+6. Sometimes after pressing the GasUp button too soon after loading the app, nothing will happen. In this case, 
+wait 5 to 10 seconds and then try again.
