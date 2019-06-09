@@ -151,7 +151,6 @@ export default class MainScreen extends React.Component {
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       this.setState({ animation: false });
-      this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
       return
     }
 
@@ -345,15 +344,14 @@ class TopGasStationsOnModal extends React.Component {
       let miles = this.props.myrecsDist[index];
 
       let station = new GasStation(name, latitude, longitude, price);
-      console.log(this.props.myrecsCoordLat);
 
       gasStationList.push(
         <GasStationOnModal
           key={index}
 	  station={{
 	    name: station.name,
-	    latitude: station.latitude,
-	    longitude: station.longitude,
+	    latitude: station.coordinate.latitude,
+	    longitude: station.coordinate.longitude,
 	    price: station.price,
 	    miles: miles
 	  }}
