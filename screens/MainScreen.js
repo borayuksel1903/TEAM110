@@ -73,7 +73,14 @@ export default class MainScreen extends React.Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      }
+      prevRegion: {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+      threshold: 5,
+    }
 
     this.props.navigation.navigate('Drawer');
     this.cycle = 0;
@@ -150,6 +157,12 @@ export default class MainScreen extends React.Component {
        this.cycle = this.cycle + 1;
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
+      if( this.state.animation === true ) {
+        /* only call gas up once for init */
+        this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
+        this.setState({ prevRegion: this.state.region })
+        console.log( "gasUP" );
+      }
       this.setState({ animation: false });
       return
     }
@@ -161,7 +174,7 @@ export default class MainScreen extends React.Component {
 
     var data = {lat: latitude, lng:longitude, tank: gasTankPercent};
 
-    fetch(('http://54.184.93.247:5000/test'),{
+    fetch(('http://54.149.202.12:5000/test'),{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -183,22 +196,10 @@ export default class MainScreen extends React.Component {
 
         result = obj[i];
         this.state.myrecsName.push( result.name );
-
-        //var str = result.coordinates;
-        //str = str.replace(',','')
-        ///str = str.replace('(','')
-        //str = str.replace(')','')
-
-        //var separateArray = str.split(" ")
-
-        //var myLat = separateArray[0]
-        //var myLong = separateArray[1]
         this.state.myrecsPrice.push(result.price)
         this.state.myrecsCoordLat.push(result.lat)
         this.state.myrecsCoordLong.push(result.lng)
         this.state.myrecsDist.push(result.Distance)
-
-
       }
     })
 
@@ -245,10 +246,19 @@ export default class MainScreen extends React.Component {
         <Animated.View>
 	       <View style={styles.gauge}>
 	        <Button transparent onPress={()=> {
-            //this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
-            this.setState({showGasPins: true});
-            this.toggleModal();
-          }}>
+		  let lat1 = this.state.prevRegion.latitude;
+	    	  let lon1 = this.state.prevRegion.longitude;
+		  let lat2 = this.state.region.latitude;
+	       	  let lon2 = this.state.region.longitude;
+
+	          if( distanceInMiBetweenEarthCoordinates(lat1, lon1, lat2, lon2) > this.state.threshold ) {
+                    this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
+		    this.setState({prevRegion: this.state.region});
+                    console.log( "gasUP" );
+	          }
+                  this.setState({showGasPins: true});
+                  this.toggleModal();
+               }}>
 	         <Gauge percent={this.state.gasTankPercent} />
 	        </Button>
 	       </View>
@@ -279,7 +289,6 @@ export default class MainScreen extends React.Component {
               myrecsCoordLong={this.state.myrecsCoordLong}
               myrecsPrice={this.state.myrecsPrice}
               myrecsDist={this.state.myrecsDist}
-	            maxGasStations={this.state.max}
               max={this.state.maxGasStations}
 	    />
           </Container>
@@ -335,6 +344,7 @@ class TopGasStationsOnModal extends React.Component {
   render() {
     let gasStationList = [];
     let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
+    console.log( "length: " + this.props.myrecsName.length + "  props max: " + this.props.max );
 
     for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
@@ -569,3 +579,22 @@ const styles = StyleSheet.create({
    bottom: '18%'
  },
 });
+
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function distanceInMiBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+  var earthRadiusKm = 6371;
+
+  var dLat = degreesToRadians(lat2-lat1);
+  var dLon = degreesToRadians(lon2-lon1);
+
+  lat1 = degreesToRadians(lat1);
+  lat2 = degreesToRadians(lat2);
+
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return earthRadiusKm * c * 0.621371;
+}

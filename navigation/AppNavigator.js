@@ -32,6 +32,6 @@ export default createAppContainer(createSwitchNavigator(
     ForgotPassword: ForgotPassword
   },
   {
-    initialRouteName: 'Main',
+    initialRouteName: 'SignIn',
   }
 ));
