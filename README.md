@@ -15,7 +15,7 @@ Username: ricoteamtester@gmail.com
 Password: testingcse110
 
 # Requirements
-The application must be run on an iPhone 7 or later. The device must be connected to WiFi and running an 
+The application should be run on an iPhone X. The device must be connected to WiFi and running an 
 iOS version of 12 or higher. The device must have Google Maps installed.
 
 # Installation Instructions 
@@ -45,3 +45,5 @@ station. They do not accurately represent the distance to the station via road t
 connectivity issues.
 6. Sometimes after pressing the GasUp button too soon after loading the app, nothing will happen. In this case, 
 wait 5 to 10 seconds and then try again.
+
+**7. Sometimes pressing the button will take a long time. If it is not working after 2 minutes, then click the "Back to the Main Page" Button and Click the GasUp button again.**
