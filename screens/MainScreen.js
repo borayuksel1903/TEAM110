@@ -66,7 +66,7 @@ export default class MainScreen extends React.Component {
        search: "",
        valueSearch: "",
        showGasPins: false,
-       maxGasStations: 4,
+       maxGasStations: 6,
        region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -336,7 +336,7 @@ class TopGasStationsOnModal extends React.Component {
   render() {
     let gasStationList = [];
     let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
-    console.log(this.props.myrecsName);
+
     for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
       let latitude = this.props.myrecsCoordLat[index];
@@ -345,6 +345,7 @@ class TopGasStationsOnModal extends React.Component {
       let miles = this.props.myrecsDist[index];
 
       let station = new GasStation(name, latitude, longitude, price);
+      console.log(this.props.myrecsCoordLat);
 
       gasStationList.push(
         <GasStationOnModal
@@ -397,6 +398,7 @@ class GasStationOnModal extends React.Component {
       default:
 
     }
+
     return(
       <ListItem thumbnail>
         <Left>
