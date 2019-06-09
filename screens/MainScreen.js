@@ -159,8 +159,8 @@ export default class MainScreen extends React.Component {
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       if( this.state.animation === true ) {
         /* only call gas up once for init */
-        this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
-        this.setState({ prevRegion: this.state.region })
+        //this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
+        //this.setState({ prevRegion: this.state.region })
         console.log( "gasUP" );
       }
       this.setState({ animation: false });
@@ -246,16 +246,18 @@ export default class MainScreen extends React.Component {
         <Animated.View>
 	       <View style={styles.gauge}>
 	        <Button transparent onPress={()=> {
+                  /*
 		  let lat1 = this.state.prevRegion.latitude;
 	    	  let lon1 = this.state.prevRegion.longitude;
 		  let lat2 = this.state.region.latitude;
 	       	  let lon2 = this.state.region.longitude;
-
 	          if( distanceInMiBetweenEarthCoordinates(lat1, lon1, lat2, lon2) > this.state.threshold ) {
                     this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
 		    this.setState({prevRegion: this.state.region});
                     console.log( "gasUP" );
 	          }
+		  */
+                  this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
                   this.setState({showGasPins: true});
                   this.toggleModal();
                }}>
@@ -451,8 +453,9 @@ class TopGasPoints extends React.Component {
       let latitude = this.props.myrecsCoordLat[index];
       let longitude = this.props.myrecsCoordLong[index];
       let price = this.props.myrecsPrice[index];
-
+     
       let station = new GasStation(name, latitude, longitude, price);
+
       gasPointList.push(
         <GasPoint
           key={index}
