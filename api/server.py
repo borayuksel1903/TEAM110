@@ -35,6 +35,8 @@ userStr = userList[0]
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
+def hello_world():
+	return 'Hello, World!'
 
 # Function that calls other funcs to get relevant data, calculates search
 # radius, and returns a string of all the data to be rendered
@@ -224,4 +226,4 @@ def getTopFiveStations(stationList):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=5000)

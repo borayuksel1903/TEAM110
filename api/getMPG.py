@@ -8,12 +8,14 @@ from selenium.common.exceptions import NoSuchElementException
 import os
 import json
 import time
-
+from selenium.webdriver.chrome.options import Options
 
 # launch url
 url = "https://www.fueleconomy.gov/feg/findacar.shtml"
 
-driver = webdriver.Chrome(executable_path='./chromedriver');
+options = Options()
+options.headless = True
+driver = webdriver.Chrome(options=options)
 
 def parseCar(car):
     if (car.split(None, 1)[0] != "Alfa" and car.split(None, 1)[0] != "Aston" and car.split(None, 1)[0] != "Land"):
@@ -88,12 +90,11 @@ def getMPG( year, car):
         i=0
         # get the make IDs for all the types to loop thru all URLs
         for makey in makes:
-            #if i == 4:
-                #driver.execute_script("window.scroppTo(0, document.body.scrollHeight);")
-            makey.click()
+
+            driver.execute_script("arguments[0].scrollIntoView();", makey)			
+	    makey.click()
             time.sleep(1)
             makeyIDS.append(makey.get_property("id").strip('chk'))
-            #i+=1
 
 
         # loop thru all URLs and get the range of each
