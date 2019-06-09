@@ -45,7 +45,7 @@ export default class CardComp extends Component {
     var data2 = {year: year, car:car};
 
     //for gas preferences
-    fetch('http://127.0.0.1:5000/result', {
+    fetch('http://18.236.93.161:5000/result', {
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ export default class CardComp extends Component {
       alert("Settings saved successfully!");
     })
 
-    fetch('http://127.0.0.1:5000/getMPG', {
+    fetch('http://18.236.93.161:5000/getMPG', {
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'

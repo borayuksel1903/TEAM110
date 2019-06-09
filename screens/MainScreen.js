@@ -344,7 +344,6 @@ class TopGasStationsOnModal extends React.Component {
   render() {
     let gasStationList = [];
     let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
-    console.log( "length: " + this.props.myrecsName.length + "  props max: " + this.props.max );
 
     for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
