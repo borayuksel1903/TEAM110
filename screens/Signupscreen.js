@@ -111,18 +111,50 @@ goBack = () => {
   this.props.navigation.navigate('SignIn');
 }
   signup = (email, password) =>{
+    var data = {email: email, password: password, displayName: this.state.name};
+
     if(this.state.password == this.state.re_password){
       try{
+        fetch('http://127.0.0.1:5000/signup', {
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(() => {
+          fetch('http://127.0.0.1:5000/signin', {
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+        })
+        .then(() => {
+          this.props.navigation.navigate('Main');
+          fetch('http://127.0.0.1:5000/updateprofile', {
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          })
+        })
+        .catch(error => {
+            alert(error.toString());
+         })
+        /*
         firebase.auth().createUserWithEmailAndPassword(email,password)
           .then(() => {
             firebase.auth().signInWithEmailAndPassword(email,password);
-            this.props.navigation.navigate('Settings');
+            this.props.navigation.navigate('Main');
             firebase.auth().currentUser.updateProfile({
               displayName: this.state.name
             })})
     .catch(error => {
         alert(error.toString());
-     })
+     })*/
       }
         catch (error) {
       }

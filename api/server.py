@@ -29,14 +29,12 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 auth = firebase.auth()
 #authenticate a user
-user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
+#user = auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
 userList = user['email'].split('@')
 userStr = userList[0]
 
 # Functions to call when at the basic localhost URL
 @app.route('/')
-def hello_world():
-	return 'Hello, World!'
 
 # Function that calls other funcs to get relevant data, calculates search
 # radius, and returns a string of all the data to be rendered
@@ -142,6 +140,50 @@ def getGeoLocation():
 
     return (lat,lng) #(32.8794112,-117.23816959999998)
 
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'POST':
+        email = request.data.get('email', '')
+        password = request.data.get('password', '')
+        auth.setPersistence(auth.AUTH.Persistence.LOCAL)
+        auth.sign_in_with_email_and_password("byuksel@uc.edu", "bora123")
+
+        return "User signed in"
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        email = request.data.get('email', '')
+        password = request.data.get('password', '')
+        auth.create_user_with_email_and_password(email, password)
+
+        return "User signed up"
+
+@app.route('/updateprofile', method=['POST'])
+def updateprofile():
+    if request.method == 'POST':
+        displayName = request.data.get('displayName', '')
+        auth.currentUser.updateProfile({
+            displayName: displayName
+        })
+
+    return "User name set"
+
+@app.route('/resetpassword', method=['GET', 'POST'])
+def resetpassword():
+    auth.sendPasswordResetEmail(request.data.get('email', ''))
+
+    return "Password reset email sent"
+
+@app.route('/changepassword', method=['GET', 'POST'])
+def changepassword():
+    auth.currentUser.updatePassword(request.data.get('newPassword', ''))
+
+    return "Password changed"
+
+
+
+
 # Function that gets the MPG of the user's car --- returns an int
 
 @app.route('/getMPG',methods=['POST'])
@@ -226,4 +268,4 @@ def getTopFiveStations(stationList):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+    app.run()

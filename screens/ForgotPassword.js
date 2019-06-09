@@ -56,8 +56,16 @@ export default class ForgotPassword extends React.Component {
   forgotPassword = () => {
       var auth = firebase.auth();
       var emailAddress = this.state.email;
+      var data = {email: emailAddress};
 
-      auth.sendPasswordResetEmail(emailAddress).then(() => {
+      fetch('http://127.0.0.1:5000/resetpassword', {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
         Alert.alert(
           "Forgot Password",
           "Password reset email sent to your email address."
@@ -69,7 +77,21 @@ export default class ForgotPassword extends React.Component {
           "Password reset failed, please try again."
         )
       });
-  };
+    }
+
+      /*auth.sendPasswordResetEmail(emailAddress).then(() => {
+        Alert.alert(
+          "Forgot Password",
+          "Password reset email sent to your email address."
+        );
+        this.props.navigation.navigate('SignIn');
+      }).catch(function(error) {
+        Alert.alert(
+          "Forgot Password",
+          "Password reset failed, please try again."
+        )
+      });
+  };*/
 }
 
 const styles = StyleSheet.create({

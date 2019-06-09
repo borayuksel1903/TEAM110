@@ -100,7 +100,46 @@ class ChangePasswordModal extends React.Component {
 
   changePassword = () => {
     var user = firebase.auth().currentUser;
-    firebase.auth().signInWithEmailAndPassword(user.email, this.state.oldPassword)
+    var data = {email: user.email, password: this.state.oldPassword, newPassword: this.state.newPassword};
+
+    fetch('http://54.184.93.247:5000//signin', {
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .catch(error => {alert("Wrong password")})
+    .then(() => {
+      if(this.state.oldPassword == this.state.newPassword){
+        Alert.alert(
+          "Change Password",
+          "Your new password cannot be the same as your old password."
+        );
+      }
+      else if(this.state.newPassword == this.state.reenterPassword){
+        fetch('http://127.0.0.1:5000/changepassword', {
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .catch(function(error) {
+          Alert.alert(
+            "Change Password",
+            "Password update failed. Please try again."
+          );
+        }).then(this.setModalVisible(false));
+      }
+      else{
+        Alert.alert(
+          "Change Password",
+          "Please re-enter the same password."
+        );
+      }
+    })
+    /*firebase.auth().signInWithEmailAndPassword(user.email, this.state.oldPassword)
     .catch(error => {alert("Wrong password")})
     .then(() => {
         if(this.state.oldPassword == this.state.newPassword){
@@ -128,7 +167,7 @@ class ChangePasswordModal extends React.Component {
             "Please re-enter the same password."
           );
         }
-    })
+    })*/
   }
 
   render() {
