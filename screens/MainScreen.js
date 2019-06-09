@@ -8,7 +8,7 @@ import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
 import { 
   Container, Icon, Item, Form, Input, Button, Label, Header, Left,
-  Body, Title, Right,Content, List, ListItem, Thumbnail 
+  Body, Title, Right,Content, List, ListItem, Thumbnail
 } from "native-base";
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
@@ -280,6 +280,7 @@ export default class MainScreen extends React.Component {
     {/*popup for gas up*/}
         <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
           <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
+            <List>
 	    <GasStationOnModal 
               station={{
 	        name: 'shellajshfg',
@@ -291,7 +292,7 @@ export default class MainScreen extends React.Component {
 	      origin={{
                 latitude: this.state.region.latitude,
 		longitude: this.state.region.longitude
-	      }}
+	      }} index={0}
 	    />
            <GasStationOnModal 
               station={{
@@ -304,7 +305,7 @@ export default class MainScreen extends React.Component {
 	      origin={{
                 latitude: this.state.region.latitude,
 		longitude: this.state.region.longitude
-	      }}
+	      }} index={1}
 	    />
             <GasStationOnModal 
               station={{
@@ -317,7 +318,7 @@ export default class MainScreen extends React.Component {
 	      origin={{
                 latitude: this.state.region.latitude,
 		longitude: this.state.region.longitude
-	      }}
+        }} index={2}
 	    />
            <GasStationOnModal 
               station={{
@@ -330,9 +331,9 @@ export default class MainScreen extends React.Component {
 	      origin={{
                 latitude: this.state.region.latitude,
 		longitude: this.state.region.longitude
-	      }}
+	      }} index={3}
 	    />
-
+      </List>
 
           </Container>
           <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
@@ -450,7 +451,23 @@ class GasStationOnModal extends React.Component {
     if( logo === undefined ) {
       logo = imageMap['other'];
     }
-
+    let tag = "";
+    switch(this.props.index) {
+      case 0:
+        tag = "GA$UP  Station"
+        break;
+      case 1:
+        tag = "Closest   Station"
+        break;
+      case 2:
+        tag = "Lowest!  $Price$"
+        break;
+      case 3:
+        tag = "Good Choice!"
+        break;
+      default:
+        
+    }
     return(
       <ListItem thumbnail>
         <Left>
@@ -460,12 +477,15 @@ class GasStationOnModal extends React.Component {
         </Left>
         <Body>
           <Text style={{color: '#FFF',fontSize: 25}} > ${this.props.station.price}     {this.props.station.miles} mi </Text>
+          <Text style={{color: '#FFC300', fontSize: 10,fontWeight: 'bold',}}> {tag} </Text>
         </Body>
+        
         <Right>
           <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.props.origin.latitude + ',' + this.props.origin.longitude + '&destination=' + this.props.station.latitude + ',' + this.props.station.longitude)}} color="#FFFFFF" >
-            <Text style={{color: '#FFF'}}>  Go  </Text>
+            <Text style={{color: '#FFC300'}}>  Go  </Text>
           </Button>
         </Right>
+        
       </ListItem>
     );
   }
