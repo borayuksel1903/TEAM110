@@ -124,11 +124,14 @@ def preferancesJson():
         finalPrefAndDist = prefAndDist[list(prefAndDist)[0]]
 
         price = sortByPrice(stations)
-        finalPrice = price[list(price)[0]]
+        finalPrice1 = price[list(price)[0]]
+        finalPrice2 = price[list(price)[1]]
         dist = sortByDistance(stations)
-        finalDist = dist[list(dist)[0]]
+        finalDist1 = dist[list(dist)[0]]
+        finalDist2 = dist[list(dist)[1]]
 
-        finalGasStations = [finalPrefAndPrice, finalPrice, finalPrefAndDist, finalDist]
+
+        finalGasStations = [finalPrefAndPrice, finalPrice1, finalPrice2, finalPrefAndDist, finalDist1, finalDist2]
 
 
 

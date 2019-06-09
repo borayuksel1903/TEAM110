@@ -66,7 +66,7 @@ export default class MainScreen extends React.Component {
        search: "",
        valueSearch: "",
        showGasPins: false,
-       maxGasStations: 4,
+       maxGasStations: 6,
        region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -151,7 +151,6 @@ export default class MainScreen extends React.Component {
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       this.setState({ animation: false });
-      this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
       return
     }
 
@@ -336,7 +335,7 @@ class TopGasStationsOnModal extends React.Component {
   render() {
     let gasStationList = [];
     let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
-    console.log(this.props.myrecsName);
+
     for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
       let latitude = this.props.myrecsCoordLat[index];
@@ -351,8 +350,8 @@ class TopGasStationsOnModal extends React.Component {
           key={index}
 	  station={{
 	    name: station.name,
-	    latitude: station.latitude,
-	    longitude: station.longitude,
+	    latitude: station.coordinate.latitude,
+	    longitude: station.coordinate.longitude,
 	    price: station.price,
 	    miles: miles
 	  }}
@@ -397,6 +396,7 @@ class GasStationOnModal extends React.Component {
       default:
 
     }
+
     return(
       <ListItem thumbnail>
         <Left>
