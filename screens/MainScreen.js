@@ -109,19 +109,19 @@ export default class MainScreen extends React.Component {
 
     var data = {lat: latitude, lng:longitude, tank: gasTankPercent};
 
-    fetch(('http://127.0.0.1:5000/test'),{
+    fetch(('http://127.0.0.1:5000/getPreferances'),{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
+      //Stringify data and pass it in as arg
+      body: JSON.stringify(data) 
     })
     .then(response => response.text())
     .then(response => {
 
-      recomandationsJSON = response;
-
-      var obj = JSON.parse(recomandationsJSON)
+      // parse respomse
+      var obj = JSON.parse(response)
 
       mylen =obj.length
 

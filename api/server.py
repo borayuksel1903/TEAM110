@@ -77,32 +77,33 @@ def mainFunc():
     return returnString + "<br/><br/>" + pprint.pformat(distanceMatrix)
 
 
-#TODO: Should I change this route name?
-@app.route('/test',methods=['GET','POST'])
+#Resolved: Should I change this route name?
+@app.route('/getPreferances',methods=['POST'])
 def preferancesJson():
 
-    if request.method == 'GET':
-        return ("startLocation")
+
     if request.method == 'POST':
 
+        #get Latitude, Longitude and Tank amount of User from View
         lat = (request.data.get('lat',''))
         lng = (request.data.get('lng',''))
         tank = (request.data.get('tank',''))
-
         data = { "tank":tank}
 
         db.child("users").child(userStr).update(data, user['idToken'])
 
-        yourStationList=getStationsWithinRange(lat,lng,5)
-
+        stationsInRange=getStationsWithinRange(lat,lng,5)
 
         stationString = ""
         counter= 1
         mylist=[]
-        for station in yourStationList:
+
+
+        for station in stationsInRange:
             # location = geolocator.reverse(str(station)) #this gives exception because str(station) is in parentheses, need to parse
             # price = getPrices(location.address) #calling getPrices from getPrices.py
-            mylist.append({'id': counter , 'name': yourStationList[station] ,'coordinates': str(station)})
+            mylist.append({'id': counter , 'name': stationsInRange[station] ,'coordinates': str(station)})
+
             #TODO: do ralph's thingies here
 
             #dictionary[str(station)]
@@ -114,18 +115,7 @@ def preferancesJson():
         #return jsonify(yourStationList)
 
 
-#TODO what are these?
-notes = {
-    0: 'do the shopping',
-    1: 'build the codez',
-    2: 'paint the door',
-}
 
-def note_repr(key):
-    return {
-        'url': request.host_url.rstrip('/') + url_for('notes_detail', key=key),
-        'text': notes[key]
-    }
 
 
 @app.route('/example/')
