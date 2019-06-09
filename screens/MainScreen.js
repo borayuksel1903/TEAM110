@@ -1,17 +1,47 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, TouchableOpacity, Animated , TextInput, Linking, Dimensions } from 'react-native';
+import { 
+  View, ScrollView, StyleSheet, Text, Image, Alert, KeyboardAvoidingView, 
+  TouchableOpacity, Animated , TextInput, Linking, Dimensions 
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import GeneralStatusBarColor from '../components/GeneralStatusBarColor';
 import { Ionicons } from '@expo/vector-icons';
-import {
+import { 
   Container, Icon, Item, Form, Input, Button, Label, Header, Left,
-  Body, Title, Right
+  Body, Title, Right,Content, List, ListItem, Thumbnail
 } from "native-base";
 import {ART} from 'react-native'
 import { AnimatedGaugeProgress, GaugeProgress } from 'react-native-simple-gauge';
 import MapView from 'react-native-maps';
 import Modal from "react-native-modal";
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Constants, Location, Permissions } from 'expo';
+
+import seventySix from '../assets/gaslogo/76color.png'
+import sevenEleven from '../assets/gaslogo/711color.png'
+import arco from '../assets/gaslogo/Arco-Logo.png'
+import chevron from '../assets/gaslogo/chevroncolor.png'
+import costco from '../assets/gaslogo/costcocolor.png'
+import mobil from '../assets/gaslogo/mobilecolor.png'
+import shell from '../assets/gaslogo/shellcolor.png'
+import speedway from '../assets/gaslogo/speedwaycolor.png'
+import united from '../assets/gaslogo/unitedcolor.png'
+import usa from '../assets/gaslogo/usacolor.png'
+import other from '../assets/gaslogo/OtherStation.png'
+
+const imageMap = {
+  "76" :       {source: seventySix,  dimension: {width: 55, height: 55}},
+  "711" :      {source: sevenEleven, dimension: {width: 55, height: 53}},
+  "arco" :     {source: arco,        dimension: {width: 55, height: 55}},
+  "chevron" :  {source: chevron,     dimension: {width: 55, height: 61}},
+  "costco" :   {source: costco,      dimension: {width: 55, height: 55}},
+  "mobil" :    {source: mobil,       dimension: {width: 55, height: 69}},
+  "shell" :    {source: shell,       dimension: {width: 55, height: 51}},
+  "speedway" : {source: speedway,    dimension: {width: 55, height: 52}},
+  "united" :   {source: united,      dimension: {width: 55, height: 58}},
+  "usa" :      {source: usa,         dimension: {width: 55, height: 30}},
+  "other" :    {source: other,       dimension: {width: 55, height: 55}},
+}
 
 let { width, height } = Dimensions.get('window');
 
@@ -34,6 +64,7 @@ export default class MainScreen extends React.Component {
        search: "",
        valueSearch: "",
        showGasPins: false,
+       maxGasStations: 7,
        region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
@@ -68,24 +99,44 @@ export default class MainScreen extends React.Component {
     this.intervalID = setInterval(() => {
       this.initAnimation();
     }, 25);
-
-    this.watchID = navigator.geolocation.watchPosition(
-      position => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-	          latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-          }
-        });
-      }, (error)=>console.log(error));
+    
+  this.watchID = navigator.geolocation.watchPosition(
+    position => {
+      this.setState({
+        region: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }
+      });
+    }, (error)=>{this.getLocationAsync();});
   }
 
   componentWillUnmount() {
     clearInterval(this.intervalID);
     navigator.geolocation.clearWatch(this.watchID);
   }
+
+  getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+
+    const region = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+    }
+
+    this.setState({ region: region });
+  };
 
   initAnimation = () => {
     if( this.state.animation === false ) {
@@ -98,11 +149,11 @@ export default class MainScreen extends React.Component {
     }
     else if( this.cycle === this.maxCycles && this.state.gasTankPercent === 70 ) {
       this.setState({ animation: false });
+      this.gasUP(this.state.region.latitude, this.state.region.longitude, this.state.gasTankPercent);
       return
     }
 
     this.setState({ gasTankPercent: this.state.gasTankPercent + this.increment });
-
   }
 
   gasUP = (latitude, longitude, gasTankPercent ) => {
@@ -145,8 +196,6 @@ export default class MainScreen extends React.Component {
         this.state.myrecsCoordLong.push(myLong)
 
       }
-      //this.setState({ isModalVisible: !this.state.isModalVisible });
-      //alert(this.state.myrecsName)
     })
 
   }
@@ -167,7 +216,7 @@ export default class MainScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title style={styles.textStyle}>HomeScreen</Title>
+            <Title style={styles.textStyle}>Home</Title>
           </Body>
           <Right />
         </Header>
@@ -182,6 +231,7 @@ export default class MainScreen extends React.Component {
             myrecsName={this.state.myrecsName}
             myrecsCoordLat={this.state.myrecsCoordLat}
             myrecsCoordLong={this.state.myrecsCoordLong}
+	    max={this.state.maxGasStations}
           />
         </MapView>
 
@@ -210,6 +260,31 @@ export default class MainScreen extends React.Component {
 	        </View>
         </Animated.View>
     </View>
+
+        {/*popup for gas up*/}
+        <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
+          <Container style={{backgroundColor:'transparent',marginTop:'40%'}}>
+	    <TopGasStationsOnModal
+	      origin={{
+                latitude: this.state.region.latitude,
+                longitude: this.state.region.longitude
+              }}
+              myrecsName={this.state.myrecsName}
+              myrecsCoordLat={this.state.myrecsCoordLat}
+              myrecsCoordLong={this.state.myrecsCoordLong}
+	      maxGasStations={this.state.max}
+              max={this.state.maxGasStations}
+	    />
+	    
+
+          </Container>
+          <Button title="Close" onPress={this.toggleModal} color="#FFFFFF" />
+          <Button large onPress={this.toggleModal} style={styles.backButton}>
+            <Text>GO BACK TO THE MAIN PAGE</Text> 
+          </Button>
+        </Modal>
+
+    {/* Nicole 
     <Modal isVisible={this.state.isModalVisible} onBackdropPress={() => this.toggleModal}>
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginTop: '40%', marginLeft: '5%' }}>
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -263,6 +338,7 @@ export default class MainScreen extends React.Component {
                       <Text>Back</Text>
                     </Button>
         </Modal>
+	*/}
       </Container>
     );
   }
@@ -300,21 +376,123 @@ class Gauge extends React.Component {
     );
   }
 }
-
-class TopGasPoints extends React.Component {
-  constructor(props){
+// needed props: orgin(lat, lon), myrecs arrays
+class TopGasStationsOnModal extends React.Component {
+  constructor(props) {
     super(props);
   }
 
   render() {
-    let gasPointList = [];
+    let gasStationList = [];
+    let max = (this.props.myrecsName.length < this.props.max) ? this.props.myrecsName.length : this.props.max;
 
-    for(let index = 0; index < this.props.myrecsName.length; index++) {
+    for(let index = 0; index < max; index++) {
       let name = this.props.myrecsName[index];
       let latitude = this.props.myrecsCoordLat[index];
       let longitude = this.props.myrecsCoordLong[index];
+      let price = 0;
+      let miles = 0;
 
-      let station = new GasStation(name, latitude, longitude, 0);
+      let station = new GasStation(name, latitude, longitude, price);
+
+      gasStationList.push(
+        <GasStationOnModal
+          key={index}
+	  station={{
+	    name: station.name,
+	    latitude: station.latitude,
+	    longitude: station.longitude,
+	    price: station.price,
+	    miles: miles
+	  }}
+    origin={this.props.origin} 
+    index={index}
+        />
+      );
+
+    }
+
+    return(
+      gasStationList
+    );
+  }
+}
+
+
+class GasStationOnModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    let logo = imageMap[this.props.station.name.toLowerCase()];
+
+    if( logo === undefined ) {
+      logo = imageMap['other'];
+    }
+    let tag = "";
+    switch(this.props.index) {
+      case 0:
+        tag = "GA$UP Station!"
+        break;
+      case 1:
+        tag = "Closest Station"
+        break;
+      case 2:
+        tag = "Lowest Price"
+        break;
+      case 3:
+        tag = "Good Choice!"
+        break;
+      default:
+        
+    }
+    return(
+      <ListItem thumbnail>
+        <Left>
+          <Thumbnail square source={logo.source}  
+	    style={{ height: logo.dimension.height, width: logo.dimension.width }} 
+          />
+        </Left>
+        <Body>
+          <Text style={{color: '#FFF',fontSize: 25}} > ${this.props.station.price}     {this.props.station.miles} mi </Text>
+          <Text style={{color: '#FFC300', fontSize: 11,fontWeight: 'bold',}}> {tag} </Text>
+        </Body>
+        
+        <Right>
+          <Button bordered light onPress={() => { Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + this.props.origin.latitude + ',' + this.props.origin.longitude + '&destination=' + this.props.station.latitude + ',' + this.props.station.longitude)}} color="#FFFFFF" >
+            <Text style={{color: '#FFF'}}>  Go  </Text>
+          </Button>
+        </Right>
+        
+      </ListItem>
+    );
+  }
+}
+
+// origin={5, 3}
+//oogle.com/maps/dir/?api=1&origin=' + this.state.region.latitude + ',' + this.state.region.longitude + '&destination=' + Mobil.coordinate.latitude + ',' + Mobil.coordinate.longitude
+
+class TopGasPoints extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let max = this.props.max;
+    if( max < 1 ) {
+      max = 1;
+    }
+
+    let gasPointList = [];
+    max = (this.props.myrecsName.length < max) ? this.props.myrecsName.length : max;
+  
+    for(let index = 0; index < max; index++) {
+      let name = this.props.myrecsName[index];
+      let latitude = this.props.myrecsCoordLat[index];
+      let longitude = this.props.myrecsCoordLong[index];
+      let price = 0;
+
+      let station = new GasStation(name, latitude, longitude, price);
       gasPointList.push(
         <GasPoint
           key={index}
