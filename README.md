@@ -18,8 +18,7 @@ Password: testingcse110
 The application must be run on an iPhone 7 or later. The device must be connected to WiFi and running an 
 iOS version of 12 or higher. The device must have Google Maps installed.
 
-# Installation Instructions
-**Necessary:**  
+# Installation Instructions 
 Install "Expo Client" from the App Store.
 
 # How to Run
