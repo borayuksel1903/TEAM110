@@ -13,7 +13,10 @@ def getPrices( address ):
 
     # setup the webdriver for chrome with the local executable
 
-    driver = webdriver.Chrome(executable_path='./chromedriver')
+	
+    options = Options()
+    options.headless = True
+    driver = webdriver.Chrome(options=options)  
 
     # go to gasbuddy.com
     driver.get("https://www.gasbuddy.com")

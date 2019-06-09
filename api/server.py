@@ -79,11 +79,10 @@ def mainFunc():
 
     return returnString + "<br/><br/>" + pprint.pformat(distanceMatrix)
 
-@app.route('/test',methods=['GET','POST'])
+#TODO Change route name
+@app.route('/test',methods=['POST'])
 def preferancesJson():
 
-    if request.method == 'GET':
-        return ("startLocation")
     if request.method == 'POST':
 
         lat = (request.data.get('lat',''))

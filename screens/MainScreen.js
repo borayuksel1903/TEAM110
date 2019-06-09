@@ -162,7 +162,7 @@ export default class MainScreen extends React.Component {
 
     var data = {lat: latitude, lng:longitude, tank: gasTankPercent};
 
-    fetch(('http://127.0.0.1:5000/test'),{
+    fetch(('http://54.184.93.247:5000/test'),{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
