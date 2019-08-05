@@ -48,7 +48,7 @@ wait 5 to 10 seconds and then try again.
 
 **7. Sometimes pressing the button will take a long time. If it is not working after 2 minutes, then click the "Back to the Main Page" Button and Click the GasUp button again.**
 
-# Screen Snippet
+# Screen Snippets
 
 ![home-page](https://github.com/borayuksel1903/TEAM110/blob/master/images/GasUp-home.png)
 ![gasup](https://github.com/borayuksel1903/TEAM110/blob/master/images/GasUp-GasUp.png)
