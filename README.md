@@ -50,4 +50,4 @@ wait 5 to 10 seconds and then try again.
 
 # Screen Snippet
 
-[alt](https://github.com/borayuksel1903/TEAM110/blob/master/images/GasUp-home.png)
+![alt-image](https://github.com/borayuksel1903/TEAM110/blob/master/images/GasUp-home.png)
